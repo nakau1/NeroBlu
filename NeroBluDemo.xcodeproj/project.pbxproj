@@ -7,6 +7,35 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DB105C0F1D26C50600CF994D /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB105BF31D26C50600CF994D /* App.swift */; };
+		DB105C101D26C50600CF994D /* NB.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB105BF41D26C50600CF994D /* NB.swift */; };
+		DB105C111D26C50600CF994D /* NB+CGGeometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB105BF51D26C50600CF994D /* NB+CGGeometry.swift */; };
+		DB105C121D26C50600CF994D /* NB+Collection.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB105BF61D26C50600CF994D /* NB+Collection.swift */; };
+		DB105C131D26C50600CF994D /* NB+NSError.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB105BF71D26C50600CF994D /* NB+NSError.swift */; };
+		DB105C141D26C50600CF994D /* NB+NSNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB105BF81D26C50600CF994D /* NB+NSNotification.swift */; };
+		DB105C151D26C50600CF994D /* NB+Number.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB105BF91D26C50600CF994D /* NB+Number.swift */; };
+		DB105C161D26C50600CF994D /* NB+String.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB105BFA1D26C50600CF994D /* NB+String.swift */; };
+		DB105C171D26C50600CF994D /* NB+UIButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB105BFB1D26C50600CF994D /* NB+UIButton.swift */; };
+		DB105C181D26C50600CF994D /* NB+UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB105BFC1D26C50600CF994D /* NB+UIColor.swift */; };
+		DB105C191D26C50600CF994D /* NB+UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB105BFD1D26C50600CF994D /* NB+UIView.swift */; };
+		DB105C1A1D26C50600CF994D /* NB+UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB105BFE1D26C50600CF994D /* NB+UIViewController.swift */; };
+		DB105C1B1D26C50600CF994D /* NBCellBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB105BFF1D26C50600CF994D /* NBCellBackgroundView.swift */; };
+		DB105C1C1D26C50600CF994D /* NBCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB105C001D26C50600CF994D /* NBCellView.swift */; };
+		DB105C1D1D26C50600CF994D /* NBConstraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB105C011D26C50600CF994D /* NBConstraint.swift */; };
+		DB105C1E1D26C50600CF994D /* NBDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB105C021D26C50600CF994D /* NBDate.swift */; };
+		DB105C1F1D26C50600CF994D /* NBDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB105C031D26C50600CF994D /* NBDialog.swift */; };
+		DB105C201D26C50600CF994D /* NBFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB105C041D26C50600CF994D /* NBFile.swift */; };
+		DB105C211D26C50600CF994D /* NBHighlightButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB105C051D26C50600CF994D /* NBHighlightButton.swift */; };
+		DB105C221D26C50600CF994D /* NBLandingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB105C061D26C50600CF994D /* NBLandingViewController.swift */; };
+		DB105C231D26C50600CF994D /* NBLongPressableButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB105C071D26C50600CF994D /* NBLongPressableButton.swift */; };
+		DB105C241D26C50600CF994D /* NBReflection.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB105C081D26C50600CF994D /* NBReflection.swift */; };
+		DB105C251D26C50600CF994D /* NBResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB105C091D26C50600CF994D /* NBResult.swift */; };
+		DB105C261D26C50600CF994D /* NBStoryboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB105C0A1D26C50600CF994D /* NBStoryboard.swift */; };
+		DB105C271D26C50600CF994D /* NBTableExternalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB105C0B1D26C50600CF994D /* NBTableExternalView.swift */; };
+		DB105C281D26C50600CF994D /* NBTextInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB105C0C1D26C50600CF994D /* NBTextInput.swift */; };
+		DB105C291D26C50600CF994D /* NBTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB105C0D1D26C50600CF994D /* NBTimer.swift */; };
+		DB105C2A1D26C50600CF994D /* NBUserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB105C0E1D26C50600CF994D /* NBUserDefaults.swift */; };
+		DB105C2C1D26C52E00CF994D /* NBThread.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB105C2B1D26C52E00CF994D /* NBThread.swift */; };
 		DB6302521D24244900FE2505 /* NeroBlu.h in Headers */ = {isa = PBXBuildFile; fileRef = DB6302511D24244900FE2505 /* NeroBlu.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DB6302561D24244900FE2505 /* NeroBlu.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB63024F1D24244900FE2505 /* NeroBlu.framework */; };
 		DB6302571D24244900FE2505 /* NeroBlu.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = DB63024F1D24244900FE2505 /* NeroBlu.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -42,6 +71,35 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		DB105BF31D26C50600CF994D /* App.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
+		DB105BF41D26C50600CF994D /* NB.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NB.swift; sourceTree = "<group>"; };
+		DB105BF51D26C50600CF994D /* NB+CGGeometry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NB+CGGeometry.swift"; sourceTree = "<group>"; };
+		DB105BF61D26C50600CF994D /* NB+Collection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NB+Collection.swift"; sourceTree = "<group>"; };
+		DB105BF71D26C50600CF994D /* NB+NSError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NB+NSError.swift"; sourceTree = "<group>"; };
+		DB105BF81D26C50600CF994D /* NB+NSNotification.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NB+NSNotification.swift"; sourceTree = "<group>"; };
+		DB105BF91D26C50600CF994D /* NB+Number.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NB+Number.swift"; sourceTree = "<group>"; };
+		DB105BFA1D26C50600CF994D /* NB+String.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NB+String.swift"; sourceTree = "<group>"; };
+		DB105BFB1D26C50600CF994D /* NB+UIButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NB+UIButton.swift"; sourceTree = "<group>"; };
+		DB105BFC1D26C50600CF994D /* NB+UIColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NB+UIColor.swift"; sourceTree = "<group>"; };
+		DB105BFD1D26C50600CF994D /* NB+UIView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NB+UIView.swift"; sourceTree = "<group>"; };
+		DB105BFE1D26C50600CF994D /* NB+UIViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NB+UIViewController.swift"; sourceTree = "<group>"; };
+		DB105BFF1D26C50600CF994D /* NBCellBackgroundView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NBCellBackgroundView.swift; sourceTree = "<group>"; };
+		DB105C001D26C50600CF994D /* NBCellView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NBCellView.swift; sourceTree = "<group>"; };
+		DB105C011D26C50600CF994D /* NBConstraint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NBConstraint.swift; sourceTree = "<group>"; };
+		DB105C021D26C50600CF994D /* NBDate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NBDate.swift; sourceTree = "<group>"; };
+		DB105C031D26C50600CF994D /* NBDialog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NBDialog.swift; sourceTree = "<group>"; };
+		DB105C041D26C50600CF994D /* NBFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NBFile.swift; sourceTree = "<group>"; };
+		DB105C051D26C50600CF994D /* NBHighlightButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NBHighlightButton.swift; sourceTree = "<group>"; };
+		DB105C061D26C50600CF994D /* NBLandingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NBLandingViewController.swift; sourceTree = "<group>"; };
+		DB105C071D26C50600CF994D /* NBLongPressableButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NBLongPressableButton.swift; sourceTree = "<group>"; };
+		DB105C081D26C50600CF994D /* NBReflection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NBReflection.swift; sourceTree = "<group>"; };
+		DB105C091D26C50600CF994D /* NBResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NBResult.swift; sourceTree = "<group>"; };
+		DB105C0A1D26C50600CF994D /* NBStoryboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NBStoryboard.swift; sourceTree = "<group>"; };
+		DB105C0B1D26C50600CF994D /* NBTableExternalView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NBTableExternalView.swift; sourceTree = "<group>"; };
+		DB105C0C1D26C50600CF994D /* NBTextInput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NBTextInput.swift; sourceTree = "<group>"; };
+		DB105C0D1D26C50600CF994D /* NBTimer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NBTimer.swift; sourceTree = "<group>"; };
+		DB105C0E1D26C50600CF994D /* NBUserDefaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NBUserDefaults.swift; sourceTree = "<group>"; };
+		DB105C2B1D26C52E00CF994D /* NBThread.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NBThread.swift; sourceTree = "<group>"; };
 		DB63024F1D24244900FE2505 /* NeroBlu.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = NeroBlu.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DB6302511D24244900FE2505 /* NeroBlu.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NeroBlu.h; sourceTree = "<group>"; };
 		DB6302531D24244900FE2505 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -76,6 +134,35 @@
 		DB6302501D24244900FE2505 /* NeroBlu */ = {
 			isa = PBXGroup;
 			children = (
+				DB105BF31D26C50600CF994D /* App.swift */,
+				DB105BF41D26C50600CF994D /* NB.swift */,
+				DB105BF51D26C50600CF994D /* NB+CGGeometry.swift */,
+				DB105BF61D26C50600CF994D /* NB+Collection.swift */,
+				DB105BF71D26C50600CF994D /* NB+NSError.swift */,
+				DB105BF81D26C50600CF994D /* NB+NSNotification.swift */,
+				DB105BF91D26C50600CF994D /* NB+Number.swift */,
+				DB105BFA1D26C50600CF994D /* NB+String.swift */,
+				DB105BFB1D26C50600CF994D /* NB+UIButton.swift */,
+				DB105BFC1D26C50600CF994D /* NB+UIColor.swift */,
+				DB105BFD1D26C50600CF994D /* NB+UIView.swift */,
+				DB105BFE1D26C50600CF994D /* NB+UIViewController.swift */,
+				DB105BFF1D26C50600CF994D /* NBCellBackgroundView.swift */,
+				DB105C001D26C50600CF994D /* NBCellView.swift */,
+				DB105C011D26C50600CF994D /* NBConstraint.swift */,
+				DB105C021D26C50600CF994D /* NBDate.swift */,
+				DB105C031D26C50600CF994D /* NBDialog.swift */,
+				DB105C041D26C50600CF994D /* NBFile.swift */,
+				DB105C051D26C50600CF994D /* NBHighlightButton.swift */,
+				DB105C061D26C50600CF994D /* NBLandingViewController.swift */,
+				DB105C071D26C50600CF994D /* NBLongPressableButton.swift */,
+				DB105C081D26C50600CF994D /* NBReflection.swift */,
+				DB105C091D26C50600CF994D /* NBResult.swift */,
+				DB105C0A1D26C50600CF994D /* NBStoryboard.swift */,
+				DB105C0B1D26C50600CF994D /* NBTableExternalView.swift */,
+				DB105C0C1D26C50600CF994D /* NBTextInput.swift */,
+				DB105C2B1D26C52E00CF994D /* NBThread.swift */,
+				DB105C0D1D26C50600CF994D /* NBTimer.swift */,
+				DB105C0E1D26C50600CF994D /* NBUserDefaults.swift */,
 				DB6302511D24244900FE2505 /* NeroBlu.h */,
 				DB6302531D24244900FE2505 /* Info.plist */,
 			);
@@ -226,6 +313,35 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DB105C0F1D26C50600CF994D /* App.swift in Sources */,
+				DB105C101D26C50600CF994D /* NB.swift in Sources */,
+				DB105C251D26C50600CF994D /* NBResult.swift in Sources */,
+				DB105C241D26C50600CF994D /* NBReflection.swift in Sources */,
+				DB105C161D26C50600CF994D /* NB+String.swift in Sources */,
+				DB105C151D26C50600CF994D /* NB+Number.swift in Sources */,
+				DB105C121D26C50600CF994D /* NB+Collection.swift in Sources */,
+				DB105C111D26C50600CF994D /* NB+CGGeometry.swift in Sources */,
+				DB105C181D26C50600CF994D /* NB+UIColor.swift in Sources */,
+				DB105C141D26C50600CF994D /* NB+NSNotification.swift in Sources */,
+				DB105C131D26C50600CF994D /* NB+NSError.swift in Sources */,
+				DB105C191D26C50600CF994D /* NB+UIView.swift in Sources */,
+				DB105C171D26C50600CF994D /* NB+UIButton.swift in Sources */,
+				DB105C1A1D26C50600CF994D /* NB+UIViewController.swift in Sources */,
+				DB105C2C1D26C52E00CF994D /* NBThread.swift in Sources */,
+				DB105C201D26C50600CF994D /* NBFile.swift in Sources */,
+				DB105C1E1D26C50600CF994D /* NBDate.swift in Sources */,
+				DB105C2A1D26C50600CF994D /* NBUserDefaults.swift in Sources */,
+				DB105C1F1D26C50600CF994D /* NBDialog.swift in Sources */,
+				DB105C291D26C50600CF994D /* NBTimer.swift in Sources */,
+				DB105C1D1D26C50600CF994D /* NBConstraint.swift in Sources */,
+				DB105C261D26C50600CF994D /* NBStoryboard.swift in Sources */,
+				DB105C281D26C50600CF994D /* NBTextInput.swift in Sources */,
+				DB105C211D26C50600CF994D /* NBHighlightButton.swift in Sources */,
+				DB105C231D26C50600CF994D /* NBLongPressableButton.swift in Sources */,
+				DB105C1C1D26C50600CF994D /* NBCellView.swift in Sources */,
+				DB105C1B1D26C50600CF994D /* NBCellBackgroundView.swift in Sources */,
+				DB105C271D26C50600CF994D /* NBTableExternalView.swift in Sources */,
+				DB105C221D26C50600CF994D /* NBLandingViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -271,6 +387,7 @@
 		DB6302581D24244900FE2505 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -282,6 +399,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.neroblu.ios.libs.NeroBlu;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -291,6 +409,7 @@
 		DB6302591D24244900FE2505 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -395,6 +514,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				INFOPLIST_FILE = NeroBluDemo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.neroblu.ios.libs.NeroBluDemo;
@@ -406,6 +526,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				INFOPLIST_FILE = NeroBluDemo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.neroblu.ios.libs.NeroBluDemo;
@@ -423,6 +544,7 @@
 				DB6302591D24244900FE2505 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		DB80EE8A1D2422F3006A44C2 /* Build configuration list for PBXProject "NeroBluDemo" */ = {
 			isa = XCConfigurationList;
