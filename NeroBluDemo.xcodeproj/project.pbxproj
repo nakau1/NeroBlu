@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		4A9DF30517FA6CC9A33533ED /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 267340167C660F961BE5D5EB /* Pods.framework */; };
+		CE86DCA61D283D450018A4BC /* NBRealm.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE86DCA51D283D450018A4BC /* NBRealm.swift */; };
+		CE86DCA81D284AE80018A4BC /* NBRealm+NSPredicate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE86DCA71D284AE80018A4BC /* NBRealm+NSPredicate.swift */; };
+		CE86DCAA1D284B2A0018A4BC /* NBRealm+String.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE86DCA91D284B2A0018A4BC /* NBRealm+String.swift */; };
 		DB105C2E1D26E0ED00CF994D /* NBRealmEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB105C2D1D26E0ED00CF994D /* NBRealmEntity.swift */; };
 		DB105C301D26E35C00CF994D /* NBRealmAccessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB105C2F1D26E35C00CF994D /* NBRealmAccessor.swift */; };
 		DB105C331D26E85000CF994D /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB105C311D26E85000CF994D /* Realm.framework */; };
@@ -49,6 +52,9 @@
 /* Begin PBXFileReference section */
 		211D9AA3F336F14AF1058976 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		267340167C660F961BE5D5EB /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CE86DCA51D283D450018A4BC /* NBRealm.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NBRealm.swift; sourceTree = "<group>"; };
+		CE86DCA71D284AE80018A4BC /* NBRealm+NSPredicate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NBRealm+NSPredicate.swift"; sourceTree = "<group>"; };
+		CE86DCA91D284B2A0018A4BC /* NBRealm+String.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NBRealm+String.swift"; sourceTree = "<group>"; };
 		DB105C2D1D26E0ED00CF994D /* NBRealmEntity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NBRealmEntity.swift; sourceTree = "<group>"; };
 		DB105C2F1D26E35C00CF994D /* NBRealmAccessor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NBRealmAccessor.swift; sourceTree = "<group>"; };
 		DB105C311D26E85000CF994D /* Realm.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Realm.framework; path = "Build/Products/Debug-iphonesimulator/Realm.framework"; sourceTree = "<group>"; };
@@ -111,6 +117,9 @@
 			isa = PBXGroup;
 			children = (
 				DB6302511D24244900FE2505 /* NeroBlu.h */,
+				CE86DCA51D283D450018A4BC /* NBRealm.swift */,
+				CE86DCA71D284AE80018A4BC /* NBRealm+NSPredicate.swift */,
+				CE86DCA91D284B2A0018A4BC /* NBRealm+String.swift */,
 				DB105C2F1D26E35C00CF994D /* NBRealmAccessor.swift */,
 				DB105C2D1D26E0ED00CF994D /* NBRealmEntity.swift */,
 				DB6302531D24244900FE2505 /* Info.plist */,
@@ -316,7 +325,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				DB105C2E1D26E0ED00CF994D /* NBRealmEntity.swift in Sources */,
+				CE86DCAA1D284B2A0018A4BC /* NBRealm+String.swift in Sources */,
 				DB105C301D26E35C00CF994D /* NBRealmAccessor.swift in Sources */,
+				CE86DCA81D284AE80018A4BC /* NBRealm+NSPredicate.swift in Sources */,
+				CE86DCA61D283D450018A4BC /* NBRealm.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
