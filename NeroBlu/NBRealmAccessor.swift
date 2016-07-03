@@ -8,193 +8,73 @@ import RealmSwift
 // MARK: - NBRealmAccessor -
 
 /// Realmオブジェクトのデータアクセサの基底クラス
-public class NBRealmAccessor {
+public class NBRealmAccessor<T: NBRealmEntity>: CustomStringConvertible {
+	
+	/// エンティティ
+	public typealias Entity = T
     
-    /// Realmファイルのパス
-    public static var realmPath: String {
-        return Realm.Configuration.defaultConfiguration.path ?? ""
-//        return Realm.Configuration.defaultConfiguration.fileURL?.absoluteString ?? ""
-    }
-    
-    /// Realmオブジェクト
-    public var realm: Realm { return try! Realm() }
-    
-    public init() {}
+    /// Realmオブジェクトの参照
+	public var realm: Realm { return NBRealm.realm }
+	
+	public init() {}
+	
+	public var description: String {
+		return ""
+	}
 }
 
-// MARK: インスタンス管理
+// MARK: - インスタンス管理 -
 public extension NBRealmAccessor {
-    
-    /// 指定した型の新しいRealmオブジェクトインスタンスを生成する
-    ///
-    /// 返されるオブジェクトのIDはオートインクリメントされた値が入ります
-    ///
-    /// - parameter type: 型
-    /// - parameter previousID: ループ中などに前回のIDを与えることで複数のユニークなIDのオブジェクトを作成できます
-    /// - returns: 新しいRealmオブジェクトインスタンス
-    public func createWithType<T : NBRealmEntity>(type: T.Type, previousID: Int64? = nil) -> T {
-        let ret = T()
-        if let previous = previousID {
-            ret.id = previous + 1
-        } else {
-            ret.id = self.increasedIDWithType(type)
-        }
-        return ret
-    }
-    
-    /// 渡したオブジェクトのコピーオブジェクトを新しく生成する
-    ///
-    /// - parameter object: コピーするオブジェクト
-    /// - returns: 引数のオブジェクトをコピーした新しいRealmオブジェクトインスタンス
-    public func cloneWithType<T : NBRealmEntity>(object: T) -> T {
-        let ret = T()
-        ret.id       = object.id
-        ret.created  = object.created
-        ret.modified = object.modified
-        return ret
-    }
-    
-    /// 指定した型のオートインクリメントされたID値を返却する
-    /// - parameter type: 型
-    /// - returns: オートインクリメントされたID値
-    public func increasedIDWithType<T : NBRealmEntity>(type: T.Type) -> Int64 {
-        guard let max = self.realm.objects(type).sorted(NBRealmEntityIDKey, ascending: false).first else {
-            return 1
-        }
-        return max.id + 1
-    }
+	
+	/// 新しいエンティティを生成する
+	/// - parameter previousID: ループ中などに前回のIDを与えることで複数のユニークなIDのエンティティを作成できます
+	/// - returns: 新しいエンティティ
+	public func create(previousID previousID: Int64? = nil) -> Entity {
+		return NBRealm.create(type: Entity.self, previousID: previousID)
+	}
+	
+	/// 渡したエンティティを複製した新しいエンティティを生成する
+	/// - parameter object: コピーするエンティティ
+	/// - returns: 引数のエンティティを複製した新しいエンティティ
+	public func clone(object: Entity) -> Entity {
+		return NBRealm.clone(object)
+	}
+	
+	/// オートインクリメントされたID値
+	public var autoIncrementedID: Int64 {
+		return NBRealm.autoIncrementedID(type: Entity.self)
+	}
 }
+
+// MARK: - レコード追加 -
+public extension NBRealmAccessor {
+	
+	/// エンティティを一括で新規追加する
+	/// - parameter entities: 追加するエンティティの配列
+	public func add(entities: [Entity]) {
+		let r = self.realm
+		var i = 0, id: Int64 = 1
+		try! r.write {
+			for entity in entities {
+				if i == 0 { id = entity.id }
+				entity.id       = id + i
+				entity.created  = NSDate()
+				entity.modified = NSDate()
+				r.add(entity, update: true)
+				i += 1
+			}
+		}
+	}
+	
+	/// エンティティを新規追加する
+	/// - parameter entity: 追加するエンティティ
+	public func add(entity: Entity) {
+		self.add([entity])
+	}
+}
+
 
 /*
-/// オブジェクトIDのキー名
-public let NBRealmObjectIDKey       = "id"
-public let NBRealmObjectCreatedKey  = "created"
-public let NBRealmObjectModifiedKey = "modified"
-
-// MARK: - NBRealmEntity -
-
-/// Realmオブジェクトの基底クラス
-public class NBRealmObject : RealmSwift.Object {
-    
-    // MARK: データプロパティ
-    
-    /// オブジェクトID
-    public dynamic var id : Int64 = 0 // = NBRealmObjectIDKey
-    
-    /// 作成日時
-    public dynamic var created = NSDate()
-    
-    /// 更新日時
-    public dynamic var modified = NSDate()
-    
-    // MARK: 配列・リスト処理
-    
-    /// RealmSwift.Listオブジェクトを配列に変換する
-    /// - parameter list: RealmSwift.Listオブジェクト
-    /// - returns: 変換された配列
-    public func listToArray<T : NBRealmObject>(list: RealmSwift.List<T>) -> [T] {
-        return list.toArray()
-    }
-    
-    /// 配列をRealmSwift.Listオブジェクトに変換する
-    /// - parameter array: 配列
-    /// - returns: 変換されたRealmSwift.Listオブジェクト
-    public func arrayToList<T : NBRealmObject>(array: [T]) -> RealmSwift.List<T> {
-        let ret = RealmSwift.List<T>()
-        ret.appendContentsOf(array)
-        return ret
-    }
-    
-    // MARK: 設定用メソッド
-    
-    /// 主キー設定
-    public override static func primaryKey() -> String? {
-        return NBRealmObjectIDKey
-    }
-}
-
-// MARK: - NBRealmAccessor -
-
-/// Realmオブジェクトのデータアクセサの基底クラス
-public class NBRealmAccessor : NSObject {
-    
-    /// Realmファイルのパス
-    public static var realmPath: String { return Realm.Configuration.defaultConfiguration.fileURL?.absoluteString ?? "" }
-    
-    /// Realmオブジェクト
-    public var realm: Realm { return try! Realm() }
-}
-
-// MARK: インスタンス管理
-public extension NBRealmAccessor {
-    
-    /// 指定した型の新しいRealmオブジェクトインスタンスを生成する
-    ///
-    /// 返されるオブジェクトのIDはオートインクリメントされた値が入ります
-    ///
-    /// - parameter type: 型
-    /// - parameter previousID: ループ中などに前回のIDを与えることで複数のユニークなIDのオブジェクトを作成できます
-    /// - returns: 新しいRealmオブジェクトインスタンス
-    public func createWithType<T : NBRealmObject>(type: T.Type, previousID: Int64? = nil) -> T {
-        let ret = T()
-        if let previous = previousID {
-            ret.id = previous + 1
-        } else {
-            ret.id = self.increasedIDWithType(type)
-        }
-        return ret
-    }
-    
-    /// 渡したオブジェクトのコピーオブジェクトを新しく生成する
-    ///
-    /// - parameter object: コピーするオブジェクト
-    /// - returns: 引数のオブジェクトをコピーした新しいRealmオブジェクトインスタンス
-    public func cloneWithType<T : NBRealmObject>(object: T) -> T {
-        let ret = T()
-        ret.id       = object.id
-        ret.created  = object.created
-        ret.modified = object.modified
-        return ret
-    }
-    
-    /// 指定した型のオートインクリメントされたID値を返却する
-    /// - parameter type: 型
-    /// - returns: オートインクリメントされたID値
-    public func increasedIDWithType<T : NBRealmObject>(type: T.Type) -> Int64 {
-        guard let max = self.realm.objects(type).sorted(NBRealmObjectIDKey, ascending: false).first else {
-            return 1
-        }
-        return max.id + 1
-    }
-}
-
-// MARK: データ追加
-public extension NBRealmAccessor {
-    
-    /// 指定したRealmオブジェクトを一括で追加する
-    /// - parameter realmObjects: 追加するRealmオブジェクトの配列
-    public func add<T : NBRealmObject>(realmObjects: [T]) {
-        let r = self.realm
-        var i = 0, id: Int64 = 1
-        try! r.write {
-            for realmObject in realmObjects {
-                if i == 0 { id = realmObject.id }
-                realmObject.id       = id + i
-                realmObject.created  = NSDate()
-                realmObject.modified = NSDate()
-                r.add(realmObject, update: true)
-                i += 1
-            }
-        }
-    }
-    
-    /// 指定したRealmオブジェクトを追加する
-    /// - parameter realmObject: 追加するRealmオブジェクト
-    public func add<T : NBRealmObject>(realmObject: T) {
-        self.add([realmObject])
-    }
-}
-
 // MARK: データ更新
 public extension NBRealmAccessor {
     
