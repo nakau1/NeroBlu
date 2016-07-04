@@ -12,7 +12,7 @@ public class NBRealm {
 	
 	/// Realmファイルのパス
 	public static var realmPath: String {
-		print(self.realm.schema.objectSchema)
+		//print(self.realm.schema.objectSchema)
 		return Realm.Configuration.defaultConfiguration.path ?? ""
 	}
 	
