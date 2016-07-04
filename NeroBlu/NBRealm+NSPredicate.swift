@@ -4,75 +4,219 @@
 // =============================================================================
 import UIKit
 
+// MARK: - NSPredicate拡張: イニシャライザ(ID) -
 public extension NSPredicate {
 	
+    /// イニシャライザ
+    /// - parameter ids: IDの配列
+    /// - parameter q: 検索文字列
 	public convenience init(ids: [Int64]) {
-		print(ids.map {
-			return NSNumber(longLong: $0)
-			})
-		
-		self.init(
-			format: "\(NBRealmEntityIDKey) IN {%@}",
-			argumentArray: ids.map {
-				return NSNumber(longLong: $0)
-			}
-		)
+        let arr = ids.map { NSNumber(longLong: $0) }
+        self.init(format: "\(NBRealmEntityIDKey) IN %@", argumentArray: [arr])
 	}
+    
+    /// イニシャライザ
+    /// - parameter id: ID
+    public convenience init(id: Int64) {
+        self.init(format: "\(NBRealmEntityIDKey) = %@", argumentArray: [NSNumber(longLong: id)])
+    }
 }
 
+// MARK: - NSPredicate拡張: イニシャライザ(式) -
+public extension NSPredicate {
+    
+    private convenience init(expression property: String, _ operation: String, _ value: AnyObject) {
+        self.init(format: "\(property) \(operation) %@", argumentArray: [value])
+    }
 
-
-/*
-// MARK: 検索条件
-public extension NBRealmAccessor {
-	
-	/// 複数の検索条件を1つにまとめて返却する
-	/// - parameter conditions: 検索条件文字列の配列
-	/// - parameter type: 結合種別
-	/// - returns: 検索条件オブジェクト
-	public func compoundPredicateWithConditions(conditions: [String], type: NSCompoundPredicateType = .AndPredicateType) -> NSPredicate {
-		var predicates = [NSPredicate]()
-		for condition in conditions {
-			predicates.append(NSPredicate(format: condition))
-		}
-		return self.compoundPredicateWithPredicates(predicates, type: type)
-	}
-	
-	/// 複数の検索条件を1つにまとめて返却する
-	/// - parameter predicates: 検索条件オブジェクトの配列
-	/// - parameter type: 結合種別
-	/// - returns: 検索条件オブジェクト
-	public func compoundPredicateWithPredicates(predicates: [NSPredicate], type: NSCompoundPredicateType = .AndPredicateType) -> NSPredicate {
-		let ret: NSPredicate
-		switch type {
-		case .AndPredicateType: ret = NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
-		case .OrPredicateType:  ret = NSCompoundPredicate(orPredicateWithSubpredicates:  predicates)
-		case .NotPredicateType: ret = NSCompoundPredicate(notPredicateWithSubpredicate:  self.compoundPredicateWithPredicates(predicates))
-		}
-		return ret
-	}
-	
-	/// IDの配列からのIN条件の検索条件を生成する
-	/// - parameter ids: IDの配列
-	/// - returns: 検索条件オブジェクト
-	public func predicateIDs(ids: [Int64]) -> NSPredicate {
-		return NSPredicate(format: "\(NBRealmObjectIDKey) IN {%@}", argumentArray: ids.map { return NSNumber(longLong: $0) } )
-	}
-	
-	/// あいまい検索を行うための検索条件を生成する
-	/// - parameter property: プロパティ名
-	/// - parameter q: 検索文字列
-	/// - returns: 検索条件オブジェクト
-	public func predicateContainsString(property: String, _ q: String) -> NSPredicate {
-		return NSPredicate(format: "\(property) CONTAINS '\(q)'")
-	}
-	
-	/// 値の完全一致検索を行うための検索条件を生成する
-	/// - parameter property: プロパティ名
-	/// - parameter v: 値
-	/// - returns: 検索条件オブジェクト
-	public func predicateEqauls(property: String, _ v: AnyObject) -> NSPredicate {
-		return NSPredicate(format: "\(property) = %@", argumentArray: [v])
-	}
+    /// イニシャライザ
+    /// - remark: "プロパティ = 値" の条件を作成します
+    /// - parameter property: プロパティ(フィールド)名
+    /// - parameter value: 値
+    /// - seealso: [NSPredicate Cheatsheet](https://realm.io/news/nspredicate-cheatsheet/)
+    public convenience init(_ property: String, equal value: AnyObject) {
+        self.init(expression: property, "=", value)
+    }
+    
+    /// イニシャライザ
+    /// - remark: "プロパティ != 値" の条件を作成します
+    /// - parameter property: プロパティ(フィールド)名
+    /// - parameter value: 値
+    /// - seealso: [NSPredicate Cheatsheet](https://realm.io/news/nspredicate-cheatsheet/)
+    public convenience init(_ property: String, notEqual value: AnyObject) {
+        self.init(expression: property, "!=", value)
+    }
+    
+    /// イニシャライザ
+    /// - remark: "プロパティ >= 値" の条件を作成します
+    /// - parameter property: プロパティ(フィールド)名
+    /// - parameter value: 値
+    /// - seealso: [NSPredicate Cheatsheet](https://realm.io/news/nspredicate-cheatsheet/)
+    public convenience init(_ property: String, equalOrGreaterThan value: AnyObject) {
+        self.init(expression: property, ">=", value)
+    }
+    
+    /// イニシャライザ
+    /// - remark: "プロパティ <= 値" の条件を作成します
+    /// - parameter property: プロパティ(フィールド)名
+    /// - parameter value: 値
+    /// - seealso: [NSPredicate Cheatsheet](https://realm.io/news/nspredicate-cheatsheet/)
+    public convenience init(_ property: String, equalOrLessThan value: AnyObject) {
+        self.init(expression: property, "<=", value)
+    }
+    
+    /// イニシャライザ
+    /// - remark: "プロパティ > 値" の条件を作成します
+    /// - parameter property: プロパティ(フィールド)名
+    /// - parameter value: 値
+    /// - seealso: [NSPredicate Cheatsheet](https://realm.io/news/nspredicate-cheatsheet/)
+    public convenience init(_ property: String, greaterThan value: AnyObject) {
+        self.init(expression: property, ">", value)
+    }
+    
+    /// イニシャライザ
+    /// - remark: "プロパティ < 値" の条件を作成します
+    /// - parameter property: プロパティ(フィールド)名
+    /// - parameter value: 値
+    /// - seealso: [NSPredicate Cheatsheet](https://realm.io/news/nspredicate-cheatsheet/)
+    public convenience init(_ property: String, lessThan value: AnyObject) {
+        self.init(expression: property, "<", value)
+    }
 }
-*/
+
+// MARK: - NSPredicate拡張: イニシャライザ(文字列検索) -
+public extension NSPredicate {
+    
+    /// イニシャライザ
+    /// - remark: あいまい文字列検索を行うための検索条件(LIKE検索)で初期化します\
+    ///           文字列がどこかに含まれていればヒットします
+    /// - warning: property は String型のフィールドである必要があります
+    /// - parameter property: プロパティ(フィールド)名
+    /// - parameter value: 値
+    /// - seealso: [NSPredicate Cheatsheet](https://realm.io/news/nspredicate-cheatsheet/)
+    public convenience init(_ property: String, contains q: String) {
+        self.init(format: "\(property) CONTAINS '\(q)'")
+    }
+    
+    /// イニシャライザ
+    /// - remark: あいまい文字列検索を行うための検索条件(LIKE検索)で初期化します\
+    ///           文字列が先頭に含まれていればヒットします
+    /// - warning: property は String型のフィールドである必要があります
+    /// - parameter property: プロパティ(フィールド)名
+    /// - parameter value: 値
+    /// - seealso: [NSPredicate Cheatsheet](https://realm.io/news/nspredicate-cheatsheet/)
+    public convenience init(_ property: String, beginsWith q: String) {
+        self.init(format: "\(property) BEGINSWITH '\(q)'")
+    }
+    
+    /// イニシャライザ
+    /// - remark: あいまい文字列検索を行うための検索条件(LIKE検索)で初期化します\
+    ///           文字列が末尾に含まれていればヒットします
+    /// - warning: property は String型のフィールドである必要があります
+    /// - parameter property: プロパティ(フィールド)名
+    /// - parameter value: 値
+    /// - seealso: [NSPredicate Cheatsheet](https://realm.io/news/nspredicate-cheatsheet/)
+    public convenience init(_ property: String, endsWith q: String) {
+        self.init(format: "\(property) ENDSWITH '\(q)'")
+    }
+}
+
+// MARK: - NSPredicate拡張: イニシャライザ(IN句) -
+public extension NSPredicate {
+    
+    /// イニシャライザ
+    /// - remark: IN句検索条件で初期化します
+    /// - parameter property: プロパティ(フィールド)名
+    /// - parameter values: 値の配列
+    /// - seealso: [NSPredicate Cheatsheet](https://realm.io/news/nspredicate-cheatsheet/)
+    public convenience init(_ property: String, valuesIn values: [AnyObject]) {
+        self.init(format: "\(property) IN %@", argumentArray: [values])
+    }
+}
+
+// MARK: - NSPredicate拡張: イニシャライザ(BETWEEN句) -
+public extension NSPredicate {
+    
+    /// イニシャライザ
+    /// - remark: BETWEEN句検索条件で初期化します
+    /// - parameter property: プロパティ(フィールド)名
+    /// - parameter between: 最小値
+    /// - parameter to: 最大値
+    /// - seealso: [NSPredicate Cheatsheet](https://realm.io/news/nspredicate-cheatsheet/)
+    public convenience init(_ property: String, between min: AnyObject, to max: AnyObject) {
+        self.init(format: "\(property) BETWEEN {%@, %@}", argumentArray: [min, max])
+    }
+    
+    /// イニシャライザ
+    /// - remark: 日時の範囲の条件で初期化します
+    /// - warning: property は Date(NSDate)型のフィールドである必要があります\
+    ///            fromDate と toDate 両方に nil を渡すことは好ましくありません
+    /// - parameter property: プロパティ(フィールド)名
+    /// - parameter fromDate: From日時
+    /// - parameter toDate: To日時
+    /// - seealso: [NSPredicate Cheatsheet](https://realm.io/news/nspredicate-cheatsheet/)
+    public convenience init(_ property: String, fromDate: NSDate?, toDate: NSDate?) {
+        var format = "", args = [AnyObject]()
+        if let from = fromDate {
+            format += "\(property) >= %@"
+            args.append(from)
+        }
+        if let to = toDate {
+            if !format.isEmpty {
+                format += " AND "
+            }
+            format += "\(property) <= %@"
+            args.append(to)
+        }
+        if !args.isEmpty {
+            self.init(format: format, argumentArray: args)
+        } else {
+            self.init(value: true)
+        }
+    }
+}
+
+// MARK: - NSPredicate拡張: コンパウンド(条件結合) -
+public extension NSPredicate {
+    
+    /// 空の条件を返す
+    /// - note: 実際には常にTRUEとなるNSPredicateを返します
+    public static var empty: NSPredicate { return NSPredicate(value: true) }
+    
+    /// 常にFALSEとなるNSPredicateを返す
+    public static var dead: NSPredicate { return NSPredicate(value: false) }
+    
+    /// AND条件結合したNSPredicateを返す
+    /// - parameter predicates: NSPredicateの配列
+    /// - returns: 条件結合したNSPredicate
+    public func and(predicate: NSPredicate) -> NSPredicate {
+        return self.compound([predicate], type: .AndPredicateType)
+    }
+    
+    /// OR条件結合したNSPredicateを返す
+    /// - parameter predicates: NSPredicateの配列
+    /// - returns: 条件結合したNSPredicate
+    public func or(predicate: NSPredicate) -> NSPredicate {
+        return self.compound([predicate], type: .OrPredicateType)
+    }
+    
+    /// 条件結合したNSPredicateを返す
+    /// - parameter predicates: NSPredicateの配列
+    /// - returns: 条件結合したNSPredicate
+    public func not(predicate: NSPredicate) -> NSPredicate {
+        return self.compound([predicate], type: .NotPredicateType)
+    }
+    
+    /// 条件結合したNSPredicateを返す
+    /// - parameter predicates: NSPredicateの配列
+    /// - parameter type: 結合の種別
+    /// - returns: 条件結合したNSPredicate
+    public func compound(predicates: [NSPredicate], type: NSCompoundPredicateType = .AndPredicateType) -> NSPredicate {
+        var p = predicates; p.insert(self, atIndex: 0)
+        switch type {
+        case .AndPredicateType: return NSCompoundPredicate(andPredicateWithSubpredicates: p)
+        case .OrPredicateType:  return NSCompoundPredicate(orPredicateWithSubpredicates:  p)
+        case .NotPredicateType: return NSCompoundPredicate(notPredicateWithSubpredicate:  self.compound(p))
+        }
+    }
+}
