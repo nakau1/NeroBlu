@@ -12,13 +12,13 @@ public extension NSPredicate {
     /// - parameter q: 検索文字列
 	public convenience init(ids: [Int64]) {
         let arr = ids.map { NSNumber(longLong: $0) }
-        self.init(format: "\(NBRealmEntityIDKey) IN %@", argumentArray: [arr])
+        self.init(format: "\(NBRealmEntity.IDKey) IN %@", argumentArray: [arr])
 	}
     
     /// イニシャライザ
     /// - parameter id: ID
     public convenience init(id: Int64) {
-        self.init(format: "\(NBRealmEntityIDKey) = %@", argumentArray: [NSNumber(longLong: id)])
+        self.init(format: "\(NBRealmEntity.IDKey) = %@", argumentArray: [NSNumber(longLong: id)])
     }
 }
 
