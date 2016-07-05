@@ -12,73 +12,76 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         print("open " + NBRealm.realmPath)
         
+        self.insert()
         
-        //let p = NSPredicate(format: "id IN %@", argumentArray: [[1, 3, 4, 5]])
-		
-        let p = NSPredicate.empty
-            .and(NSPredicate("name", valuesIn: ["ritsumeikan", "doshisha"]))
-        print(p)
         
-        let acc = SchoolAccessor()
-        let records = acc.select(condition: p)
         
-        print(records)
-        
-//        var id: Int64? = nil
+//        //let p = NSPredicate(format: "id IN %@", argumentArray: [[1, 3, 4, 5]])
+//		
+////        let p = NSPredicate.empty
+////            .and(NSPredicate("name", valuesIn: ["ritsumeikan", "doshisha"]))
+////        print(p)
 //        
-//        var schools = [School]()
-//        for n in ["waseda", "keio", "ritsumeikan", "doshisha"] {
-//            let school = acc.create(previousID: id)
-//            school.name = n
-//            schools.append(school)
-//            id = school.id
-//        }
+//        let records = acc.select()
 //        
-//        acc.insert(schools)
+//        print(records)
+//        
+////        var id: Int64? = nil
+////        
+////        var schools = [School]()
+////        for n in ["waseda", "keio", "ritsumeikan", "doshisha"] {
+////            let school = acc.create(previousID: id)
+////            school.name = n
+////            schools.append(school)
+////            id = school.id
+////        }
+////        
+////        acc.insert(schools)
+    }
+    
+    
+    private func insert() {
+        let ffa = FontFamilyAccessor()
+        let fa = FontAccessor()
+        
+        var fid: Int64 = 0
+        
+        let fontFamilies = ffa.create(UIFont.familyNames(), previousID: 0) { fontFamily, familyName in
+            fontFamily.name = familyName
+            
+            let fonts = fa.create(UIFont.fontNamesForFamilyName(familyName), previousID: fid) { font, fontName in
+                font.name = fontName
+                return font
+            }
+            fa.save(fonts)
+            fid += fonts.count
+            
+            fontFamily.fonts.reset(fonts)
+            
+            return fontFamily
+        }
+        ffa.save(fontFamilies)
     }
 }
 
-class School: NBRealmEntity {
+class Font: NBRealmEntity {
+    
+    dynamic var name = ""
+}
+
+class FontFamily: NBRealmEntity {
     
     dynamic var name = ""
     
-    let schoolClasses = RealmSwift.List<SchoolClass>()
-}
-
-class Teacher: NBRealmEntity {
-	
-	dynamic var name = ""
-	dynamic var subject = ""
-}
-
-class Student: NBRealmEntity {
-	
-	dynamic var name = ""
-}
-
-class SchoolClass: NBRealmEntity {
-	
-	dynamic var name = ""
-	
-	let students = RealmSwift.List<Student>()
-	
-	dynamic var value: Teacher?
+    let fonts = RealmSwift.List<Font>()
 }
 
 // ====================
 
-class SchoolAccessor: NBRealmAccessor<School> {
+class FontAccessor: NBRealmAccessor<Font> {
 	
 }
 
-class TeacherAccessor: NBRealmAccessor<Teacher> {
-	
-}
-
-class StudentAccessor: NBRealmAccessor<Student> {
-	
-}
-
-class SchoolClassAccessor: NBRealmAccessor<SchoolClass> {
+class FontFamilyAccessor: NBRealmAccessor<FontFamily> {
 	
 }

@@ -23,48 +23,120 @@ public class NBRealmAccessor<T: NBRealmEntity>: CustomStringConvertible {
 	}
 }
 
-// MARK: - インスタンス管理 -
+// MARK: - エンティティ生成 -
 public extension NBRealmAccessor {
 	
 	/// 新しいエンティティを生成する
 	/// - parameter previousID: ループ中などに前回のIDを与えることで複数のユニークなIDのエンティティを作成できます
 	/// - returns: 新しいエンティティ
 	public func create(previousID previousID: Int64? = nil) -> Entity {
-		return NBRealm.create(type: Entity.self, previousID: previousID)
+        let ret = Entity()
+        ret.id = self.currentID(withPreviousID: previousID)
+        return ret
 	}
+    
+    /// 配列等(コレクションタイプ)から新しいエンティティを配列で生成する
+    /// - parameter previousID: ループ中などに前回のIDを与えることで複数のユニークなIDのエンティティを作成できます
+    /// - returns: 新しいエンティティ
+    public func create<C: CollectionType>(collection: C, previousID: Int64? = nil, setup: (Entity, C.Generator.Element) -> Entity) -> [Entity] {
+        var ret = [Entity]()
+        var id = self.currentID(withPreviousID: previousID)
+        for element in collection {
+            var entity = Entity()
+            entity.id = id
+            entity = setup(entity, element)
+            ret.append(entity)
+            id += 1
+        }
+        return ret
+    }
+}
+
+// MARK: - エンティティ複製 -
+public extension NBRealmAccessor {
 	
 	/// 渡したエンティティを複製した新しいエンティティを生成する
 	/// - parameter object: コピーするエンティティ
 	/// - returns: 引数のエンティティを複製した新しいエンティティ
 	public func clone(object: Entity) -> Entity {
-		return NBRealm.clone(object)
+        let ret = Entity()
+        ret.id       = object.id
+        ret.created  = object.created
+        ret.modified = object.modified
+        return ret
 	}
-	
+}
+
+// MARK: - 汎用メソッド/プロパティ -
+public extension NBRealmAccessor {
+    
 	/// オートインクリメントされたID値
 	public var autoIncrementedID: Int64 {
-		return NBRealm.autoIncrementedID(type: Entity.self)
+        guard let max = self.realm.objects(Entity).sorted(NBRealmEntity.IDKey, ascending: false).first else {
+            return 1
+        }
+        return max.id + 1
 	}
+    
+    /// 前回のIDを渡すことで今回使用すべき適切なIDを取得する
+    /// - parameter previousID: 前回のID
+    /// - returns: 今回使用すべき適切なID
+    private func currentID(withPreviousID previousID: Int64?) -> Int64 {
+        if let previous = previousID {
+            return previous + 1
+        } else {
+            return self.autoIncrementedID
+        }
+    }
+}
+
+// MARK: - レコード保存 -
+public extension NBRealmAccessor {
+    
+    /// 指定したエンティティのレコードを更新する
+    /// - parameter condition: 条件オブジェクト
+    /// - parameter updating: データ更新クロージャ
+    public func save(entity: Entity) {
+        self.save([entity])
+    }
+    
+    /// 指定したエンティティのレコードを更新する
+    /// - parameter condition: 条件オブジェクト
+    /// - parameter updating: データ更新クロージャ
+    public func save(entities: [Entity]) {
+        let r = self.realm
+        try! r.write {
+            for entity in entities {
+                entity.modified = NSDate()
+            }
+            r.add(entities, update: true)
+        }
+    }
 }
 
 // MARK: - レコード取得 -
 public extension NBRealmAccessor {
     
-    /// ソート情報
-    /// - complexity: String フィールド名
-    /// - complexity: Bool 昇順: true、降順: false
-    public typealias NBRealmSort = [String : Bool]
-    
-    /// エンティティを配列で取得する
+    /// 指定した条件とソートでレコードを抽出しエンティティの配列で取得する
     /// - parameter condition: 条件オブジェクト
     /// - parameter sort: ソート
+    /// - parameter limit: 取得制限
     /// - returns: エンティティの配列
-    public func select(condition condition: NSPredicate? = nil, sort: NBRealmSort? = nil) -> [Entity] {
-        return self.getResult(condition: condition, sort: sort).map { return $0 }
+    public func select(condition condition: NSPredicate? = nil, sort: NBRealmSort? = nil, limit: NBRealmLimit? = nil) -> [Entity] {
+        let result = self.getResult(condition: condition, sort: sort)
+        if let limit = limit {
+            var ret = [Entity]()
+            for i in limit.offset...(limit.offset + limit.count) {
+                ret.append(result[i])
+            }
+            return ret
+        } else {
+            return result.map {$0}
+        }
     }
     
     /// 指定した条件で抽出されるレコード数を取得する
     /// - parameter condition: 条件オブジェクト
-    /// - parameter sort: ソート
     /// - returns: レコード数
     public func count(condition condition: NSPredicate? = nil) -> Int {
         return self.getResult(condition: condition, sort: nil).count
@@ -74,10 +146,10 @@ public extension NBRealmAccessor {
     /// - parameter condition: 条件オブジェクト
     /// - parameter sort: ソート
     /// - returns: RealmResultsオブジェクト
-    private func getResult(condition condition: NSPredicate? = nil, sort: NBRealmSort? = nil) -> RealmSwift.Results<T> {
+    private func getResult(condition condition: NSPredicate? = nil, sort: NBRealmSort? = nil) -> RealmSwift.Results<Entity> {
         var result = self.realm.objects(Entity)
-        if let filter = condition {
-            result = result.filter(filter)
+        if let condition = condition {
+            result = result.filter(condition)
         }
         if let sort = sort {
             sort.forEach {
@@ -94,18 +166,18 @@ public extension NBRealmAccessor {
 	/// エンティティの配列からレコードを一括で新規追加する
 	/// - parameter entities: 追加するエンティティの配列
 	public func insert(entities: [Entity]) {
-		let r = self.realm
-		var i = 0, id: Int64 = 1
-		try! r.write {
-			for entity in entities {
-				if i == 0 { id = entity.id }
-				entity.id       = id + i
-				entity.created  = NSDate()
-				entity.modified = NSDate()
-				r.add(entity, update: true)
-				i += 1
-			}
-		}
+        let r = self.realm
+        var i = 0, id: Int64 = 1
+        try! r.write {
+            for entity in entities {
+                if i == 0 { id = entity.id }
+                entity.id       = id + i
+                entity.created  = NSDate()
+                entity.modified = NSDate()
+                r.add(entity, update: true)
+                i += 1
+            }
+        }
 	}
 	
 	/// エンティティからレコードを新規追加する
@@ -127,25 +199,34 @@ public extension NBRealmAccessor {
         }
     }
     
-    /// 指定したIDに該当するレコードを削除する
+    /// 指定した複数のIDで抽出されるレコードを削除する
     /// - parameter ids: IDの配列
     public func delete(ids ids: [Int64]) {
-        
+        self.delete(NSPredicate(ids: ids))
+    }
+    
+    /// 指定したIDのレコードを削除する
+    /// - parameter id: ID
+    public func delete(id id: Int64) {
+        self.delete(NSPredicate(id: id))
     }
     
     /// 指定したエンティティのレコードを削除する
     /// - parameter entity: エンティティ
     public func delete(entity entity: Entity) {
-        
+        let r = self.realm
+        try! r.write {
+            r.delete(entity)
+        }
     }
 }
 
-// MARK: データ更新
+// MARK: - レコード更新 -
 public extension NBRealmAccessor {
     
     /// データ更新クロージャ
-    /// - complexity: Entity 更新対象のエンティティ
-    /// - complexity: Int インデックス
+    /// - parameter Entity: 更新対象のエンティティ
+    /// - parameter Int: インデックス
     public typealias NBRealmUpdateClosure = (Entity, Int) -> Void
     
     /// 指定した条件で抽出されるレコードを更新する
@@ -167,17 +248,29 @@ public extension NBRealmAccessor {
         }
     }
     
-    /// 指定した条件で抽出されるレコードを更新する
-    /// - parameter condition: 条件オブジェクト
+    /// 指定した複数のIDで抽出されるレコードを更新する
+    /// - parameter ids: IDの配列
     /// - parameter updating: データ更新クロージャ
     public func update(ids: [Int64], updating: NBRealmUpdateClosure) {
-        
+        self.update(NSPredicate(ids: ids), updating: updating)
     }
     
-    /// 指定した条件で抽出されるレコードを更新する
+    /// 指定したIDのレコードを更新する
+    /// - parameter id: ID
+    /// - parameter updating: データ更新クロージャ
+    public func update(id: Int64, updating: NBRealmUpdateClosure) {
+        self.update(NSPredicate(id: id), updating: updating)
+    }
+    
+    /// 指定したエンティティのレコードを更新する
     /// - parameter condition: 条件オブジェクト
     /// - parameter updating: データ更新クロージャ
     public func update(entity: Entity, updating: NBRealmUpdateClosure) {
-        
+        let r = self.realm
+        try! r.write {
+            entity.modified = NSDate()
+            updating(entity, 0)
+            r.add(entity, update: true)
+        }
     }
 }
