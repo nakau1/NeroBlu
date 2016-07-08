@@ -22,7 +22,7 @@ public class NBRealm {
     
     /// Realmファイルのパス
     public static var realmPath: String {
-        return Realm.Configuration.defaultConfiguration.path ?? ""
+        return Realm.Configuration.defaultConfiguration.fileURL?.absoluteString ?? ""
     }
     
     /// Realmオブジェクト
