@@ -24,6 +24,7 @@
 		DB80EE9A1D2422F3006A44C2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DB80EE991D2422F3006A44C2 /* Assets.xcassets */; };
 		DB80EE9D1D2422F3006A44C2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DB80EE9B1D2422F3006A44C2 /* LaunchScreen.storyboard */; };
 		DB8430601D2B79450017181D /* NBRealm+RealmSwift.List.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB84305F1D2B79450017181D /* NBRealm+RealmSwift.List.swift */; };
+		DBC921061D2D56AB00F37ABD /* NBRealmBrowsingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBC921051D2D56AB00F37ABD /* NBRealmBrowsingViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -71,6 +72,7 @@
 		DB80EE9C1D2422F3006A44C2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		DB80EE9E1D2422F3006A44C2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DB84305F1D2B79450017181D /* NBRealm+RealmSwift.List.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NBRealm+RealmSwift.List.swift"; sourceTree = "<group>"; };
+		DBC921051D2D56AB00F37ABD /* NBRealmBrowsingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NBRealmBrowsingViewController.swift; sourceTree = "<group>"; };
 		F47824373F82E8EB6973FB5B /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -125,6 +127,7 @@
 				CE86DCA91D284B2A0018A4BC /* NBRealm+String.swift */,
 				DB105C2F1D26E35C00CF994D /* NBRealmAccessor.swift */,
 				DB105C2D1D26E0ED00CF994D /* NBRealmEntity.swift */,
+				DBC921051D2D56AB00F37ABD /* NBRealmBrowsingViewController.swift */,
 				DB6302531D24244900FE2505 /* Info.plist */,
 			);
 			path = NeroBlu;
@@ -332,6 +335,7 @@
 				CE86DCAA1D284B2A0018A4BC /* NBRealm+String.swift in Sources */,
 				DB105C301D26E35C00CF994D /* NBRealmAccessor.swift in Sources */,
 				CE86DCA81D284AE80018A4BC /* NBRealm+NSPredicate.swift in Sources */,
+				DBC921061D2D56AB00F37ABD /* NBRealmBrowsingViewController.swift in Sources */,
 				CE86DCA61D283D450018A4BC /* NBRealm.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
