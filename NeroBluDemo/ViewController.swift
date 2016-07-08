@@ -11,10 +11,16 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         print("open " + NBRealm.realmPath)
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
         
         self.insert()
         
-        
+        NBRealmBrowsingViewController.show(self)
+        //NBRealmBrowseViewController.show(self)
+    }
         
 //        //let p = NSPredicate(format: "id IN %@", argumentArray: [[1, 3, 4, 5]])
 //		
@@ -37,20 +43,36 @@ class ViewController: UIViewController {
 ////        }
 ////        
 ////        acc.insert(schools)
-    }
     
     
     private func insert() {
+        let aa = AuthorAccessor()
+        var aarr = [Author]()
+        for (i, name) in ["Tom", "Jeff", "Leo", "Alex"].enumerate() {
+            let a = aa.create(withID: Int64(i+1))
+            a.age.value = 34
+            a.name = name
+            aarr.append(a)
+        }
+        aa.save(aarr)
+
+        func randomAuthor() -> Author {
+            let r = Int(arc4random_uniform(4))
+            return aarr[r]
+        }
+        
+        
         let ffa = FontFamilyAccessor()
         let fa = FontAccessor()
         
         var fid: Int64 = 0
         
-        let fontFamilies = ffa.create(UIFont.familyNames(), previousID: 0) { fontFamily, familyName in
+        let fontFamilies = ffa.create(UIFont.familyNames(), withID: 1) { fontFamily, familyName in
             fontFamily.name = familyName
             
-            let fonts = fa.create(UIFont.fontNamesForFamilyName(familyName), previousID: fid) { font, fontName in
+            let fonts = fa.create(UIFont.fontNamesForFamilyName(familyName), withID: fid) { font, fontName in
                 font.name = fontName
+                font.author = randomAuthor()
                 return font
             }
             fa.save(fonts)
@@ -64,9 +86,16 @@ class ViewController: UIViewController {
     }
 }
 
+
 class Font: NBRealmEntity {
     
     dynamic var name = ""
+    
+    dynamic var author: Author?
+    
+    override var description: String {
+        return "#\(self.id) \"\(self.name)\""
+    }
 }
 
 class FontFamily: NBRealmEntity {
@@ -74,14 +103,37 @@ class FontFamily: NBRealmEntity {
     dynamic var name = ""
     
     let fonts = RealmSwift.List<Font>()
+    
+    override var description: String {
+        return "#\(self.id) \"\(self.name)\""
+    }
 }
+
+class Author: NBRealmEntity {
+    
+    dynamic var name = ""
+    
+    let age = RealmOptional<Int>(40)
+    
+    dynamic var email: String?
+    
+    dynamic var male = true
+    
+    dynamic var deleted = false
+    
+    dynamic var thumbnailImage: NSData = NSData()
+    
+    override var description: String {
+        return "#\(self.id) \"\(self.name)\""
+    }
+}
+
 
 // ====================
 
-class FontAccessor: NBRealmAccessor<Font> {
-	
-}
+class FontAccessor: NBRealmAccessor<Font> {}
 
-class FontFamilyAccessor: NBRealmAccessor<FontFamily> {
-	
-}
+class FontFamilyAccessor: NBRealmAccessor<FontFamily> {}
+
+class AuthorAccessor: NBRealmAccessor<Author> {}
+
