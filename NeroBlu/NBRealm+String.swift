@@ -6,9 +6,9 @@ import UIKit
 
 // MARK: - String拡張 -
 public extension String {
-	
-	/// Realm用にエスケープした文字列
-	public var realmEscaped: String {
+    
+    /// Realm用にエスケープした文字列
+    public var realmEscaped: String {
         let reps = [
             "\\" : "\\\\",
             "'"  : "\\'",
@@ -18,5 +18,5 @@ public extension String {
             ret = self.stringByReplacingOccurrencesOfString(rep.0, withString: rep.1)
         }
         return ret
-	}
+    }
 }

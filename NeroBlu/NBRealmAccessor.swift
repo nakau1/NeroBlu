@@ -9,18 +9,18 @@ import RealmSwift
 
 /// Realmオブジェクトのデータアクセサの基底クラス
 public class NBRealmAccessor<T: NBRealmEntity>: CustomStringConvertible {
-	
-	/// エンティティ
-	public typealias Entity = T
+    
+    /// エンティティ
+    public typealias Entity = T
     
     /// Realmオブジェクトの参照
-	public var realm: Realm { return NBRealm.realm }
-	
-	public init() {}
-	
-	public var description: String {
-		return ""
-	}
+    public var realm: Realm { return NBRealm.realm }
+    
+    public init() {}
+    
+    public var description: String {
+        return ""
+    }
 }
 
 // MARK: - エンティティ生成 -
@@ -54,24 +54,24 @@ public extension NBRealmAccessor {
 
 // MARK: - エンティティ複製 -
 public extension NBRealmAccessor {
-	
-	/// 渡したエンティティを複製した新しいエンティティを生成する
-	/// - parameter object: コピーするエンティティ
-	/// - returns: 引数のエンティティを複製した新しいエンティティ
-	public func clone(object: Entity) -> Entity {
+    
+    /// 渡したエンティティを複製した新しいエンティティを生成する
+    /// - parameter object: コピーするエンティティ
+    /// - returns: 引数のエンティティを複製した新しいエンティティ
+    public func clone(object: Entity) -> Entity {
         let ret = Entity()
         ret.id       = object.id
         ret.created  = object.created
         ret.modified = object.modified
         return ret
-	}
+    }
 }
 
 // MARK: - 汎用メソッド/プロパティ -
 public extension NBRealmAccessor {
     
-	/// オートインクリメントされたID値
-	public var autoIncrementedID: Int64 {
+    /// オートインクリメントされたID値
+    public var autoIncrementedID: Int64 {
         guard let max = self.realm.objects(Entity).sorted(NBRealmEntity.IDKey, ascending: false).first else {
             return 1
         }
@@ -162,10 +162,10 @@ public extension NBRealmAccessor {
 
 // MARK: - レコード追加 -
 public extension NBRealmAccessor {
-	
-	/// エンティティの配列からレコードを一括で新規追加する
-	/// - parameter entities: 追加するエンティティの配列
-	public func insert(entities: [Entity]) {
+    
+    /// エンティティの配列からレコードを一括で新規追加する
+    /// - parameter entities: 追加するエンティティの配列
+    public func insert(entities: [Entity]) {
         let r = self.realm
         var i = 0, id: Int64 = 1
         try! r.write {
@@ -178,13 +178,13 @@ public extension NBRealmAccessor {
                 i += 1
             }
         }
-	}
-	
-	/// エンティティからレコードを新規追加する
-	/// - parameter entity: 追加するエンティティ
-	public func insert(entity: Entity) {
-		self.insert([entity])
-	}
+    }
+    
+    /// エンティティからレコードを新規追加する
+    /// - parameter entity: 追加するエンティティ
+    public func insert(entity: Entity) {
+        self.insert([entity])
+    }
 }
 
 // MARK: - レコード削除 -

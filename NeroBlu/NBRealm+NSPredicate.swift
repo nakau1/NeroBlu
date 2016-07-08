@@ -6,14 +6,14 @@ import UIKit
 
 // MARK: - NSPredicate拡張: イニシャライザ(ID) -
 public extension NSPredicate {
-	
+    
     /// イニシャライザ
     /// - parameter ids: IDの配列
     /// - parameter q: 検索文字列
-	public convenience init(ids: [Int64]) {
+    public convenience init(ids: [Int64]) {
         let arr = ids.map { NSNumber(longLong: $0) }
         self.init(format: "\(NBRealmEntity.IDKey) IN %@", argumentArray: [arr])
-	}
+    }
     
     /// イニシャライザ
     /// - parameter id: ID
@@ -28,7 +28,7 @@ public extension NSPredicate {
     private convenience init(expression property: String, _ operation: String, _ value: AnyObject) {
         self.init(format: "\(property) \(operation) %@", argumentArray: [value])
     }
-
+    
     /// イニシャライザ
     /// - remark: "プロパティ = 値" の条件を作成します
     /// - parameter property: プロパティ(フィールド)名
