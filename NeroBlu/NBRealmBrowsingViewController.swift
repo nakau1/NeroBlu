@@ -378,16 +378,17 @@ private extension NBRealmBrowsingTextUtil {
     private class func text(property property: RmProperty) -> NSAttributedString {
         let typeName: String
         switch property.type {
-        case .Int:    typeName = "Int"
-        case .Bool:   typeName = "Bool"
-        case .Float:  typeName = "Float"
-        case .Double: typeName = "Double"
-        case .String: typeName = "String"
-        case .Data:   typeName = "BinaryData"
-        case .Any:    typeName = "Any: not supported in swift"
-        case .Date:   typeName = "DateTime"
-        case .Object: typeName = "<\(property.objectClassName ?? "?" )>"
-        case .Array:  typeName = "Array of <\(property.objectClassName ?? "?" )>"
+        case .Int:            typeName = "Int"
+        case .Bool:           typeName = "Bool"
+        case .Float:          typeName = "Float"
+        case .Double:         typeName = "Double"
+        case .String:         typeName = "String"
+        case .Data:           typeName = "BinaryData"
+        case .Any:            typeName = "Any: not supported in swift"
+        case .Date:           typeName = "DateTime"
+        case .Object:         typeName = "<\(property.objectClassName ?? "?" )>"
+        case .Array:          typeName = "Array of <\(property.objectClassName ?? "?" )>"
+        case .LinkingObjects: typeName = "LinkingObjects of <\(property.objectClassName ?? "?" )>"
         }
         
         let ret = self.string(typeName)
