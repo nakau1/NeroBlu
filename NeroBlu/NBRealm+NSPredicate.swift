@@ -196,6 +196,18 @@ public extension NSPredicate {
     }
 }
 
+// MARK: - NSPredicate拡張: イニシャライザ(集計用) -
+public extension NSPredicate {
+    
+    /// ANY句を加えた条件を返す
+    /// - property　of: オブジェクト名
+    /// - seealso: [NSPredicate Cheatsheet](https://realm.io/news/nspredicate-cheatsheet/)
+    public func any(of objectName: String) -> NSPredicate {
+        let format = "ANY \(objectName)." + self.predicateFormat
+        return NSPredicate(format: format)
+    }
+}
+
 // MARK: - NSPredicate拡張: コンパウンド(条件結合) -
 public extension NSPredicate {
     
