@@ -176,6 +176,26 @@ public extension NSPredicate {
     }
 }
 
+// MARK: - NSPredicate拡張: イニシャライザ(nil比較) -
+public extension NSPredicate {
+    
+    /// イニシャライザ
+    /// - remark: nilかどうかの比較条件で初期化します
+    /// - parameter property: プロパティ(フィールド)名
+    /// - seealso: [NSPredicate Cheatsheet](https://realm.io/news/nspredicate-cheatsheet/)
+    public convenience init(isNil property: String) {
+        self.init(format: "\(property) == nil", argumentArray: nil)
+    }
+    
+    /// イニシャライザ
+    /// - remark: nilでないかどうかの比較条件で初期化します
+    /// - parameter property: プロパティ(フィールド)名
+    /// - seealso: [NSPredicate Cheatsheet](https://realm.io/news/nspredicate-cheatsheet/)
+    public convenience init(isNotNil property: String) {
+        self.init(format: "\(property) != nil", argumentArray: nil)
+    }
+}
+
 // MARK: - NSPredicate拡張: コンパウンド(条件結合) -
 public extension NSPredicate {
     
