@@ -25,22 +25,30 @@ public class NBRealmAccessor<T: NBRealmEntity>: CustomStringConvertible {
 
 // MARK: - エンティティ生成 -
 public extension NBRealmAccessor {
-	
-	/// 新しいエンティティを生成する
-	/// - parameter previousID: ループ中などに前回のIDを与えることで複数のユニークなIDのエンティティを作成できます
-	/// - returns: 新しいエンティティ
-	public func create(previousID previousID: Int64? = nil) -> Entity {
+    
+    /// 新しいエンティティを生成する
+    /// - parameter withID: エンティティに与えるID(省略時は自動的に採番)
+    /// - returns: 新しいエンティティ
+    public func create(withID id: Int64? = nil) -> Entity {
         let ret = Entity()
-        ret.id = self.currentID(withPreviousID: previousID)
+        ret.id = id ?? self.autoIncrementedID
         return ret
-	}
+    }
     
     /// 配列等(コレクションタイプ)から新しいエンティティを配列で生成する
-    /// - parameter previousID: ループ中などに前回のIDを与えることで複数のユニークなIDのエンティティを作成できます
+    /// - parameter collection: CollectionTypeを実装したオブジェクト(配列等)
+    /// - parameter withID: 最初のエンティティに与えるID(省略時は自動的に採番)。以降は配列要素数に合わせてインクリメントされる
+    /// - parameter setup: 生成されたエンティティに対するセットアップ処理
+    /// - remark: setup\
+    ///           \
+    ///           - parameter Entity: 生成されたエンティティ\
+    ///           - parameter T.Generator.Element: コレクションの要素\
+    ///           \
+    ///           - returns: セットアップされたエンティティ
     /// - returns: 新しいエンティティ
-    public func create<C: CollectionType>(collection: C, previousID: Int64? = nil, setup: (Entity, C.Generator.Element) -> Entity) -> [Entity] {
+    public func create<T: CollectionType>(collection: T, withID firstID: Int64, setup: (Entity, T.Generator.Element) -> Entity) -> [Entity] {
         var ret = [Entity]()
-        var id = self.currentID(withPreviousID: previousID)
+        var id = firstID ?? self.autoIncrementedID
         for element in collection {
             var entity = Entity()
             entity.id = id
@@ -76,17 +84,6 @@ public extension NBRealmAccessor {
             return 1
         }
         return max.id + 1
-	}
-    
-    /// 前回のIDを渡すことで今回使用すべき適切なIDを取得する
-    /// - parameter previousID: 前回のID
-    /// - returns: 今回使用すべき適切なID
-    private func currentID(withPreviousID previousID: Int64?) -> Int64 {
-        if let previous = previousID {
-            return previous + 1
-        } else {
-            return self.autoIncrementedID
-        }
     }
 }
 
