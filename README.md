@@ -1,7 +1,7 @@
-#NeroBlu
+#NeroBluNet
 
 ##Installation with CocoaPods
 
 ```
-pod 'NeroBlu', :git => 'https://github.com/nakau1/NeroBlu.git'
+pod 'NeroBluNet', :git => 'https://github.com/nakau1/NeroBlu', :branch => 'NBNetworking’
 ```
