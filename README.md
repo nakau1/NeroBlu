@@ -1,7 +1,7 @@
-#NeroBlu
+#NeroBluHUD
 
 ##Installation with CocoaPods
 
 ```
-pod 'NeroBlu', :git => 'https://github.com/nakau1/NeroBlu.git'
+pod 'NeroBluHUD', :git => 'https://github.com/nakau1/NeroBlu', :branch => 'NBHud’
 ```
