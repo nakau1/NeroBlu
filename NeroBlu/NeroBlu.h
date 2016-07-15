@@ -5,8 +5,8 @@
 //  Created by 中安佑一 on 2016/06/30.
 //  Copyright © 2016年 yuichi.nakayasu@gmail.com. All rights reserved.
 //
-
 #import <UIKit/UIKit.h>
+#import "SVProgressHUD/SVProgressHUD.h"
 
 //! Project version number for NeroBlu.
 FOUNDATION_EXPORT double NeroBluVersionNumber;
