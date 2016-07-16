@@ -1,7 +1,7 @@
-#NeroBlu
+#NeroBluCostomDialog
 
 ##Installation with CocoaPods
 
 ```
-pod 'NeroBlu', :git => 'https://github.com/nakau1/NeroBlu.git'
+pod 'NeroBluCostomDialog', :git => 'https://github.com/nakau1/NeroBlu', :branch => 'NBCostomDialog’
 ```
