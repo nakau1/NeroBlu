@@ -15,6 +15,8 @@
 		DB80EE981D2422F3006A44C2 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DB80EE961D2422F3006A44C2 /* Main.storyboard */; };
 		DB80EE9A1D2422F3006A44C2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DB80EE991D2422F3006A44C2 /* Assets.xcassets */; };
 		DB80EE9D1D2422F3006A44C2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DB80EE9B1D2422F3006A44C2 /* LaunchScreen.storyboard */; };
+		DBE418C11D39BF8D001A949D /* NBCustomizedDialogViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBE418C01D39BF8D001A949D /* NBCustomizedDialogViewController.swift */; };
+		DBE418C31D39C027001A949D /* NBSelectionDialogViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBE418C21D39C027001A949D /* NBSelectionDialogViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,6 +54,8 @@
 		DB80EE991D2422F3006A44C2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DB80EE9C1D2422F3006A44C2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		DB80EE9E1D2422F3006A44C2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DBE418C01D39BF8D001A949D /* NBCustomizedDialogViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NBCustomizedDialogViewController.swift; sourceTree = "<group>"; };
+		DBE418C21D39C027001A949D /* NBSelectionDialogViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NBSelectionDialogViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,6 +81,8 @@
 			isa = PBXGroup;
 			children = (
 				DB6302511D24244900FE2505 /* NeroBlu.h */,
+				DBE418C01D39BF8D001A949D /* NBCustomizedDialogViewController.swift */,
+				DBE418C21D39C027001A949D /* NBSelectionDialogViewController.swift */,
 				DB6302531D24244900FE2505 /* Info.plist */,
 			);
 			path = NeroBlu;
@@ -226,6 +232,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DBE418C31D39C027001A949D /* NBSelectionDialogViewController.swift in Sources */,
+				DBE418C11D39BF8D001A949D /* NBCustomizedDialogViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -271,6 +279,7 @@
 		DB6302581D24244900FE2505 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -282,6 +291,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.neroblu.ios.libs.NeroBlu;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -291,6 +301,7 @@
 		DB6302591D24244900FE2505 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -395,6 +406,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				INFOPLIST_FILE = NeroBluDemo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.neroblu.ios.libs.NeroBluDemo;
@@ -406,6 +418,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				INFOPLIST_FILE = NeroBluDemo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.neroblu.ios.libs.NeroBluDemo;
@@ -423,6 +436,7 @@
 				DB6302591D24244900FE2505 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		DB80EE8A1D2422F3006A44C2 /* Build configuration list for PBXProject "NeroBluDemo" */ = {
 			isa = XCConfigurationList;
