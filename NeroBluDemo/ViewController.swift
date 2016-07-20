@@ -7,19 +7,34 @@
 //
 
 import UIKit
+import NeroBlu
 
 class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    
+    @IBAction func didTapButton() {
+        self.presentDialog(DialogViewController.create())
     }
-
-
 }
 
+class DialogViewController: NBCustomizedDialogViewController {
+    
+    class func create() -> DialogViewController {
+        return UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("temp") as! DialogViewController
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+    }
+    
+    @IBAction func didTapButton() {
+        
+    }
+    
+    deinit {
+        print("deinit \(self)")
+    }
+}
