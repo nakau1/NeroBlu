@@ -162,7 +162,7 @@ public class NBKeyboardEventManager: NSObject {
             self.keyboardY      = CGFloat.min
         }
         
-        App.Nofify.observe(self, start: start, notificationsAndSelectors:[
+        App.Notify.observe(self, start: start, notificationsAndSelectors:[
             UIKeyboardWillShowNotification        : selector,
             UIKeyboardWillChangeFrameNotification : selector,
             UIKeyboardWillHideNotification        : selector,

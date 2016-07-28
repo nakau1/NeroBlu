@@ -8,7 +8,7 @@ import UIKit
 public extension App {
     
     /// サイズ定義
-    public class Nofify {
+    public class Notify {
         
         /// 通知の監視を開始する
         /// - parameter observer: 監視するオブジェクト
