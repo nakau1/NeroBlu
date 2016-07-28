@@ -9,6 +9,11 @@ class ViewController: NBLandingViewController {
     
     override var items: [(title: String, rows: [NBLandingItem])] {
         return [
+            (title:"動作確認", rows:[
+                NBLandingItem("動作確認(1)") {
+                    print(App.Dimen.Screen.RetinaSize)
+                },
+                ]),
             (title:"NB+CGGeometry", rows:[
                 NBLandingItem("CGRect(1) - 反転") {
                     var r = cr0
