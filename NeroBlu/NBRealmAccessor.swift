@@ -21,6 +21,19 @@ public class NBRealmAccessor<T: NBRealmEntity>: CustomStringConvertible {
     public var description: String {
         return ""
     }
+    
+    // MARK: エンティティ複製
+    
+    /// 渡したエンティティを複製した新しいエンティティを生成する
+    /// - parameter object: コピーするエンティティ
+    /// - returns: 引数のエンティティを複製した新しいエンティティ
+    public func clone(object: Entity) -> Entity {
+        let ret = Entity()
+        ret.id       = object.id
+        ret.created  = object.created
+        ret.modified = object.modified
+        return ret
+    }
 }
 
 // MARK: - エンティティ生成 -
@@ -56,21 +69,6 @@ public extension NBRealmAccessor {
             ret.append(entity)
             id += 1
         }
-        return ret
-    }
-}
-
-// MARK: - エンティティ複製 -
-public extension NBRealmAccessor {
-    
-    /// 渡したエンティティを複製した新しいエンティティを生成する
-    /// - parameter object: コピーするエンティティ
-    /// - returns: 引数のエンティティを複製した新しいエンティティ
-    public func clone(object: Entity) -> Entity {
-        let ret = Entity()
-        ret.id       = object.id
-        ret.created  = object.created
-        ret.modified = object.modified
         return ret
     }
 }
