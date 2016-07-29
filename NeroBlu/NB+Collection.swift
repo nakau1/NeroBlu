@@ -32,14 +32,14 @@ public extension Dictionary {
     
     /// 渡された辞書を自身にマージする(自身を書き換えます)
     /// - parameter dictionary: マージする辞書
-    mutating func merge(dictionary dic: Dictionary) {
+    public mutating func merge(dictionary dic: Dictionary) {
         dic.forEach { self.updateValue($1, forKey: $0) }
     }
     
     /// 渡された辞書を自身にマージした新しい辞書を取得する(自身は書き換わりません)
     /// - parameter dictionary: マージする辞書
     /// - returns: 新しい辞書オブジェクト
-    func merged(dictionary dic: Dictionary) -> Dictionary {
+    public func merged(dictionary dic: Dictionary) -> Dictionary {
         var ret = self
         dic.forEach { ret.updateValue($1, forKey: $0) }
         return ret
