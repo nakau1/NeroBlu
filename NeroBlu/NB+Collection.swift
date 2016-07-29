@@ -25,6 +25,22 @@ extension Array {
         let index = Int.random(min: min, max: max)
         return self[index]
     }
+    
+    /// 新しい要素を足した配列を返す
+    /// - note: 元の配列自身の要素は変わりません。その用途の場合は appendメソッドを使います
+    /// - parameter e: 要素
+    /// - returns: 要素を足した配列(元の配列自身は変わりません)
+    public func add(e: Element) -> Array<Element> {
+        return self + [e]
+    }
+    
+    /// 新しい要素を足した配列を返す
+    /// - note: 元の配列自身の要素は変わりません。その用途の場合は appendメソッドを使います
+    /// - parameter e: 要素
+    /// - returns: 要素を足した配列(元の配列自身は変わりません)
+    public func add(e: [Element]) -> Array<Element> {
+        return self + e
+    }
 }
 
 // MARK: - Dictionary拡張 -
