@@ -69,6 +69,13 @@ public extension Int {
         return min + r
     }
     
+    /// 指定した範囲の中から乱数を取得する
+    /// - parameter range: 範囲
+    /// - returns: 乱数
+    public static func random(range: Range<Int>) -> Int {
+        return random(min: range.startIndex, max: range.endIndex)
+    }
+    
     /// 3桁区切りにフォーマットされた文字列
     public var formatted: String {
         let fmt = NSNumberFormatter()
