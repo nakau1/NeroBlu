@@ -45,3 +45,24 @@ public extension Dictionary {
         return ret
     }
 }
+
+// MARK: - flatMap拡張 -
+public protocol NBSequenceOptionalType {
+    
+    associatedtype T
+    
+    var optionalValue: T? { get }
+}
+
+extension Optional: NBSequenceOptionalType {
+    
+    public var optionalValue: Wrapped? { return self }
+}
+
+public extension SequenceType where Generator.Element: NBSequenceOptionalType {
+    
+    /// nilを取り除いた非オプショナルなコレクション
+    public var flatten: [Generator.Element.T] {
+        return self.flatMap { $0.optionalValue }
+    }
+}
