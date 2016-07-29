@@ -4,6 +4,19 @@
 // =============================================================================
 import UIKit
 
+// MARK: - Bool拡張 -
+public extension Bool {
+    
+    /// 自身の真偽を反転させる(自身の値が変わる)
+    mutating public func reverse() -> Bool {
+        self = !self
+        return self
+    }
+    
+    /// 自身の真偽を反転させた値を返す(自身の値は変わらない)
+    public var reversed: Bool { return !self }
+}
+
 // MARK: - CGFloat拡張 -
 public extension CGFloat {
     
