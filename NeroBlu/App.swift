@@ -64,7 +64,7 @@ public extension App {
             /// 画面のスケール
             public static var Scale: CGFloat { return UIScreen.mainScreen().scale }
             /// Retinaを考慮した画面サイズ
-            public static var RetinaSize: CGSize { return cs(self.Width * self.Scale, self.Height * self.Scale) }
+            public static var RetinaSize: CGSize { return self.Size * self.Scale }
         }
     }
 }

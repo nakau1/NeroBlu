@@ -44,6 +44,7 @@
 		DB80EE981D2422F3006A44C2 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DB80EE961D2422F3006A44C2 /* Main.storyboard */; };
 		DB80EE9A1D2422F3006A44C2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DB80EE991D2422F3006A44C2 /* Assets.xcassets */; };
 		DB80EE9D1D2422F3006A44C2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DB80EE9B1D2422F3006A44C2 /* LaunchScreen.storyboard */; };
+		DBC0EE081D4ADCE1007E3D02 /* NB+Operation.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBC0EE071D4ADCE1007E3D02 /* NB+Operation.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -110,6 +111,7 @@
 		DB80EE991D2422F3006A44C2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DB80EE9C1D2422F3006A44C2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		DB80EE9E1D2422F3006A44C2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DBC0EE071D4ADCE1007E3D02 /* NB+Operation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NB+Operation.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -141,6 +143,7 @@
 				DB105BF71D26C50600CF994D /* NB+NSError.swift */,
 				DB105BF81D26C50600CF994D /* NB+NSNotification.swift */,
 				DB105BF91D26C50600CF994D /* NB+Number.swift */,
+				DBC0EE071D4ADCE1007E3D02 /* NB+Operation.swift */,
 				DB105BFA1D26C50600CF994D /* NB+String.swift */,
 				DB105BFB1D26C50600CF994D /* NB+UIButton.swift */,
 				DB105BFC1D26C50600CF994D /* NB+UIColor.swift */,
@@ -322,6 +325,7 @@
 				DB105C121D26C50600CF994D /* NB+Collection.swift in Sources */,
 				DB105C111D26C50600CF994D /* NB+CGGeometry.swift in Sources */,
 				DB105C181D26C50600CF994D /* NB+UIColor.swift in Sources */,
+				DBC0EE081D4ADCE1007E3D02 /* NB+Operation.swift in Sources */,
 				DB105C141D26C50600CF994D /* NB+NSNotification.swift in Sources */,
 				DB105C131D26C50600CF994D /* NB+NSError.swift in Sources */,
 				DB105C191D26C50600CF994D /* NB+UIView.swift in Sources */,
