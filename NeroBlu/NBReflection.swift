@@ -35,7 +35,7 @@ extension NBReflection {
         let full  = self.className(target, needsFullName: true)
         let short = self.className(target, needsFullName: false)
         
-        if let range = full.range(of: ".\(short)") where full != short {
+        if let range = full.range(of: ".\(short)"), full != short {
             return full.substring(to: range.lowerBound)
         }
         return ""
@@ -61,7 +61,7 @@ extension NBReflection {
         if let cls = target as? AnyClass {
             return cls
         } else if let obj = target as? AnyObject {
-            return obj.dynamicType
+            return type(of: obj)
         } else {
             return nil
         }
