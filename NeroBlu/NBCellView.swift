@@ -11,7 +11,7 @@ public extension IndexPath {
     /// - parameter row: 行インデックス
     /// - parameter section: セクションインデックス
     public init(_ row: Int, _ section: Int = 0) {
-        (self as NSIndexPath).init(row: row, section: section)
+        self.init(row: row, section: section)
     }
 }
 
