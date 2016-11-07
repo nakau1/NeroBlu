@@ -13,14 +13,14 @@ public extension UITextField {
             var r : NSRange? = NSMakeRange(0, 1)
             guard
                 let ap = self.attributedPlaceholder,
-                let ret = ap.attribute(NSForegroundColorAttributeName, atIndex: 0, effectiveRange: &r!) as? UIColor
+                let ret = ap.attribute(NSForegroundColorAttributeName, at: 0, effectiveRange: &r!) as? UIColor
                 else {
                     return nil
             }
             return ret
         }
         set(v) {
-            guard let color = v, font = self.font else {
+            guard let color = v, let font = self.font else {
                 return
             }
             let attributes: [String : AnyObject] = [
@@ -35,7 +35,7 @@ public extension UITextField {
 // MARK: - NBTextFieldManager -
 
 // テキストフィールドを管理するクラス
-public class NBTextFieldManager: NSObject, UITextFieldDelegate {
+open class NBTextFieldManager: NSObject, UITextFieldDelegate {
 
     public typealias ProcessingClosure = (String) -> String // (inputted raw text) -> processed text
     
@@ -44,29 +44,29 @@ public class NBTextFieldManager: NSObject, UITextFieldDelegate {
     public typealias CommittedClosure = (String) -> Void   // (processed text) -> void
     
     /// 管理対象のテキストフィールド
-    public private(set) weak var textField: UITextField!
+    open fileprivate(set) weak var textField: UITextField!
     
     /// リターンキー押下で値を確定させるかどうか
-    public var shouldCommitReturnKey = true
+    open var shouldCommitReturnKey = true
     
     /// 値変更(EditingChanged)が行われる度に入力値の加工を行うかどうか
     /// 日本語入力の際はfalseに設定すると自然な動作をする
-    public var shouldProcessEditingChanged = true
+    open var shouldProcessEditingChanged = true
     
     /// 許可する文字列長
-    public var maxLength: Int? = nil
+    open var maxLength: Int? = nil
     
     /// 入力された値に対して加工を行うクロージャ
-    public var processing: ProcessingClosure?
+    open var processing: ProcessingClosure?
     
     /// 入力された値を制限する(使用禁止文字)かどうかを返すクロージャ
-    public var restricting: RestrictingClosure?
+    open var restricting: RestrictingClosure?
     
     /// 入力された値を確定した時に呼ばれるクロージャ
-    public var committed: CommittedClosure?
+    open var committed: CommittedClosure?
     
     /// リターンキー押下時に呼ばれるクロージャ
-    public var returned: VoidClosure?
+    open var returned: VoidClosure?
     
     /// イニシャライザ
     /// - parameter textField: 管理対象のテキストフィールド
@@ -74,12 +74,12 @@ public class NBTextFieldManager: NSObject, UITextFieldDelegate {
         super.init()
         self.textField = textField
         self.textField.delegate = self
-        self.textField.addTarget(self, action: #selector(NBTextFieldManager.textFieldDidEditingChanged(_:)), forControlEvents: .EditingChanged)
+        self.textField.addTarget(self, action: #selector(NBTextFieldManager.textFieldDidEditingChanged(_:)), for: .editingChanged)
     }
     
     /// キーボードを閉じてテキストフィールドの値を確定させる
-    public func commit() {
-        if self.textField.isFirstResponder() {
+    open func commit() {
+        if self.textField.isFirstResponder {
             self.textField.resignFirstResponder()
         } else {
             self.textFieldDidEndEditing(self.textField)
@@ -88,7 +88,7 @@ public class NBTextFieldManager: NSObject, UITextFieldDelegate {
     
     // MARK: UITextFieldDelegate
     
-    public func textFieldShouldReturn(textField: UITextField) -> Bool {
+    open func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         if self.shouldCommitReturnKey {
             self.commit()
         }
@@ -96,7 +96,7 @@ public class NBTextFieldManager: NSObject, UITextFieldDelegate {
         return true
     }
     
-    public func textFieldDidEndEditing(textField: UITextField) {
+    open func textFieldDidEndEditing(_ textField: UITextField) {
         var text = self.textField.text ?? ""
         if let max = self.maxLength {
             if text.length > max {
@@ -110,14 +110,14 @@ public class NBTextFieldManager: NSObject, UITextFieldDelegate {
         self.textField.text = text
     }
     
-    public func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
+    open func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         if let restricting = self.restricting {
             return !restricting(string)
         }
         return true
     }
     
-    public func textFieldDidEditingChanged(textField: UITextField) {
+    open func textFieldDidEditingChanged(_ textField: UITextField) {
         if self.shouldProcessEditingChanged {
             self.textFieldDidEndEditing(textField)
         }
@@ -127,7 +127,7 @@ public class NBTextFieldManager: NSObject, UITextFieldDelegate {
 // MARK: - NBKeyboardEventManager -
 
 // キーボードイベントを管理するクラス
-public class NBKeyboardEventManager: NSObject {
+open class NBKeyboardEventManager: NSObject {
     
     public typealias ChangingClosure = (CGFloat) -> Void
     
@@ -135,10 +135,10 @@ public class NBKeyboardEventManager: NSObject {
     ///
     /// self.view.layoutIfNeeded() を呼び出すことで綺麗にアニメーションされる
     /// - parameter distance: 座標変更後の画面最下部とキーボードのY座標の距離
-    public var changing: ChangingClosure?
+    open var changing: ChangingClosure?
     
-    private var keyboardHeight: CGFloat = CGFloat.min
-    private var keyboardY:      CGFloat = CGFloat.min
+    fileprivate var keyboardHeight: CGFloat = CGFloat.leastNormalMagnitude
+    fileprivate var keyboardY:      CGFloat = CGFloat.leastNormalMagnitude
     
     /// イニシャライザ
     /// - parameter changing: キーボードの座標変更時のアニメーション実行時に呼ばれるクロージャ
@@ -154,35 +154,35 @@ public class NBKeyboardEventManager: NSObject {
     
     // MARK: プライベート
     
-    private func observeKeyboardEvents(start: Bool) {
+    fileprivate func observeKeyboardEvents(_ start: Bool) {
         let selector = "willChangeKeyboardFrame:"
         
         if start {
-            self.keyboardHeight = CGFloat.min
-            self.keyboardY      = CGFloat.min
+            self.keyboardHeight = CGFloat.leastNormalMagnitude
+            self.keyboardY      = CGFloat.leastNormalMagnitude
         }
         
         App.Notify.observe(self, start: start, notificationsAndSelectors:[
-            UIKeyboardWillShowNotification        : selector,
-            UIKeyboardWillChangeFrameNotification : selector,
-            UIKeyboardWillHideNotification        : selector,
+            NSNotification.Name.UIKeyboardWillShow        : selector,
+            NSNotification.Name.UIKeyboardWillChangeFrame : selector,
+            NSNotification.Name.UIKeyboardWillHide        : selector,
             ]
         )
     }
 
-    @objc private func willChangeKeyboardFrame(notify: NSNotification) {
+    @objc fileprivate func willChangeKeyboardFrame(_ notify: Notification) {
         guard
             let userInfo   = notify.userInfo,
-            let beginFrame = userInfo[UIKeyboardFrameBeginUserInfoKey]?.CGRectValue,
-            let endFrame   = userInfo[UIKeyboardFrameEndUserInfoKey]?.CGRectValue,
+            let beginFrame = (userInfo[UIKeyboardFrameBeginUserInfoKey] as AnyObject).cgRectValue,
+            let endFrame   = (userInfo[UIKeyboardFrameEndUserInfoKey] as AnyObject).cgRectValue,
             let curve      = userInfo[UIKeyboardAnimationCurveUserInfoKey] as? NSNumber,
-            let duration   = userInfo[UIKeyboardAnimationDurationUserInfoKey] as? NSTimeInterval
+            let duration   = userInfo[UIKeyboardAnimationDurationUserInfoKey] as? TimeInterval
             else {
                 return
         }
 
         // 初回のみ
-        if self.keyboardHeight == CGFloat.min && self.keyboardY == CGFloat.min {
+        if self.keyboardHeight == CGFloat.leastNormalMagnitude && self.keyboardY == CGFloat.leastNormalMagnitude {
             self.keyboardHeight = beginFrame.height
             self.keyboardY      = beginFrame.minY
         }
@@ -199,8 +199,8 @@ public class NBKeyboardEventManager: NSObject {
         self.keyboardHeight = height
         self.keyboardY      = endY
         
-        UIView.animateWithDuration(
-            duration,
+        UIView.animate(
+            withDuration: duration,
             delay: 0,
             options: UIViewAnimationOptions(rawValue: UInt(curve)),
             animations: {

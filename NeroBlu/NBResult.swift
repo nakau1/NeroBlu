@@ -10,7 +10,7 @@ import UIKit
 public enum NBResult {
     
     /// 未実行状態(初期状態)
-    case None
+    case none
     /// 成功
     case Succeed
     /// 失敗
@@ -31,7 +31,7 @@ public enum NBResult {
     public var cancelled: Bool { switch self { case .Cancelled: return true default: return false } }
     
     /// 実行したかどうか(.Noneの場合だけfalseになる)
-    public var done: Bool { switch self { case .None: return false default: return true } }
+    public var done: Bool { switch self { case .none: return false default: return true } }
 }
 
 

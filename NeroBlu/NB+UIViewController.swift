@@ -14,29 +14,29 @@ extension UIViewController: Navigatable {
     /// ナビゲーションスタックにビューコントローラをプッシュして表示を更新する
     /// - parameter viewController: ビューコントローラ
     /// - parameter animated: アニメーションの有無
-    public func push(viewController: UIViewController, animated: Bool = true) {
+    public func push(_ viewController: UIViewController, animated: Bool = true) {
         self.navigationController?.pushViewController(viewController, animated: animated)
     }
     
     /// ナビゲーションスタックからトップビューコントローラをポップして表示を更新する
     /// - parameter animated: アニメーションの有無
     /// - returns: ポップしたトップビューコントローラ
-    public func pop(animated animated: Bool = true) -> UIViewController? {
-        return self.navigationController?.popViewControllerAnimated(animated)
+    public func pop(animated: Bool = true) -> UIViewController? {
+        return self.navigationController?.popViewController(animated: animated)
     }
     
     /// ルートビューコントローラを除いて、スタック上のすべてのビューコントローラをポップして表示を更新する
     /// - parameter animated: アニメーションの有無
     /// - returns: ポップされたビューコントローラの配列
-    public func popToRoot(animated animated: Bool = true) -> [UIViewController]? {
-        return self.navigationController?.popToRootViewControllerAnimated(animated)
+    public func popToRoot(animated: Bool = true) -> [UIViewController]? {
+        return self.navigationController?.popToRootViewController(animated: animated)
     }
     
     /// 指定されたビューコントローラがナビゲーションスタックの最上位に位置するまでポップして表示を更新する
     /// - parameter viewController: ビューコントローラ
     /// - parameter animated: アニメーションの有無
     /// - returns: ポップされたビューコントローラの配列
-    public func popTo(viewController: UIViewController, animated: Bool = true) -> [UIViewController]? {
+    public func popTo(_ viewController: UIViewController, animated: Bool = true) -> [UIViewController]? {
         return self.navigationController?.popToViewController(viewController, animated: animated)
     }
 }
@@ -52,17 +52,17 @@ extension UIViewController: Presentable {
     /// - parameter viewController: ビューコントローラ
     /// - parameter transitionStyle: 表示エフェクトスタイル
     /// - parameter completion: 表示完了時の処理
-    public func present(viewController: UIViewController, transitionStyle: UIModalTransitionStyle? = nil, completion: CompletionHandler? = nil) {
+    public func present(_ viewController: UIViewController, transitionStyle: UIModalTransitionStyle? = nil, completion: CompletionHandler? = nil) {
         if let transition = transitionStyle {
             viewController.modalTransitionStyle = transition
         }
-        self.presentViewController(viewController, animated: true, completion: completion)
+        self.present(viewController, animated: true, completion: completion)
     }
     
     /// モーダルで表示されたビューコントローラを閉じる
     /// - parameter completion: 閉じ終えた時の処理
-    public func dismiss(completion: CompletionHandler? = nil) {
-        self.dismissViewControllerAnimated(true, completion: completion)
+    public func dismiss(_ completion: CompletionHandler? = nil) {
+        self.dismiss(animated: true, completion: completion)
     }
 }
 
@@ -71,7 +71,7 @@ public extension App.System {
     
     /// 現在の表示上で最も上層にいるビューコントローラ
     public static var TopViewController: UIViewController? {
-        var vc: UIViewController? = UIApplication.sharedApplication().keyWindow?.rootViewController
+        var vc: UIViewController? = UIApplication.shared.keyWindow?.rootViewController
         while vc?.presentedViewController != nil {
             vc = vc!.presentedViewController!
         }

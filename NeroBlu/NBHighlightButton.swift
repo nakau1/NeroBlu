@@ -5,20 +5,20 @@
 import UIKit
 
 /// ハイライト時の設定が簡易にできるボタン
-@IBDesignable public class NBHighlightButton: UIButton {
+@IBDesignable open class NBHighlightButton: UIButton {
     
-    private var originalBackgroundColor: UIColor?
-    private var originalBorderColor:     UIColor?
+    fileprivate var originalBackgroundColor: UIColor?
+    fileprivate var originalBorderColor:     UIColor?
     
     /// 通常文字色
-    @IBInspectable public var normalTitleColor : UIColor? = nil {
+    @IBInspectable open var normalTitleColor : UIColor? = nil {
         didSet { let v = self.normalTitleColor
-            self.setTitleColor(v, forState: .Normal)
+            self.setTitleColor(v, for: UIControlState())
         }
     }
     
     /// 通常背景色
-    @IBInspectable public var normalBackgroundColor : UIColor? = nil {
+    @IBInspectable open var normalBackgroundColor : UIColor? = nil {
         didSet { let v = self.normalBackgroundColor
             self.originalBackgroundColor = v
             self.backgroundColor         = v
@@ -26,7 +26,7 @@ import UIKit
     }
     
     /// 通常枠色
-    @IBInspectable public var normalBorderColor: UIColor? {
+    @IBInspectable open var normalBorderColor: UIColor? {
         didSet { let v = self.normalBorderColor
             self.originalBorderColor = v
             self.borderColor         = v
@@ -34,30 +34,30 @@ import UIKit
     }
     
     /// ハイライト時の文字色
-    @IBInspectable public var highlightedTitleColor : UIColor? = nil {
+    @IBInspectable open var highlightedTitleColor : UIColor? = nil {
         didSet { let v = self.highlightedTitleColor
-            self.setTitleColor(v, forState: .Highlighted)
+            self.setTitleColor(v, for: .highlighted)
         }
     }
     
     /// ハイライト時の背景色
-    @IBInspectable public var highlightedBackgroundColor : UIColor? = nil
+    @IBInspectable open var highlightedBackgroundColor : UIColor? = nil
     
     /// ハイライト時の枠線の色
-    @IBInspectable public var highlightedBorderColor : UIColor?
+    @IBInspectable open var highlightedBorderColor : UIColor?
     
-    override public var highlighted: Bool {
+    override open var isHighlighted: Bool {
         get {
-            return super.highlighted
+            return super.isHighlighted
         }
         set(v) {
-            super.highlighted = v
+            super.isHighlighted = v
             
             let nb = self.originalBackgroundColor, hb = self.highlightedBackgroundColor, cb = v ? hb : nb
             self.backgroundColor = cb
             
             let nl = self.originalBorderColor, hl = self.highlightedBorderColor, cl = v ? hl : nl
-            self.layer.borderColor = cl?.CGColor
+            self.layer.borderColor = cl?.cgColor
         }
     }
 }

@@ -16,19 +16,19 @@ public struct NBTableExternalViewOptions {
     public var backgroundColor = UIColor(rgb: 0xEFEFF4)
     
     /// フォント
-    public var font = UIFont.systemFontOfSize(16.0)
+    public var font = UIFont.systemFont(ofSize: 16.0)
     
     /// セパレータの左側マージン値
     public var insets = UIEdgeInsets(top: 4.0, left: 20.0, bottom: 4.0, right: 12.0)
     
     /// テキスト揃え
-    public var align = NSTextAlignment.Left
+    public var align = NSTextAlignment.left
 }
 
 // MARK: - NBTableExternalView -
 
 /// テーブルビュー/コレクションビューの主にハイライトを目的としたセル背景用のビュークラス
-public class NBTableExternalView: UIView {
+open class NBTableExternalView: UIView {
     
     /// イニシャライザ
     /// - parameter text: テキスト
@@ -49,7 +49,7 @@ public class NBTableExternalView: UIView {
         
         var labelFrame = cr0
         labelFrame.size.width  = max
-        labelFrame.size.height = label.sizeThatFits(cs(max, CGFloat.max)).height
+        labelFrame.size.height = label.sizeThatFits(cs(max, CGFloat.greatestFiniteMagnitude)).height
         labelFrame.origin.x    = opt.insets.left
         labelFrame.origin.y    = opt.insets.top
         

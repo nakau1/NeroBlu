@@ -23,7 +23,7 @@ public extension CGFloat {
     /// 様々な数値をCGFloatに変換する
     /// - parameter number: 数値(整数、ダブル/フロート値、数字文字列)
     /// - returns: CGFloat値(変換できない場合は0を返す)
-    public static func cast<T>(number: T) -> CGFloat {
+    public static func cast<T>(_ number: T) -> CGFloat {
         if      let v = number as? CGFloat { return v }
         else if let v = number as? Int     { return CGFloat(v) }
         else if let v = number as? Int8    { return CGFloat(v) }
@@ -72,17 +72,17 @@ public extension Int {
     /// 指定した範囲の中から乱数を取得する
     /// - parameter range: 範囲
     /// - returns: 乱数
-    public static func random(range: Range<Int>) -> Int {
-        return random(min: range.startIndex, max: range.endIndex)
+    public static func random(_ range: Range<Int>) -> Int {
+        return random(min: range.lowerBound, max: range.upperBound)
     }
     
     /// 3桁区切りにフォーマットされた文字列
     public var formatted: String {
-        let fmt = NSNumberFormatter()
-        fmt.numberStyle       = .DecimalStyle
+        let fmt = NumberFormatter()
+        fmt.numberStyle       = .decimal
         fmt.groupingSeparator = ","
         fmt.groupingSize      = 3
-        return fmt.stringFromNumber(self) ?? ""
+        return fmt.string(from: NSNumber(self)) ?? ""
     }
 }
 

@@ -19,9 +19,9 @@ public extension UIView {
     @IBInspectable public var borderColor: UIColor? {
         get {
             guard let color = self.layer.borderColor else { return nil }
-            return UIColor(CGColor: color)
+            return UIColor(cgColor: color)
         }
-        set(v) { self.layer.borderColor = v?.CGColor }
+        set(v) { self.layer.borderColor = v?.cgColor }
     }
     
     /// 角丸
@@ -72,35 +72,35 @@ public extension UIView {
     /// - parameter nibName: XIBファイル名
     /// - parameter bundle: バンドル
     /// - returns: 新しいビュー
-    public class func loadFromNib<T: UIView>(type: T.Type, nibName: String? = nil, bundle: NSBundle? = nil) -> T? {
+    public class func loadFromNib<T: UIView>(_ type: T.Type, nibName: String? = nil, bundle: Bundle? = nil) -> T? {
         let name = nibName ?? NBReflection.className(type)
         let nib = UINib(nibName: name, bundle: bundle)
-        return nib.instantiateWithOwner(nil, options: nil).first as? T
+        return nib.instantiate(withOwner: nil, options: nil).first as? T
     }
     
     // MARK: 座標関連
     
     /// ビューのX座標
     public var x: CGFloat {
-        get    { return CGRectGetMinX(self.frame) }
+        get    { return self.frame.minX }
         set(v) { self.frame.origin.x = v }
     }
     
     /// ビューのY座標
     public var y: CGFloat {
-        get    { return CGRectGetMinY(self.frame) }
+        get    { return self.frame.minY }
         set(v) { self.frame.origin.y = v }
     }
     
     /// ビューの幅
     public var width: CGFloat {
-        get    { return CGRectGetWidth(self.frame) }
+        get    { return self.frame.width }
         set(v) { self.frame.size.width = v }
     }
     
     /// ビューの高さ
     public var height: CGFloat {
-        get    { return CGRectGetHeight(self.frame) }
+        get    { return self.frame.height }
         set(v) { self.frame.size.height = v }
     }
 }

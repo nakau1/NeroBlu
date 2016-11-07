@@ -153,7 +153,7 @@ class ViewController: NBLandingViewController {
     
     let notificationsAndSelectors = ["TestNotification" : "didNotify:"]
     
-    func didNotify(notify: NSNotification) {
+    func didNotify(_ notify: Notification) {
         print("Notified!")
     }
 }

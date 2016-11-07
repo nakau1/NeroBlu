@@ -7,11 +7,11 @@ import UIKit
 // MARK: - NBUserDefaults -
 
 /// UserDefaultsを使用した永続的データを扱うクラス
-public class NBUserDefaults: NSObject {
+open class NBUserDefaults: NSObject {
     
-    private let ud = NSUserDefaults.standardUserDefaults()
+    fileprivate let ud = UserDefaults.standard
     
-    private var domain = ""
+    fileprivate var domain = ""
     
     public override init() {
         super.init()
@@ -44,7 +44,7 @@ public extension NBUserDefaults {
         var ret = [String : AnyObject]()
         let filter = { (key: String, val: AnyObject) -> Bool in key.hasSuffix(self.domain) }
         let each   = { (key: String, val: AnyObject) -> Void in ret[key] = val }
-        self.ud.dictionaryRepresentation().filter(filter).forEach(each)
+        self.ud.dictionaryRepresentation().filter(filter as! ((key: String, value: Any)) -> Bool).forEach(each as! ((key: String, value: Any)) -> Void)
         return ret
     }
 }
@@ -52,42 +52,42 @@ public extension NBUserDefaults {
 // MARK: - プライベートメソッド -
 private extension NBUserDefaults {
     
-    private func registerDomain() {
-        self.domain = "@\( NSStringFromClass(self.dynamicType) )"
+    func registerDomain() {
+        self.domain = "@\( NSStringFromClass(type(of: self)) )"
     }
     
-    private func registerDefaults() {
+    func registerDefaults() {
         let dic = self.propertyNames.reduce([String : AnyObject]()) { (dic, key) -> [String : AnyObject] in
             var dic = dic
-            dic[self.keyName(key)] = self.valueForKey(key)
+            dic[self.keyName(key)] = self.value(forKey: key) as AnyObject?
             return dic
         }
-        self.ud.registerDefaults(dic)
+        self.ud.register(defaults: dic)
     }
     
-    private func setupProperty() {
+    func setupProperty() {
         self.propertyNames.forEach { propertyName in
-            self.setValue(self.ud.objectForKey(self.keyName(propertyName)), forKey: propertyName)
+            self.setValue(self.ud.object(forKey: self.keyName(propertyName)), forKey: propertyName)
         }
     }
     
-    private func observe(start: Bool) {
+    func observe(_ start: Bool) {
         self.propertyNames.forEach { propertyName in
             if start {
-                self.addObserver(self, forKeyPath: propertyName, options: .New, context: nil)
+                self.addObserver(self, forKeyPath: propertyName, options: .new, context: nil)
             } else {
                 self.removeObserver(self, forKeyPath: propertyName)
             }
         }
     }
     
-    private func keyName(name: String) -> String {
+    func keyName(_ name: String) -> String {
         return "\(name)\(self.domain)"
     }
     
     var propertyNames: [String] {
         return Mirror(reflecting: self).children.flatMap { $0.label }.filter {
-            !self.dynamicType.ignoredProperties().contains($0)
+            !type(of: self).ignoredProperties().contains($0)
         }
     }
 }
@@ -95,9 +95,9 @@ private extension NBUserDefaults {
 // MARK: - KVO -
 public extension NBUserDefaults {
     
-    public override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
+    open override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         guard let keyPath = keyPath else { return }
-        self.ud.setObject(change?["new"], forKey: self.keyName(keyPath))
+        self.ud.set(change?["new"], forKey: self.keyName(keyPath))
         self.ud.synchronize()
     }
 }

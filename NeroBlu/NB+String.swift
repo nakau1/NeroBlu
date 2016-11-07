@@ -17,7 +17,7 @@ public extension String {
     /// 自身をローカライズのキーとしてローカライズされた文字列を取得する
     /// - parameter comment: コメント
     /// - returns: ローカライズされた文字列
-    public func localize(comment: String = "") -> String {
+    public func localize(_ comment: String = "") -> String {
         return NSLocalizedString(self, comment: comment)
     }
 }
@@ -29,7 +29,7 @@ public extension String {
     /// 自身をフォーマットとしてフォーマット化された文字列を取得する
     /// - parameter args: 引数
     /// - returns: フォーマット化された文字列
-    public func format(args: CVarArgType...) -> String {
+    public func format(_ args: CVarArg...) -> String {
         let s = NSString(format: self, arguments: getVaList(args))
         return s as String
     }
@@ -56,7 +56,7 @@ extension String {
     /// 空文字列であれば指定の代替文字を返す
     /// - parameter substitute: 代替文字
     /// - returns: 空文字列の場合は代替文字、それ以外は自身を返す
-    public func emptyTo(substitute: String) -> String {
+    public func emptyTo(_ substitute: String) -> String {
         return self.isEmpty ? substitute : self
     }
 }
@@ -68,16 +68,16 @@ extension String {
     /// - parameter search: 検索する文字
     /// - parameter replacement: 置換する文字
     /// - returns: 置換された文字列
-    public func replace(search: String, _ replacement: String) -> String {
-        return self.stringByReplacingOccurrencesOfString(search, withString: replacement, options: NSStringCompareOptions(), range: nil)
+    public func replace(_ search: String, _ replacement: String) -> String {
+        return self.replacingOccurrences(of: search, with: replacement, options: NSString.CompareOptions(), range: nil)
     }
     
     /// 指定した範囲の文字列置換を行う
     /// - parameter range: 範囲
     /// - parameter replacement: 置換する文字
     /// - returns: 置換された文字列
-    public func replace(range: NSRange, _ replacement: String) -> String {
-        return self.ns.stringByReplacingCharactersInRange(range, withString: replacement)
+    public func replace(_ range: NSRange, _ replacement: String) -> String {
+        return self.ns.replacingCharacters(in: range, with: replacement)
     }
 }
 
@@ -88,8 +88,8 @@ extension String {
     /// - parameter separator: 分割に使用するセパレータ文字
     /// - parameter allowEmpty: 空文字を許可するかどうか。falseにすると分割された結果が空文字だった場合は配列に入りません
     /// - returns: 分割された結果の文字列配列
-    public func split(separator: String, allowEmpty: Bool = true) -> [String] {
-        let ret = self.componentsSeparatedByString(separator)
+    public func split(_ separator: String, allowEmpty: Bool = true) -> [String] {
+        let ret = self.components(separatedBy: separator)
         if allowEmpty {
             return ret
         }
@@ -144,8 +144,8 @@ extension String {
     ///
     /// - parameter characterSet: トリムに使用するキャラクタセット(省略すると半角スペースのみがトリム対象となる)
     /// - returns: トリムされた文字列
-    public func trim(characterSet: NSCharacterSet = .whitespaceCharacterSet()) -> String {
-        return self.stringByTrimmingCharactersInSet(characterSet)
+    public func trim(_ characterSet: CharacterSet = .whitespaces) -> String {
+        return self.trimmingCharacters(in: characterSet)
     }
 }
 
@@ -169,7 +169,7 @@ extension String {
     /// - parameter start: 開始インデックス
     /// - parameter length: 文字列長
     /// - returns: 部分取得された文字列
-    public func substring(location location: Int, length: Int? = nil) -> String {
+    public func substring(location: Int, length: Int? = nil) -> String {
         let strlen = self.length
         let max = strlen - 1, min = strlen * -1
         
@@ -212,14 +212,14 @@ extension String {
         } else if max < e {
             e = max
         }
-        let range = Range(self.startIndex.advancedBy(s)...self.startIndex.advancedBy(e))
-        return self.substringWithRange(range)
+        let range = Range(self.characters.index(self.startIndex, offsetBy: s)...self.characters.index(self.startIndex, offsetBy: e))
+        return self.substring(with: range)
     }
     
     /// 文字列の部分取得を行う
     /// - parameter range: 範囲
     /// - returns: 部分取得された文字列
-    public func substring(range range: NSRange) -> String {
+    public func substring(range: NSRange) -> String {
         return self.substring(location: range.location, length: range.length)
     }
 }
@@ -233,23 +233,23 @@ extension String {
     /// - parameter regularExpressionOptions: 正規表現オプション
     /// - parameter matchingOptions: 正規表現マッチングオプション
     /// - returns: 正規表現パターンに合った文字列の配列
-    public func matchedStrings(pattern: String, regularExpressionOptions: NSRegularExpressionOptions? = nil, matchingOptions: NSMatchingOptions? = nil) -> [String] {
+    public func matchedStrings(_ pattern: String, regularExpressionOptions: NSRegularExpression.Options? = nil, matchingOptions: NSRegularExpression.MatchingOptions? = nil) -> [String] {
         
         guard let regExp = try? NSRegularExpression(
             pattern: pattern,
-            options: regularExpressionOptions ?? NSRegularExpressionOptions()
+            options: regularExpressionOptions ?? NSRegularExpression.Options()
             ) else {
                 return []
         }
         
-        let results = regExp.matchesInString(
-            self,
-            options: matchingOptions ?? NSMatchingOptions(),
+        let results = regExp.matches(
+            in: self,
+            options: matchingOptions ?? NSRegularExpression.MatchingOptions(),
             range:   NSMakeRange(0, self.length)
         )
         var ret = [String]()
         for result in results {
-            ret.append(self.substring(range: result.rangeAtIndex(0)))
+            ret.append(self.substring(range: result.rangeAt(0)))
         }
         return ret
     }
@@ -259,15 +259,15 @@ extension String {
     /// - parameter regularExpressionOptions: 正規表現オプション
     /// - parameter matchingOptions: 正規表現マッチングオプション
     /// - returns: 正規表現パターンに合った最初の文字列
-    public func matchedString(pattern: String, regularExpressionOptions: NSRegularExpressionOptions? = nil, matchingOptions: NSMatchingOptions? = nil) -> String? {
+    public func matchedString(_ pattern: String, regularExpressionOptions: NSRegularExpression.Options? = nil, matchingOptions: NSRegularExpression.MatchingOptions? = nil) -> String? {
         return self.matchedStrings(pattern, regularExpressionOptions: regularExpressionOptions, matchingOptions: matchingOptions).first
     }
     
     /// 指定した正規表現パターンに合うかどうかを返す
     /// - parameter pattern: 正規表現パターン
     /// - returns: 文字列が正規表現パターンに合うかどうか
-    public func isMatched(pattern: String) -> Bool {
-        let range = self.ns.rangeOfString(pattern, options: .RegularExpressionSearch)
+    public func isMatched(_ pattern: String) -> Bool {
+        let range = self.ns.range(of: pattern, options: .regularExpression)
         return range.location != NSNotFound
     }
     
@@ -277,13 +277,13 @@ extension String {
     /// - parameter regularExpressionOptions: 正規表現オプション
     /// - parameter matchingOptions: 正規表現マッチングオプション
     /// - returns: 置換した文字列
-    public func replaceMatched(pattern: String, replacement: String, regularExpressionOptions: NSRegularExpressionOptions? = nil, matchingOptions: NSMatchingOptions? = nil) -> String {
+    public func replaceMatched(_ pattern: String, replacement: String, regularExpressionOptions: NSRegularExpression.Options? = nil, matchingOptions: NSRegularExpression.MatchingOptions? = nil) -> String {
         
         let mutableSelf = self.mutable
-        guard let regExp = try? NSRegularExpression(pattern: pattern, options: regularExpressionOptions ?? NSRegularExpressionOptions()) else {
+        guard let regExp = try? NSRegularExpression(pattern: pattern, options: regularExpressionOptions ?? NSRegularExpression.Options()) else {
             return "\(self)"
         }
-        regExp.replaceMatchesInString(mutableSelf, options: matchingOptions ?? NSMatchingOptions(), range: NSMakeRange(0, self.length), withTemplate: replacement)
+        regExp.replaceMatches(in: mutableSelf, options: matchingOptions ?? NSRegularExpression.MatchingOptions(), range: NSMakeRange(0, self.length), withTemplate: replacement)
         
         return mutableSelf as String
     }
@@ -293,7 +293,7 @@ extension String {
     /// - parameter regularExpressionOptions: 正規表現オプション
     /// - parameter matchingOptions: 正規表現マッチングオプション
     /// - returns: 削除した文字列
-    public func removeMatched(pattern: String, regularExpressionOptions: NSRegularExpressionOptions? = nil, matchingOptions: NSMatchingOptions? = nil) -> String {
+    public func removeMatched(_ pattern: String, regularExpressionOptions: NSRegularExpression.Options? = nil, matchingOptions: NSRegularExpression.MatchingOptions? = nil) -> String {
         return self.replaceMatched(pattern, replacement: "", regularExpressionOptions: regularExpressionOptions, matchingOptions: matchingOptions)
     }
 }
@@ -306,7 +306,7 @@ extension String {
     /// - parameter transform: 変換方法
     /// - parameter reverse: 変換順序
     /// - returns: 変換した文字列
-    public func transform(transform transform: CFStringRef, reverse: Bool) -> String {
+    public func transform(transform: CFString, reverse: Bool) -> String {
         let mutableSelf = self.mutable as CFMutableString
         CFStringTransform(mutableSelf, nil, transform, reverse)
         return mutableSelf as String
@@ -371,7 +371,7 @@ extension String {
     public static let structureOfLowercaseAlphabet = "abcdefghijklmnopqrstuvwxyz"
     
     /// 半角大文字アルファベットの構成
-    public static let structureOfUppercaseAlphabet = structureOfLowercaseAlphabet.uppercaseString
+    public static let structureOfUppercaseAlphabet = structureOfLowercaseAlphabet.uppercased()
     
     /// 半角アルファベットの構成
     public static let structureOfAlphabet = structureOfLowercaseAlphabet + structureOfUppercaseAlphabet
@@ -403,8 +403,8 @@ extension String {
     /// - returns: 渡した文字のみで構成されているかどうか
     public func isOnly(structuredBy chars: String) -> Bool {
         let characterSet = NSMutableCharacterSet()
-        characterSet.addCharactersInString(chars)
-        return self.stringByTrimmingCharactersInSet(characterSet).length <= 0
+        characterSet.addCharacters(in: chars)
+        return self.trimmingCharacters(in: characterSet as CharacterSet).length <= 0
     }
 }
 
@@ -413,7 +413,7 @@ extension String {
     
     /// URLエンコードした文字列
     public var urlEncode: String {
-        return self.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.alphanumericCharacterSet()) ?? ""
+        return self.addingPercentEncoding(withAllowedCharacters: CharacterSet.alphanumerics) ?? ""
     }
     
     /// URLデコードした文字列
@@ -430,15 +430,15 @@ extension String {
         if self.isEmpty { return "" }
         
         let r = NSMakeRange(0, 1)
-        var ret = self.capitalizedString.stringByReplacingOccurrencesOfString("_", withString: "")
-        ret = ret.ns.stringByReplacingCharactersInRange(r, withString: ret.ns.substringWithRange(r).lowercaseString)
+        var ret = self.capitalized.replacingOccurrences(of: "_", with: "")
+        ret = ret.ns.replacingCharacters(in: r, with: ret.ns.substring(with: r).lowercased())
         return ret
     }
     
     /// キャメル記法をスネーク記法に変換した文字列
     public var camelToSnake: String {
         if self.isEmpty { return "" }
-        return self.replaceMatched("(?<=\\w)([A-Z])", replacement: "_$1").lowercaseString
+        return self.replaceMatched("(?<=\\w)([A-Z])", replacement: "_$1").lowercased()
     }
 }
 
@@ -449,7 +449,7 @@ extension String {
 /// - parameter separator: 分割に使用するセパレータ文字
 /// - parameter allowEmpty: 空文字を許可するかどうか。falseにすると分割された結果が空文字だった場合は配列に入りません
 /// - returns: 分割された結果の文字列配列
-public func split(string: String, _ separator: String, allowEmpty: Bool = true) -> [String] {
+public func split(_ string: String, _ separator: String, allowEmpty: Bool = true) -> [String] {
     return string.split(separator, allowEmpty: allowEmpty)
 }
 
@@ -457,14 +457,14 @@ public func split(string: String, _ separator: String, allowEmpty: Bool = true) 
 /// - parameter strings: 対象の文字列
 /// - parameter glue: 結合に使用する文字
 /// - returns: 結合した結果の文字列
-public func join(strings: [String], _ glue: String) -> String {
-    return (strings as NSArray).componentsJoinedByString(glue)
+public func join(_ strings: [String], _ glue: String) -> String {
+    return (strings as NSArray).componentsJoined(by: glue)
 }
 
 /// 文字列の部分取得を行う
 /// - parameter start: 開始インデックス
 /// - parameter length: 文字列長(省略した場合は末尾まで取得)
 /// - returns: 部分取得された文字列
-public func substring(string: String, _ location: Int, _ length: Int? = nil) -> String {
+public func substring(_ string: String, _ location: Int, _ length: Int? = nil) -> String {
     return string.substring(location: location, length: length)
 }

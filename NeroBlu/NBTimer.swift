@@ -5,19 +5,19 @@
 import UIKit
 
 /// タイマークラス
-public class NBTimer: NSObject {
+open class NBTimer: NSObject {
     
     /// タイマーを開始する
     /// - parameter time: タイマー時間
     /// - parameter completion: タイマー発火時の処理
     /// - returns: 動作中のNSTimerオブジェクト
-    public class func start(time: NSTimeInterval, completion: CompletionHandler) -> NSTimer {
+    open class func start(_ time: TimeInterval, completion: @escaping CompletionHandler) -> Timer {
         let timer = NBTimer()
         NBTimer.timers.append(timer)
         
         timer.completion = completion
-        timer.timer = NSTimer.scheduledTimerWithTimeInterval(
-            time,
+        timer.timer = Timer.scheduledTimer(
+            timeInterval: time,
             target:   timer,
             selector: #selector(NBTimer.didFireTimer),
             userInfo: nil,
@@ -26,18 +26,18 @@ public class NBTimer: NSObject {
         return timer.timer!
     }
     
-    private static var timers: [NBTimer] = []
+    fileprivate static var timers: [NBTimer] = []
     
-    private var completion: CompletionHandler!
+    fileprivate var completion: CompletionHandler!
     
-    private weak var timer: NSTimer?
+    fileprivate weak var timer: Timer?
     
-    @objc private func didFireTimer() {
+    @objc fileprivate func didFireTimer() {
         self.completion()
         self.timer = nil
         
-        if let index = NBTimer.timers.indexOf(self) {
-            NBTimer.timers.removeAtIndex(index.hashValue)
+        if let index = NBTimer.timers.index(of: self) {
+            NBTimer.timers.remove(at: index.hashValue)
         }
     }
 }

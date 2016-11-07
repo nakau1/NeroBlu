@@ -7,7 +7,7 @@ import UIKit
 // MARK: - App -
 
 /// アプリケーション
-public class App {}
+open class App {}
 
 // MARK: - App.System -
 public extension App {
@@ -16,7 +16,7 @@ public extension App {
     public struct System {
         
         /// UIApplicationの共有オブジェクト
-        public static var Shared: UIApplication { return UIApplication.sharedApplication() }
+        public static var Shared: UIApplication { return UIApplication.shared }
         
         /// ルートビューコントローラ
         public static var Root: UIViewController? {
@@ -26,12 +26,12 @@ public extension App {
         
         /// アプリケーションID
         public static var ApplicationID: String {
-            return NSBundle.mainBundle().infoDictionary?[kCFBundleIdentifierKey as String] as? String ?? ""
+            return Bundle.main.infoDictionary?[kCFBundleIdentifierKey as String] as? String ?? ""
         }
         
         /// iPadかどうか
         public static var isiPad: Bool {
-            return UIDevice.currentDevice().model.hasPrefix("iPad")
+            return UIDevice.current.model.hasPrefix("iPad")
         }
         
         /// シミュレータかどうか
@@ -56,13 +56,13 @@ public extension App {
         /// 画面
         public struct Screen {
             /// 画面のサイズ
-            public static var Size: CGSize { return UIScreen.mainScreen().bounds.size }
+            public static var Size: CGSize { return UIScreen.main.bounds.size }
             /// 画面の幅
             public static var Width: CGFloat { return self.Size.width }
             /// 画面の高さ
             public static var Height: CGFloat { return self.Size.height }
             /// 画面のスケール
-            public static var Scale: CGFloat { return UIScreen.mainScreen().scale }
+            public static var Scale: CGFloat { return UIScreen.main.scale }
             /// Retinaを考慮した画面サイズ
             public static var RetinaSize: CGSize { return self.Size * self.Scale }
         }

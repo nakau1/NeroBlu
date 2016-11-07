@@ -7,15 +7,15 @@ import UIKit
 // MARK: - NBLandingItem -
 
 /// NBLandingViewControllerの項目クラス
-public class NBLandingItem {
+open class NBLandingItem {
     
-    private var title:   String
-    private var handler: VoidClosure
+    fileprivate var title:   String
+    fileprivate var handler: VoidClosure
     
     /// イニシャライザ
     /// - parameter title: 項目タイトル
     /// - parameter handler: 項目選択時の処理
-    public init(_ title: String, _ handler: VoidClosure) {
+    public init(_ title: String, _ handler: @escaping VoidClosure) {
         self.title   = title
         self.handler = handler
     }
@@ -24,84 +24,84 @@ public class NBLandingItem {
 // MARK: - NBLandingViewController -
 
 /// ランディング画面ビューコントローラ
-public class NBLandingViewController: UIViewController {
+open class NBLandingViewController: UIViewController {
     
     /// テーブルビュー
-    @IBOutlet public weak var tableView: UITableView!
+    @IBOutlet open weak var tableView: UITableView!
     
     /// ランディング画面の項目の定義を返す
     /// - returns: title: セクションのタイトル, rows: 項目の配列
-    public var items: [(title: String, rows: [NBLandingItem])] {
+    open var items: [(title: String, rows: [NBLandingItem])] {
         return []
     }
     
-    private var table: Table!
+    fileprivate var table: Table!
     
-    override public func viewDidLoad() {
+    override open func viewDidLoad() {
         super.viewDidLoad()
         self.setupTableViewIfNeeded()
         self.table = Table(controller: self)
     }
     
-    private class Table: NSObject, UITableViewDelegate, UITableViewDataSource {
+    fileprivate class Table: NSObject, UITableViewDelegate, UITableViewDataSource {
         
-        private let controller: NBLandingViewController
+        fileprivate let controller: NBLandingViewController
         
-        private let cellIdentifier = "item"
+        fileprivate let cellIdentifier = "item"
         
         init(controller: NBLandingViewController) {
             self.controller = controller
             super.init()
             
-            controller.tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: self.cellIdentifier)
+            controller.tableView.register(UITableViewCell.self, forCellReuseIdentifier: self.cellIdentifier)
             controller.tableView.delegate = self
             controller.tableView.dataSource = self
         }
         
-        @objc private func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        @objc fileprivate func numberOfSections(in tableView: UITableView) -> Int {
             return self.controller.items.count
         }
         
-        @objc private func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        @objc fileprivate func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
             return self.controller.items[section].rows.count
         }
         
-        @objc private func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-            let cell = tableView.dequeueReusableCellWithIdentifier(self.cellIdentifier, forIndexPath: indexPath)
+        @objc fileprivate func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+            let cell = tableView.dequeueReusableCell(withIdentifier: self.cellIdentifier, for: indexPath)
             let item = self.controller.items[indexPath.section].rows[indexPath.row]
             cell.textLabel?.text = item.title
             return cell
         }
         
-        @objc private func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        @objc fileprivate func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
             return self.controller.items[section].title
         }
         
-        @objc private func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-            tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        @objc fileprivate func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+            tableView.deselectRow(at: indexPath, animated: true)
             let item = self.controller.items[indexPath.section].rows[indexPath.row]
             item.handler()
         }
     }
     
-    private func setupTableViewIfNeeded() {
+    fileprivate func setupTableViewIfNeeded() {
         if self.tableView != nil { return }
         
-        let v = UITableView(frame: CGRectZero, style: .Grouped)
+        let v = UITableView(frame: CGRect.zero, style: .grouped)
         self.view.addSubview(v)
         v.translatesAutoresizingMaskIntoConstraints = false
         
-        func constraint(attr: NSLayoutAttribute, _ toItem: AnyObject? = nil) -> NSLayoutConstraint {
+        func constraint(_ attr: NSLayoutAttribute, _ toItem: AnyObject? = nil) -> NSLayoutConstraint {
             return NSLayoutConstraint(
-                item: v, attribute: attr, relatedBy: .Equal,
+                item: v, attribute: attr, relatedBy: .equal,
                 toItem: toItem ?? self.view, attribute: attr, multiplier: 1, constant: 0)
         }
         
         self.view.addConstraints([
-            constraint(.Leading),
-            constraint(.Trailing),
-            constraint(.Top, self.topLayoutGuide),
-            constraint(.Bottom, self.bottomLayoutGuide),
+            constraint(.leading),
+            constraint(.trailing),
+            constraint(.top, self.topLayoutGuide),
+            constraint(.bottom, self.bottomLayoutGuide),
         ])
         
         self.tableView = v

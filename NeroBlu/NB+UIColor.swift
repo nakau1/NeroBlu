@@ -13,7 +13,7 @@ public extension UIColor {
     /// - parameter blue: B値(0-255)
     /// - parameter alpha: アルファ値(0-255)
     public convenience init(_ red: Int, _ green: Int, _ blue: Int, _ alpha: Int = 255) {
-        func calc(i: Int) -> CGFloat {
+        func calc(_ i: Int) -> CGFloat {
             if i < 0 { return 0 } else if 255 < i { return 1 } else { return CGFloat(i) / 255 }
         }
         self.init(red: calc(red), green: calc(green), blue: calc(blue), alpha: calc(alpha))
@@ -41,8 +41,8 @@ public extension UIColor {
     /// アルファ値を設定した新しいインスタンスを返す
     /// - parameter alpha: アルファ値
     /// - returns: UIColor
-    public func alpha(alpha: CGFloat) -> UIColor {
-        return self.colorWithAlphaComponent(alpha)
+    public func alpha(_ alpha: CGFloat) -> UIColor {
+        return self.withAlphaComponent(alpha)
     }
 }
 
@@ -74,7 +74,7 @@ public extension UIColor {
     /// カラーコードを整数に変換する
     /// - parameter colorCode: カラーコード
     /// - returns: カラーコードを整数化した値(RGBA値)
-    public class func colorCodeToHex(colorCode: String) -> Int {
+    public class func colorCodeToHex(_ colorCode: String) -> Int {
         var colorCode = colorCode
         if colorCode.hasPrefix(self.prefix) {
             colorCode = colorCode.substring(location: 1)
@@ -91,12 +91,12 @@ public extension UIColor {
         default: return self.minHex
         }
         
-        if (colorCode as NSString).rangeOfString("^[a-fA-F0-9]+$", options: .RegularExpressionSearch).location == NSNotFound {
+        if (colorCode as NSString).range(of: "^[a-fA-F0-9]+$", options: .regularExpression).location == NSNotFound {
             return self.minHex
         }
         
         var ret: UInt32 = 0
-        NSScanner(string: colorCode).scanHexInt(&ret)
+        Scanner(string: colorCode).scanHexInt32(&ret)
         return Int(ret)
     }
     
@@ -104,7 +104,7 @@ public extension UIColor {
     /// - parameter hex: 整数
     /// - parameter prefix: 先頭に"#"を付けるどうか
     /// - returns: カラーコード文字列
-    public class func hexToColorCode(hex: UInt32, withPrefix prefix: Bool = true) -> String {
+    public class func hexToColorCode(_ hex: UInt32, withPrefix prefix: Bool = true) -> String {
         var hex = hex
         if hex > UInt32(self.maxHex) {
             hex = UInt32(self.maxHex)
@@ -152,16 +152,16 @@ public extension UIColor {
 // MARK: - UIColor拡張: プライベート -
 private extension UIColor {
     
-    private static let maxHex = 0xFFFFFF
-    private static let minHex = 0x0
+    static let maxHex = 0xFFFFFF
+    static let minHex = 0x0
     
-    private static let prefix = "#"
+    static let prefix = "#"
     
-    private class func intByCGFloat(v: CGFloat) -> Int {
+    class func intByCGFloat(_ v: CGFloat) -> Int {
         return Int(round(v * 255.0))
     }
     
-    private class func hexStringByCGFloat(v: CGFloat) -> String {
+    class func hexStringByCGFloat(_ v: CGFloat) -> String {
         let n = self.intByCGFloat(v)
         return NSString(format: "%02X", n) as String
     }
@@ -170,21 +170,21 @@ private extension UIColor {
 // MARK: - 色定義 -
 public struct Color {
  
-    public static let Black     = UIColor.blackColor()
-    public static let DarkGray  = UIColor.darkGrayColor()
-    public static let LightGray = UIColor.lightGrayColor()
-    public static let White     = UIColor.whiteColor()
-    public static let Gray      = UIColor.grayColor()
-    public static let Red       = UIColor.redColor()
-    public static let Green     = UIColor.greenColor()
-    public static let Blue      = UIColor.blueColor()
-    public static let Cyan      = UIColor.cyanColor()
-    public static let Yellow    = UIColor.yellowColor()
-    public static let Magenta   = UIColor.magentaColor()
-    public static let Orange    = UIColor.orangeColor()
-    public static let Purple    = UIColor.purpleColor()
-    public static let Brown     = UIColor.brownColor()
-    public static let Clear     = UIColor.clearColor()
+    public static let Black     = UIColor.black
+    public static let DarkGray  = UIColor.darkGray
+    public static let LightGray = UIColor.lightGray
+    public static let White     = UIColor.white
+    public static let Gray      = UIColor.gray
+    public static let Red       = UIColor.red
+    public static let Green     = UIColor.green
+    public static let Blue      = UIColor.blue
+    public static let Cyan      = UIColor.cyan
+    public static let Yellow    = UIColor.yellow
+    public static let Magenta   = UIColor.magenta
+    public static let Orange    = UIColor.orange
+    public static let Purple    = UIColor.purple
+    public static let Brown     = UIColor.brown
+    public static let Clear     = UIColor.clear
     
     public static var Random: UIColor { return self.Random(0, 255) }
     
@@ -192,7 +192,7 @@ public struct Color {
     
     public static var LightRandom: UIColor { return self.Random(128, 255) }
     
-    private static func Random(min: Int, _ max: Int) -> UIColor {
+    fileprivate static func Random(_ min: Int, _ max: Int) -> UIColor {
         var c = [Int](); for _ in 0..<3 { c.append(Int.random(min: min, max: max)) }
         return UIColor(c[0], c[1], c[2])
     }
@@ -201,13 +201,13 @@ public struct Color {
 // MARK: - テスト色定義 -
 public struct TestColor {
     
-    private static let alpha: CGFloat = 0.3
+    fileprivate static let alpha: CGFloat = 0.3
     
-    public static let Black     = UIColor.blackColor().alpha(alpha)
-    public static let DarkGray  = UIColor.darkGrayColor().alpha(alpha)
-    public static let LightGray = UIColor.lightGrayColor().alpha(alpha)
-    public static let White     = UIColor.whiteColor().alpha(alpha)
-    public static let Gray      = UIColor.grayColor().alpha(alpha)
+    public static let Black     = UIColor.black.alpha(alpha)
+    public static let DarkGray  = UIColor.darkGray.alpha(alpha)
+    public static let LightGray = UIColor.lightGray.alpha(alpha)
+    public static let White     = UIColor.white.alpha(alpha)
+    public static let Gray      = UIColor.gray.alpha(alpha)
     public static let Red       = UIColor(rgb: 0xD4161C).alpha(alpha)
     public static let Green     = UIColor(rgb: 0x2AA48E).alpha(alpha)
     public static let Blue      = UIColor(rgb: 0x406FC5).alpha(alpha)

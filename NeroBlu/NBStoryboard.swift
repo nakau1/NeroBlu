@@ -12,7 +12,7 @@ public extension App {
     /// - parameter bundle: バンドル
     /// - parameter id: ストーリーボード上のID文字列 後から id(_:) メソッドからでも設定が可能
     /// - returns: NBStoryboard
-    public static func Storyboard(name: String, bundle: NSBundle? = nil, id: String? = nil) -> NBStoryboard {
+    public static func Storyboard(_ name: String, bundle: Bundle? = nil, id: String? = nil) -> NBStoryboard {
         return NBStoryboard(name, bundle, id)
     }
 }
@@ -20,21 +20,21 @@ public extension App {
 // MARK: - NBStoryboard -
 
 /// ストーリーボードに関する処理を行うクラス
-public class NBStoryboard {
+open class NBStoryboard {
     
     /// ストーリーボードIDを設定する
     /// - parameter storyboardIdentifier: ストーリーボード上のID文字列
     /// - returns: 自身の参照
-    public func id(storyboardIdentifier: String) -> NBStoryboard {
+    open func id(_ storyboardIdentifier: String) -> NBStoryboard {
         self.storyboardIdentifier = storyboardIdentifier
         return self
     }
     
     /// ストーリーボード上のコントローラを取得する
     /// - returns: コントローラ(事前にストーリーボードIDの設定がない場合はルートビューコントローラを返却する)
-    public func get() -> UIViewController {
+    open func get() -> UIViewController {
         if let id = self.storyboardIdentifier {
-            return self.storyboard.instantiateViewControllerWithIdentifier(id)
+            return self.storyboard.instantiateViewController(withIdentifier: id)
         } else {
             guard let vc = self.storyboard.instantiateInitialViewController() else {
                 fatalError("not found root(initial) view controller in storyboard of '\(self.name)'")
@@ -46,18 +46,18 @@ public class NBStoryboard {
     /// ストーリーボード上のコントローラを取得する
     /// - parameter type: 取得するビューコントローラの型
     /// - returns: コントローラ(事前にストーリーボードIDの設定がない場合はルートビューコントローラを返却する)
-    public func get<T: UIViewController>(type: T.Type) -> T {
+    open func get<T: UIViewController>(_ type: T.Type) -> T {
         guard let vc = self.get() as? T else {
             fatalError("view controller is not match '\(type.className)' in storyboard of '\(self.name)'")
         }
         return vc
     }
     
-    private var storyboard: UIStoryboard
-    private var name: String
-    private var storyboardIdentifier: String?
+    fileprivate var storyboard: UIStoryboard
+    fileprivate var name: String
+    fileprivate var storyboardIdentifier: String?
     
-    private init(_ name: String, _ bundle: NSBundle?, _ id: String?) {
+    fileprivate init(_ name: String, _ bundle: Bundle?, _ id: String?) {
         self.name = name
         self.storyboardIdentifier = id
         self.storyboard = UIStoryboard(name: name, bundle: bundle)
@@ -71,9 +71,9 @@ public extension UINib {
     /// - parameter name: Nibファイル名
     /// - parameter bundle: バンドル
     /// - returns: UINibオブジェクト(存在しない場合はnil)
-    public class func create(nibName name: String, bundle bundleOrNil: NSBundle?) -> UINib? {
-        let bundle = bundleOrNil ?? NSBundle.mainBundle()
-        if let _ = bundle.pathForResource(name, ofType: "nib") {
+    public class func create(nibName name: String, bundle bundleOrNil: Bundle?) -> UINib? {
+        let bundle = bundleOrNil ?? Bundle.main
+        if let _ = bundle.path(forResource: name, ofType: "nib") {
             return UINib(nibName: name, bundle: bundle)
         }
         return nil

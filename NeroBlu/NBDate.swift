@@ -8,7 +8,7 @@ import UIKit
 
 /// 曜日
 public enum NBDateWeek: Int {
-    case Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday
+    case sunday, monday, tuesday, wednesday, thursday, friday, saturday
     
     /// 曜日の数
     public static let count = 7
@@ -16,7 +16,7 @@ public enum NBDateWeek: Int {
     /// 開始曜日から並べた配列
     /// - parameter startWeek: 開始曜日
     /// - returns: NBDateWeekの配列
-    public static func weeks(startWeek: NBDateWeek) -> [NBDateWeek] {
+    public static func weeks(_ startWeek: NBDateWeek) -> [NBDateWeek] {
         var ret = [NBDateWeek]()
         for i in 0..<NBDateWeek.count {
             let n = startWeek.rawValue + i
@@ -31,7 +31,7 @@ public enum NBDateWeek: Int {
 
 /// 月
 public enum NBDateMonth: Int {
-    case January, February, March, April, May, June, July, August, September, October, November, December
+    case january, february, march, april, may, june, july, august, september, october, november, december
     
     /// 月の数
     public static let count = 12
@@ -43,23 +43,23 @@ public enum NBDateMonth: Int {
 // MARK: - NBDate -
 
 /// 日付クラス
-public class NBDate: CustomStringConvertible {
+open class NBDate: CustomStringConvertible {
     
     /// 取り扱うNSDateオブジェクト
-    private(set) var date = NSDate()
+    fileprivate(set) var date = Date()
     
     /// カレンダーオブジェクト
-    public var calendar: NSCalendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)!
+    open var calendar: Calendar = Calendar(identifier: Calendar.Identifier.gregorian)
     
     /// デフォルトの出力日付フォーマット
-    public static var defaultOutputFormat = "yyyy/MM/dd HH:mm:ss"
+    open static var defaultOutputFormat = "yyyy/MM/dd HH:mm:ss"
     
     /// デフォルトの入力日付フォーマット
-    public static var defaultInputFormat = "yyyy-MM-dd HH:mm:ss"
+    open static var defaultInputFormat = "yyyy-MM-dd HH:mm:ss"
     
     /// イニシャライザ
     /// - parameter date: 日付
-    public init(date: NSDate) {
+    public init(date: Date) {
         self.date = date
     }
 }
@@ -75,7 +75,7 @@ public extension NBDate {
     /// - parameter minute: 分
     /// - parameter second: 秒
     public convenience init(year y: Int? = nil, month m: Int? = nil, day d: Int? = nil, hour h: Int? = nil, minute i: Int? = nil, second s: Int? = nil) {
-        self.init(date: NSDate())
+        self.init(date: Date())
         self.date = self.date(year: y, month: m, day: d, hour: h, minute: i, second: s)
     }
 }
@@ -85,37 +85,37 @@ public extension NBDate {
     
     /// 年
     public var year: Int {
-        get    { return self.calendar.components(.Year, fromDate: self.date).year }
+        get    { return (self.calendar as NSCalendar).components(.year, from: self.date).year! }
         set(v) { self.date = self.date(year: v) }
     }
     
     /// 月
     public var month: Int {
-        get    { return self.calendar.components(.Month, fromDate: self.date).month }
+        get    { return (self.calendar as NSCalendar).components(.month, from: self.date).month! }
         set(v) { self.date = self.date(month: v) }
     }
     
     /// 日
     public var day: Int {
-        get    { return self.calendar.components(.Day, fromDate: self.date).day }
+        get    { return (self.calendar as NSCalendar).components(.day, from: self.date).day! }
         set(v) { self.date = self.date(day: v) }
     }
     
     /// 時
     public var hour: Int {
-        get    { return self.calendar.components(.Hour, fromDate: self.date).hour }
+        get    { return (self.calendar as NSCalendar).components(.hour, from: self.date).hour! }
         set(v) { self.date = self.date(hour: v) }
     }
     
     /// 分
     public var minute: Int {
-        get    { return self.calendar.components(.Minute, fromDate: self.date).minute }
+        get    { return (self.calendar as NSCalendar).components(.minute, from: self.date).minute! }
         set(v) { self.date = self.date(minute: v) }
     }
     
     /// 秒
     public var second: Int {
-        get    { return self.calendar.components(.Second, fromDate: self.date).second }
+        get    { return (self.calendar as NSCalendar).components(.second, from: self.date).second! }
         set(v) { self.date = self.date(second: v) }
     }
 }
@@ -127,7 +127,7 @@ extension NBDate {
     public var week: NBDateWeek { return NBDateWeek(rawValue: self.weekIndex)! }
     
     /// 曜日インデックス
-    public var weekIndex: Int { return self.calendar.components(.Weekday, fromDate: self.date).weekday - 1 }
+    public var weekIndex: Int { return (self.calendar as NSCalendar).components(.weekday, from: self.date).weekday! - 1 }
     
     /// 月オブジェクト(enum)
     public var monthObject: NBDateMonth { return NBDateMonth(rawValue: self.monthIndex)! }
@@ -159,15 +159,15 @@ extension NBDate {
     
     /// 和暦
     public var japaneseYearName: String {
-        let fmt = NSDateFormatter()
-        fmt.calendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierJapanese)
-        fmt.locale = NSLocale.currentLocale()
-        fmt.formatterBehavior = .Behavior10_4
+        let fmt = DateFormatter()
+        fmt.calendar = Calendar(identifier: Calendar.Identifier.japanese)
+        fmt.locale = Locale.current
+        fmt.formatterBehavior = .behavior10_4
         fmt.dateFormat = "GG"
-        var ret = fmt.stringFromDate(self.date)
+        var ret = fmt.string(from: self.date)
         
         fmt.dateFormat = "y"
-        let year = fmt.stringFromDate(self.date)
+        let year = fmt.string(from: self.date)
         if self.isJapaneseLocale {
             ret += (year == "1") ? "元" : year
             ret += "年"
@@ -189,19 +189,19 @@ public extension NBDate {
     /// 指定した日付フォーマットから文字列を生成する
     /// - parameter format: 日付フォーマット
     /// - returns: 日付文字列
-    public func string(format: String) -> String {
-        return self.dateFormatter(format).stringFromDate(self.date)
+    public func string(_ format: String) -> String {
+        return self.dateFormatter(format).string(from: self.date)
     }
     
     /// 指定した日付フォーマットから日付フォーマッタを生成する
     /// - parameter format: 日付フォーマット
     /// - returns: 日付フォーマッタ
-    public func dateFormatter(format: String) -> NSDateFormatter {
-        let fmt = NSDateFormatter()
+    public func dateFormatter(_ format: String) -> DateFormatter {
+        let fmt = DateFormatter()
         fmt.calendar   = self.calendar
         fmt.dateFormat = format
-        fmt.locale     = NSLocale.currentLocale()
-        fmt.timeZone   = NSTimeZone.systemTimeZone()
+        fmt.locale     = Locale.current
+        fmt.timeZone   = TimeZone.current
         return fmt
     }
     
@@ -215,10 +215,10 @@ public extension NBDate {
     /// - parameter format: 日付フォーマット
     /// - parameter format: 日付フォーマット(省略した場合は)
     /// - returns: 日付文字列
-    public class func create(string string: String, format: String? = nil) -> NBDate? {
+    public class func create(string: String, format: String? = nil) -> NBDate? {
         let temp = NBDate()
         let fmt = format ?? NBDate.defaultInputFormat
-        guard let d = temp.dateFormatter(fmt).dateFromString(string) else { return nil }
+        guard let d = temp.dateFormatter(fmt).date(from: string) else { return nil }
         return NBDate(date: d)
     }
 }
@@ -236,7 +236,7 @@ public extension NBDate {
     /// - parameter minute: 分(省略した場合は0)
     /// - parameter second: 秒(省略した場合は0)
     /// - returns: 新しいインスタンス
-    public class func create(year: Int, _ month: Int, _ day: Int, _ hour: Int? = nil, _ minute: Int? = nil, _ second: Int? = nil) -> NBDate {
+    public class func create(_ year: Int, _ month: Int, _ day: Int, _ hour: Int? = nil, _ minute: Int? = nil, _ second: Int? = nil) -> NBDate {
         return NBDate(
             year:   year,
             month:  month,
@@ -249,7 +249,7 @@ public extension NBDate {
     
     /// 現時刻を指す新しいインスタンス
     public class var now: NBDate {
-        return NBDate(date: NSDate())
+        return NBDate(date: Date())
     }
     
     /// 今日の00:00の時刻を指す新しいインスタンス
@@ -272,7 +272,7 @@ public extension NBDate {
     /// 指定した年に変更する
     /// - parameter value: 設定する年
     /// - returns: 自身の参照
-    public func modifyYear(value: Int) -> Self {
+    public func modifyYear(_ value: Int) -> Self {
         self.date = self.date(year: value)
         return self
     }
@@ -280,7 +280,7 @@ public extension NBDate {
     /// 指定した月に変更する
     /// - parameter value: 設定する月
     /// - returns: 自身の参照
-    public func modifyMonth(value: Int) -> Self {
+    public func modifyMonth(_ value: Int) -> Self {
         self.date = self.date(month: value)
         return self
     }
@@ -288,7 +288,7 @@ public extension NBDate {
     /// 指定した日に変更する
     /// - parameter value: 設定する日
     /// - returns: 自身の参照
-    public func modifyDay(value: Int) -> Self {
+    public func modifyDay(_ value: Int) -> Self {
         self.date = self.date(day: value)
         return self
     }
@@ -296,7 +296,7 @@ public extension NBDate {
     /// 指定した時に変更する
     /// - parameter value: 設定する時
     /// - returns: 自身の参照
-    public func modifyHour(value: Int) -> Self {
+    public func modifyHour(_ value: Int) -> Self {
         self.date = self.date(hour: value)
         return self
     }
@@ -304,7 +304,7 @@ public extension NBDate {
     /// 指定した分に変更する
     /// - parameter value: 設定する分
     /// - returns: 自身の参照
-    public func modifyMinute(value: Int) -> Self {
+    public func modifyMinute(_ value: Int) -> Self {
         self.date = self.date(minute: value)
         return self
     }
@@ -312,7 +312,7 @@ public extension NBDate {
     /// 指定した秒に変更する
     /// - parameter value: 設定する秒
     /// - returns: 自身の参照
-    public func modifySecond(value: Int) -> Self {
+    public func modifySecond(_ value: Int) -> Self {
         self.date = self.date(second: value)
         return self
     }
@@ -324,7 +324,7 @@ public extension NBDate {
     /// 指定した年数を足す
     /// - parameter add: 追加する年
     /// - returns: 自身の参照
-    public func addYear(add: Int = 1) -> Self {
+    public func addYear(_ add: Int = 1) -> Self {
         self.date = self.date(year: self.year + add)
         return self
     }
@@ -332,7 +332,7 @@ public extension NBDate {
     /// 指定した月数を足す
     /// - parameter add: 追加する月
     /// - returns: 自身の参照
-    public func addMonth(add: Int = 1) -> Self {
+    public func addMonth(_ add: Int = 1) -> Self {
         self.date = self.date(month: self.month + add)
         return self
     }
@@ -340,7 +340,7 @@ public extension NBDate {
     /// 指定した日数を足す
     /// - parameter add: 追加する日
     /// - returns: 自身の参照
-    public func addDay(add: Int = 1) -> Self {
+    public func addDay(_ add: Int = 1) -> Self {
         self.date = self.date(day: self.day + add)
         return self
     }
@@ -348,7 +348,7 @@ public extension NBDate {
     /// 指定した時数を足す
     /// - parameter add: 追加する時
     /// - returns: 自身の参照
-    public func addHour(add: Int = 1) -> Self {
+    public func addHour(_ add: Int = 1) -> Self {
         self.date = self.date(hour: self.hour + add)
         return self
     }
@@ -356,7 +356,7 @@ public extension NBDate {
     /// 指定した分数を足す
     /// - parameter add: 追加する分
     /// - returns: 自身の参照
-    public func addMinute(add: Int = 1) -> Self {
+    public func addMinute(_ add: Int = 1) -> Self {
         self.date = self.date(minute: self.minute + add)
         return self
     }
@@ -364,7 +364,7 @@ public extension NBDate {
     /// 指定した秒数を足す
     /// - parameter add: 追加する分
     /// - returns: 自身の参照
-    public func addSecond(add: Int = 1) -> Self {
+    public func addSecond(_ add: Int = 1) -> Self {
         self.date = self.date(second: self.second + add)
         return self
     }
@@ -398,48 +398,48 @@ public extension NBDate {
     /// 比較を行う(NSDate#cpmpare(_:)のラッパ)
     /// - parameter date: 比較対象の日付
     /// - returns: 比較結果
-    public func compare(date: NBDate) -> NSComparisonResult {
+    public func compare(_ date: NBDate) -> ComparisonResult {
         return self.date.compare(date.date)
     }
     
     /// 同じ日時かどうかを取得する
     /// - parameter date: 比較対象の日付
     /// - returns: 同じ日時かどうか
-    public func isSame(date: NBDate) -> Bool {
-        return self.compare(date) == .OrderedSame
+    public func isSame(_ date: NBDate) -> Bool {
+        return self.compare(date) == .orderedSame
     }
     
     /// 自身が対象の日付よりも未来の日付かどうかを取得する
     /// - parameter date: 比較対象の日付
     /// - returns: 自身が未来かどうか
     public func isFuture(than date: NBDate) -> Bool {
-        return self.compare(date) == .OrderedDescending
+        return self.compare(date) == .orderedDescending
     }
     
     /// 自身が対象の日付よりも過去の日付かどうかを取得する
     /// - parameter date: 比較対象の日付
     /// - returns: 自身が過去かどうか
     public func isPast(than date: NBDate) -> Bool {
-        return self.compare(date) == .OrderedAscending
+        return self.compare(date) == .orderedAscending
     }
     
     /// 日付のみを比較して同じ日付かどうかを取得する
     /// - parameter date: 比較対象の日付
     /// - returns: 同じ日付かどうか(時刻は比較しません)
-    public func isSameDay(date: NBDate) -> Bool {
-        let flags: NSCalendarUnit = [.Year, .Month, .Day]
-        let comps1 = self.calendar.components(flags, fromDate: self.date)
-        let comps2 = self.calendar.components(flags, fromDate: date.date)
+    public func isSameDay(_ date: NBDate) -> Bool {
+        let flags: NSCalendar.Unit = [.year, .month, .day]
+        let comps1 = (self.calendar as NSCalendar).components(flags, from: self.date)
+        let comps2 = (self.calendar as NSCalendar).components(flags, from: date.date)
         return ((comps1.year == comps2.year) && (comps1.month == comps2.month) && (comps1.day == comps2.day))
     }
     
     /// 時刻のみを比較して同じ時刻かどうかを取得する
     /// - parameter date: 比較対象の日付
     /// - returns: 同じ時刻かどうか(日付は比較しません)
-    public func isSameTime(date: NBDate) -> Bool {
-        let flags: NSCalendarUnit = [.Hour, .Minute, .Second]
-        let comps1 = self.calendar.components(flags, fromDate: self.date)
-        let comps2 = self.calendar.components(flags, fromDate: date.date)
+    public func isSameTime(_ date: NBDate) -> Bool {
+        let flags: NSCalendar.Unit = [.hour, .minute, .second]
+        let comps1 = (self.calendar as NSCalendar).components(flags, from: self.date)
+        let comps2 = (self.calendar as NSCalendar).components(flags, from: date.date)
         return ((comps1.hour == comps2.hour) && (comps1.minute == comps2.minute) && (comps1.second == comps2.second))
     }
     
@@ -460,12 +460,12 @@ public extension NBDate {
     
     /// 日付が日曜日かどうか
     public var isSunday: Bool {
-        return self.week == .Sunday
+        return self.week == .sunday
     }
     
     /// 日付が土曜日かどうか
     public var isSaturday: Bool {
-        return self.week == .Saturday
+        return self.week == .saturday
     }
     
     /// 日付が平日かどうか
@@ -481,7 +481,7 @@ public extension NBDate {
     /// - parameter year: 年
     /// - parameter month: 月
     /// - returns: NBDateの配列
-    class func datesInMonth(year year: Int, month: Int) -> [NBDate] {
+    class func datesInMonth(year: Int, month: Int) -> [NBDate] {
         var ret = [NBDate]()
         
         let lastDay = NBDate.create(year, month, 1).lastDayOfMonth
@@ -497,7 +497,7 @@ public extension NBDate {
     /// - parameter month: 月
     /// - parameter startWeek: 開始曜日
     /// - returns: NBDateの配列
-    class func datesForCalendarInMonth(year year: Int, month: Int, startWeek: NBDateWeek = .Sunday) -> [NBDate] {
+    class func datesForCalendarInMonth(year: Int, month: Int, startWeek: NBDateWeek = .sunday) -> [NBDate] {
         var ret = [NBDate]()
         
         let lastDay = NBDate.create(year, month, 1).lastDayOfMonth
@@ -507,7 +507,7 @@ public extension NBDate {
             let date = NBDate.create(year, month, day)
             
             if day == 1 {
-                if let weekIndex = weeks.indexOf(date.week) {
+                if let weekIndex = weeks.index(of: date.week) {
                     for j in 0..<weekIndex {
                         ret.append(date.clone().addDay((weekIndex - j) * -1))
                     }
@@ -517,7 +517,7 @@ public extension NBDate {
             ret.append(date)
             
             if day == lastDay {
-                if let weekIndex = weeks.indexOf(date.week) where weekIndex + 1 < NBDateWeek.count {
+                if let weekIndex = weeks.index(of: date.week), weekIndex + 1 < NBDateWeek.count {
                     for _ in (weekIndex + 1)..<NBDateWeek.count {
                         ret.append(date.clone().addDay())
                     }
@@ -531,25 +531,25 @@ public extension NBDate {
 // MARK: - NBDate: ブライベート -
 private extension NBDate {
     
-    private func date(year y: Int? = nil, month m: Int? = nil, day d: Int? = nil, hour h: Int? = nil, minute i: Int? = nil, second s: Int? = nil) -> NSDate {
-        let comps = NSDateComponents()
+    func date(year y: Int? = nil, month m: Int? = nil, day d: Int? = nil, hour h: Int? = nil, minute i: Int? = nil, second s: Int? = nil) -> Date {
+        var comps = DateComponents()
         comps.year   = y ?? self.year
         comps.month  = m ?? self.month
         comps.day    = d ?? self.day
         comps.hour   = h ?? self.hour
         comps.minute = i ?? self.minute
         comps.second = s ?? self.second
-        return self.calendar.dateFromComponents(comps)!
+        return self.calendar.date(from: comps)!
     }
     
-    private func localizedName(symbols: (NSDateFormatter) -> [String]!, index: Int) -> String {
-        let fmt = NSDateFormatter()
+    func localizedName(_ symbols: (DateFormatter) -> [String]!, index: Int) -> String {
+        let fmt = DateFormatter()
         fmt.calendar = self.calendar
-        fmt.locale = NSLocale.currentLocale()
+        fmt.locale = Locale.current
         return symbols(fmt)[index]
     }
     
-    private var isJapaneseLocale: Bool { return NSLocale.currentLocale().localeIdentifier == "ja_JP" }
+    var isJapaneseLocale: Bool { return Locale.current.identifier == "ja_JP" }
 }
 
 

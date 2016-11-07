@@ -16,7 +16,7 @@ import UIKit
 /// - parameter relate: 計算式の関係性
 /// - parameter priority: 制約の優先度
 /// - returns: 制約(NSLayoutConstraint)オブジェクト
-public func Constraint(item: AnyObject, _ attr: NSLayoutAttribute, to: AnyObject?, _ attrTo: NSLayoutAttribute, _ constant: CGFloat, multiplier: CGFloat = 1.0, relate: NSLayoutRelation = .Equal, priority: UILayoutPriority = UILayoutPriorityRequired) -> NSLayoutConstraint {
+public func Constraint(_ item: AnyObject, _ attr: NSLayoutAttribute, to: AnyObject?, _ attrTo: NSLayoutAttribute, _ constant: CGFloat, multiplier: CGFloat = 1.0, relate: NSLayoutRelation = .equal, priority: UILayoutPriority = UILayoutPriorityRequired) -> NSLayoutConstraint {
     let ret = NSLayoutConstraint(
         item:       item,
         attribute:  attr,
@@ -47,7 +47,7 @@ public extension UIView {
     /// - parameter arrayOfConstraints: レイアウト制約の配列の配列
     /// - parameter on: 制約を追加するオブジェクトに与える属性
     /// - returns: 設定したレイアウト制約の配列
-    public func setConstraints(arrayOfConstraints: [[NSLayoutConstraint]], on target: UIView? = nil) -> [NSLayoutConstraint] {
+    public func setConstraints(_ arrayOfConstraints: [[NSLayoutConstraint]], on target: UIView? = nil) -> [NSLayoutConstraint] {
         return self.setConstraints(arrayOfConstraints: arrayOfConstraints, on: target, additional: nil)
     }
     
@@ -56,17 +56,17 @@ public extension UIView {
     /// - parameter on: 制約を追加するオブジェクトに与える属性
     /// - parameter additional: さらに追加するレイアウト制約の配列を返すクロージャ
     /// - returns: 設定したレイアウト制約の配列
-    public func setConstraints(arrayOfConstraints arrayOfConstraints: [[NSLayoutConstraint]], on target: UIView? = nil, additional: (() -> ([NSLayoutConstraint]))?) -> [NSLayoutConstraint] {
+    public func setConstraints(arrayOfConstraints: [[NSLayoutConstraint]], on target: UIView? = nil, additional: (() -> ([NSLayoutConstraint]))?) -> [NSLayoutConstraint] {
         guard let target = self.omittableItem(target) as? UIView else { return [] }
         self.prepareConstraints()
 
         var ret = [NSLayoutConstraint]()
         for constraints in arrayOfConstraints {
-            ret.appendContentsOf(constraints)
+            ret.append(contentsOf: constraints)
 
         }
         if let constraints = additional?() {
-            ret.appendContentsOf(constraints)
+            ret.append(contentsOf: constraints)
         }
         
         target.addConstraints(ret)
@@ -81,13 +81,13 @@ public extension UIView {
     /// - parameter identifier: ストーリーボード等で指定したID文字列
     /// - parameter on: 自身に制約を追加したビュー。検索はこのビューと自身に対して行う(省略時は自身の親ビューを対象にする)
     /// - returns: IDにマッチするレイアウト制約
-    public func searchConstraint(identifier: String, on target: UIView? = nil) -> NSLayoutConstraint? {
+    public func searchConstraint(_ identifier: String, on target: UIView? = nil) -> NSLayoutConstraint? {
         var constraints = self.constraints
         if let toItem = self.omittableItem(target) as? UIView {
-            constraints.appendContentsOf(toItem.constraints)
+            constraints.append(contentsOf: toItem.constraints)
         }
         for constraint in constraints {
-            if let id = constraint.identifier where id == identifier {
+            if let id = constraint.identifier, id == identifier {
                 return constraint
             }
         }
@@ -98,13 +98,13 @@ public extension UIView {
 // MARK: - UIView拡張: レイアウト制約(プライベート) -
 private extension UIView {
 
-    private func constraint(
-        attr:       NSLayoutAttribute,
+    func constraint(
+        _ attr:       NSLayoutAttribute,
         to:         AnyObject?         = nil,
         attrTo:     NSLayoutAttribute? = nil,
         constant:   CGFloat            = 0.0,
         multiplier: CGFloat            = 1.0,
-        relate:     NSLayoutRelation   = .Equal,
+        relate:     NSLayoutRelation   = .equal,
         priority:   UILayoutPriority   = UILayoutPriorityRequired
         ) -> NSLayoutConstraint
     {
@@ -120,7 +120,7 @@ private extension UIView {
         )
     }
     
-    private func omittableItem(item: AnyObject?) -> AnyObject? {
+    func omittableItem(_ item: AnyObject?) -> AnyObject? {
         return item ?? self.superview
     }
 }
@@ -135,21 +135,21 @@ public extension UIView {
     /// - parameter right: 右端のマージン値(省略時は戻り値に含まれない)
     /// - parameter toItem: 制約の対象ビューまたはオブジェクト(省略時は自身の親ビューを対象にする)
     /// - returns: NSLayoutConstraintの配列
-    public func constraints<T>(top top: T? = nil, left: T? = nil, bottom: T? = nil, right: T? = nil, toItem item: AnyObject? = nil) -> [NSLayoutConstraint] {
+    public func constraints<T>(top: T? = nil, left: T? = nil, bottom: T? = nil, right: T? = nil, toItem item: AnyObject? = nil) -> [NSLayoutConstraint] {
         
         var constraints = [NSLayoutConstraint]()
         
         if let v = top {
-            constraints.append(self.constraint(.Top, constant: CGFloat.cast(v), to: self.omittableItem(item)))
+            constraints.append(self.constraint(.top, to: self.omittableItem(item), constant: CGFloat.cast(v)))
         }
         if let v = left {
-            constraints.append(self.constraint(.Leading, constant: CGFloat.cast(v), to: self.omittableItem(item)))
+            constraints.append(self.constraint(.leading, to: self.omittableItem(item), constant: CGFloat.cast(v)))
         }
         if let v = bottom {
-            constraints.append(self.constraint(.Bottom, constant: -CGFloat.cast(v), to: self.omittableItem(item)))
+            constraints.append(self.constraint(.bottom, to: self.omittableItem(item), constant: -CGFloat.cast(v)))
         }
         if let v = right {
-            constraints.append(self.constraint(.Trailing, constant: -CGFloat.cast(v), to: self.omittableItem(item)))
+            constraints.append(self.constraint(.trailing, to: self.omittableItem(item), constant: -CGFloat.cast(v)))
         }
         
         return constraints
@@ -159,10 +159,10 @@ public extension UIView {
     /// - parameter position: 位置
     /// - parameter toItem: 制約の対象ビューまたはオブジェクト(省略時は自身の親ビューを対象にする)
     /// - returns: NSLayoutConstraintの配列
-    public func constraints(position position: CGPoint, toItem item: AnyObject? = nil) -> [NSLayoutConstraint] {
+    public func constraints(position: CGPoint, toItem item: AnyObject? = nil) -> [NSLayoutConstraint] {
         return [
-            self.constraint(.Top,     constant: position.x, to: self.omittableItem(item)),
-            self.constraint(.Leading, constant: position.y, to: self.omittableItem(item)),
+            self.constraint(.top,     to: self.omittableItem(item), constant: position.x),
+            self.constraint(.leading, to: self.omittableItem(item), constant: position.y),
         ]
     }
     
@@ -170,9 +170,9 @@ public extension UIView {
     /// - parameter x: X座標(左端からの距離)
     /// - parameter toItem: 制約の対象ビューまたはオブジェクト(省略時は自身の親ビューを対象にする)
     /// - returns: NSLayoutConstraintの配列
-    public func constraints<T>(x x: T, toItem item: AnyObject? = nil) -> [NSLayoutConstraint] {
+    public func constraints<T>(x: T, toItem item: AnyObject? = nil) -> [NSLayoutConstraint] {
         return [
-            self.constraint(.Top, constant: CGFloat.cast(x), to: self.omittableItem(item)),
+            self.constraint(.top, to: self.omittableItem(item), constant: CGFloat.cast(x)),
         ]
     }
     
@@ -180,9 +180,9 @@ public extension UIView {
     /// - parameter y: Y座標(上端からの距離)
     /// - parameter toItem: 制約の対象ビューまたはオブジェクト(省略時は自身の親ビューを対象にする)
     /// - returns: NSLayoutConstraintの配列
-    public func constraints<T>(y y: T, toItem item: AnyObject? = nil) -> [NSLayoutConstraint] {
+    public func constraints<T>(y: T, toItem item: AnyObject? = nil) -> [NSLayoutConstraint] {
         return [
-            self.constraint(.Leading, constant: CGFloat.cast(y), to: self.omittableItem(item)),
+            self.constraint(.leading, to: self.omittableItem(item), constant: CGFloat.cast(y)),
         ]
     }
 }
@@ -193,28 +193,28 @@ public extension UIView {
     /// 指定したサイズのレイアウト制約を配列で取得する
     /// - parameter size: サイズ
     /// - returns: NSLayoutConstraintの配列
-    public func constraints(size size: CGSize) -> [NSLayoutConstraint] {
+    public func constraints(size: CGSize) -> [NSLayoutConstraint] {
         return [
-            self.constraint(.Width,  constant: size.width),
-            self.constraint(.Height, constant: size.height),
+            self.constraint(.width,  constant: size.width),
+            self.constraint(.height, constant: size.height),
         ]
     }
     
     /// 指定した幅のレイアウト制約を配列で取得する
     /// - parameter width: 幅
     /// - returns: NSLayoutConstraintの配列
-    public func constraints<T>(width width: T) -> [NSLayoutConstraint] {
+    public func constraints<T>(width: T) -> [NSLayoutConstraint] {
         return [
-            self.constraint(.Width, constant: CGFloat.cast(width)),
+            self.constraint(.width, constant: CGFloat.cast(width)),
         ]
     }
     
     /// 指定した高さのレイアウト制約を配列で取得する
     /// - parameter height: 高さ
     /// - returns: NSLayoutConstraintの配列
-    public func constraints<T>(height height: T) -> [NSLayoutConstraint] {
+    public func constraints<T>(height: T) -> [NSLayoutConstraint] {
         return [
-            self.constraint(.Height, constant: CGFloat.cast(height)),
+            self.constraint(.height, constant: CGFloat.cast(height)),
         ]
     }
 }
@@ -225,12 +225,12 @@ public extension UIView {
     /// 指定したCGRectからレイアウト制約を配列で取得する
     /// - parameter rect: CGRect
     /// - returns: NSLayoutConstraintの配列
-    public func constraints(rect rect: CGRect, toItem item: AnyObject? = nil) -> [NSLayoutConstraint] {
+    public func constraints(rect: CGRect, toItem item: AnyObject? = nil) -> [NSLayoutConstraint] {
         return [
-            self.constraint(.Top,     constant: rect.origin.x, to: self.omittableItem(item)),
-            self.constraint(.Leading, constant: rect.origin.y, to: self.omittableItem(item)),
-            self.constraint(.Width,   constant: rect.size.width),
-            self.constraint(.Height,  constant: rect.size.height),
+            self.constraint(.top,     to: self.omittableItem(item), constant: rect.origin.x),
+            self.constraint(.leading, to: self.omittableItem(item), constant: rect.origin.y),
+            self.constraint(.width,   constant: rect.size.width),
+            self.constraint(.height,  constant: rect.size.height),
         ]
     }
 }
@@ -273,8 +273,8 @@ public extension UIView {
     public func constraints(equalSizeToViews views: [UIView]) -> [NSLayoutConstraint] {
         var ret = [NSLayoutConstraint]()
         for view in views {
-            ret.append(self.constraint(.Width,  to: view))
-            ret.append(self.constraint(.Height, to: view))
+            ret.append(self.constraint(.width,  to: view))
+            ret.append(self.constraint(.height, to: view))
         }
         return ret
     }
@@ -296,7 +296,7 @@ public extension UIView {
     public func constraints(equalWidthToViews views: [UIView]) -> [NSLayoutConstraint] {
         var ret = [NSLayoutConstraint]()
         for view in views {
-            ret.append(self.constraint(.Width, to: view))
+            ret.append(self.constraint(.width, to: view))
         }
         return ret
     }
@@ -318,7 +318,7 @@ public extension UIView {
     public func constraints(equalHeightToViews views: [UIView]) -> [NSLayoutConstraint] {
         var ret = [NSLayoutConstraint]()
         for view in views {
-            ret.append(self.constraint(.Height, to: view))
+            ret.append(self.constraint(.height, to: view))
         }
         return ret
     }
@@ -340,7 +340,7 @@ public extension UIView {
     /// - returns: NSLayoutConstraintの配列
     public func constraints<T>(aboveOf view: UIView, space: T) -> [NSLayoutConstraint] {
         return [
-            self.constraint(.Bottom, to: view, attrTo: .Top, constant: -CGFloat.cast(space))
+            self.constraint(.bottom, to: view, attrTo: .top, constant: -CGFloat.cast(space))
         ]
     }
     
@@ -350,7 +350,7 @@ public extension UIView {
     /// - returns: NSLayoutConstraintの配列
     public func constraints<T>(belowOf view: UIView, space: T) -> [NSLayoutConstraint] {
         return [
-            self.constraint(.Top, to: view, attrTo: .Bottom, constant: CGFloat.cast(space))
+            self.constraint(.top, to: view, attrTo: .bottom, constant: CGFloat.cast(space))
         ]
     }
     
@@ -360,7 +360,7 @@ public extension UIView {
     /// - returns: NSLayoutConstraintの配列
     public func constraints<T>(leftOf view: UIView, space: T) -> [NSLayoutConstraint] {
         return [
-            self.constraint(.Trailing, to: view, attrTo: .Leading, constant: -CGFloat.cast(space))
+            self.constraint(.trailing, to: view, attrTo: .leading, constant: -CGFloat.cast(space))
         ]
     }
     
@@ -370,7 +370,7 @@ public extension UIView {
     /// - returns: NSLayoutConstraintの配列
     public func constraints<T>(rightOf view: UIView, space: T) -> [NSLayoutConstraint] {
         return [
-            self.constraint(.Leading, to: view, attrTo: .Trailing, constant: CGFloat.cast(space))
+            self.constraint(.leading, to: view, attrTo: .trailing, constant: CGFloat.cast(space))
         ]
     }
 }
@@ -417,7 +417,7 @@ public extension UIView {
     public func constraints<T>(alignTop views: [UIView], diff: T) -> [NSLayoutConstraint] {
         var ret = [NSLayoutConstraint]()
         for view in views {
-            ret.append(self.constraint(.Top, to: view, attrTo: .Top, constant: CGFloat.cast(diff)))
+            ret.append(self.constraint(.top, to: view, attrTo: .top, constant: CGFloat.cast(diff)))
         }
         return ret
     }
@@ -448,7 +448,7 @@ public extension UIView {
     public func constraints<T>(alignBottom views: [UIView], diff: T) -> [NSLayoutConstraint] {
         var ret = [NSLayoutConstraint]()
         for view in views {
-            ret.append(self.constraint(.Bottom, to: view, attrTo: .Bottom, constant: -CGFloat.cast(diff)))
+            ret.append(self.constraint(.bottom, to: view, attrTo: .bottom, constant: -CGFloat.cast(diff)))
         }
         return ret
     }
@@ -479,7 +479,7 @@ public extension UIView {
     public func constraints<T>(alignLeft views: [UIView], diff: T) -> [NSLayoutConstraint] {
         var ret = [NSLayoutConstraint]()
         for view in views {
-            ret.append(self.constraint(.Leading, to: view, attrTo: .Leading, constant: CGFloat.cast(diff)))
+            ret.append(self.constraint(.leading, to: view, attrTo: .leading, constant: CGFloat.cast(diff)))
         }
         return ret
     }
@@ -510,7 +510,7 @@ public extension UIView {
     public func constraints<T>(alignRight views: [UIView], diff: T) -> [NSLayoutConstraint] {
         var ret = [NSLayoutConstraint]()
         for view in views {
-            ret.append(self.constraint(.Trailing, to: view, attrTo: .Trailing, constant: -CGFloat.cast(diff)))
+            ret.append(self.constraint(.trailing, to: view, attrTo: .trailing, constant: -CGFloat.cast(diff)))
         }
         return ret
     }
@@ -541,8 +541,8 @@ public extension UIView {
     public func constraints<T>(alignVertical views: [UIView], diff: T) -> [NSLayoutConstraint] {
         var ret = [NSLayoutConstraint]()
         for view in views {
-            ret.append(self.constraint(.Top,    to: view, attrTo: .Top,    constant: CGFloat.cast(diff)))
-            ret.append(self.constraint(.Bottom, to: view, attrTo: .Bottom, constant: -CGFloat.cast(diff)))
+            ret.append(self.constraint(.top,    to: view, attrTo: .top,    constant: CGFloat.cast(diff)))
+            ret.append(self.constraint(.bottom, to: view, attrTo: .bottom, constant: -CGFloat.cast(diff)))
         }
         return ret
     }
@@ -573,8 +573,8 @@ public extension UIView {
     public func constraints<T>(alignHorizontal views: [UIView], diff: T) -> [NSLayoutConstraint] {
         var ret = [NSLayoutConstraint]()
         for view in views {
-            ret.append(self.constraint(.Leading,  to: view, attrTo: .Leading,  constant: CGFloat.cast(diff)))
-            ret.append(self.constraint(.Trailing, to: view, attrTo: .Trailing, constant: -CGFloat.cast(diff)))
+            ret.append(self.constraint(.leading,  to: view, attrTo: .leading,  constant: CGFloat.cast(diff)))
+            ret.append(self.constraint(.trailing, to: view, attrTo: .trailing, constant: -CGFloat.cast(diff)))
         }
         return ret
     }
@@ -604,7 +604,7 @@ public extension UIView {
     /// - returns: NSLayoutConstraintの配列
     public func constraints<T>(baseline view: UIView?, diff: T) -> [NSLayoutConstraint] {
         return [
-            self.constraint(.Baseline, to: self.omittableItem(view), attrTo: .Baseline, constant: CGFloat.cast(diff))
+            self.constraint(.lastBaseline, to: self.omittableItem(view), attrTo: .lastBaseline, constant: CGFloat.cast(diff))
         ]
     }
     
@@ -625,7 +625,7 @@ public extension UIView {
     /// - returns: NSLayoutConstraintの配列
     public func constraints<T>(centerX view: UIView?, diff: T) -> [NSLayoutConstraint] {
         return [
-            self.constraint(.CenterX, to: self.omittableItem(view), attrTo: .CenterX, constant: CGFloat.cast(diff))
+            self.constraint(.centerX, to: self.omittableItem(view), attrTo: .centerX, constant: CGFloat.cast(diff))
         ]
     }
     
@@ -646,7 +646,7 @@ public extension UIView {
     /// - returns: NSLayoutConstraintの配列
     public func constraints<T>(centerY view: UIView?, diff: T) -> [NSLayoutConstraint] {
         return [
-            self.constraint(.CenterY, to: self.omittableItem(view), attrTo: .CenterY, constant: CGFloat.cast(diff))
+            self.constraint(.centerY, to: self.omittableItem(view), attrTo: .centerY, constant: CGFloat.cast(diff))
         ]
     }
     
@@ -668,8 +668,8 @@ public extension UIView {
     /// - returns: NSLayoutConstraintの配列
     public func constraints<T>(centerOf view: UIView?, x: T, y: T) -> [NSLayoutConstraint] {
         return [
-            self.constraint(.CenterX, to: self.omittableItem(view), attrTo: .CenterX, constant: CGFloat.cast(x)),
-            self.constraint(.CenterY, to: self.omittableItem(view), attrTo: .CenterY, constant: CGFloat.cast(y))
+            self.constraint(.centerX, to: self.omittableItem(view), attrTo: .centerX, constant: CGFloat.cast(x)),
+            self.constraint(.centerY, to: self.omittableItem(view), attrTo: .centerY, constant: CGFloat.cast(y))
         ]
     }
     
@@ -706,7 +706,7 @@ public extension UIView {
         }
         if h == 0 { return [] } // for zero divide crash
         
-        return [self.constraint(.Width, to: self, attrTo: .Height, multiplier: w / h)]
+        return [self.constraint(.width, to: self, attrTo: .height, multiplier: w / h)]
     }
 }
 
@@ -718,10 +718,10 @@ public extension UIViewController {
     /// - returns: NSLayoutConstraintの配列
     public func addAllFitConstraints(toView view: UIView) {
         let constraints = [
-            Constraint(view, .Top,      to: self.topLayoutGuide,    .Top,      0),
-            Constraint(view, .Leading,  to: self.view,              .Leading,  0),
-            Constraint(view, .Bottom,   to: self.bottomLayoutGuide, .Bottom,   0),
-            Constraint(view, .Trailing, to: self.view,              .Trailing, 0),
+            Constraint(view, .top,      to: self.topLayoutGuide,    .top,      0),
+            Constraint(view, .leading,  to: self.view,              .leading,  0),
+            Constraint(view, .bottom,   to: self.bottomLayoutGuide, .bottom,   0),
+            Constraint(view, .trailing, to: self.view,              .trailing, 0),
         ]
         self.view.addConstraints(constraints)
     }

@@ -15,11 +15,11 @@ public func * (lhs: CGPoint, rhs: CGFloat) -> CGPoint {
 }
 
 /// CGSizeを等倍で拡大する演算子
-public func *= (inout lhs: CGSize, rhs: CGFloat) {
+public func *= (lhs: inout CGSize, rhs: CGFloat) {
     lhs = lhs * rhs
 }
 
 /// CGPointを等倍で拡大する演算子
-public func *= (inout lhs: CGPoint, rhs: CGFloat) {
+public func *= (lhs: inout CGPoint, rhs: CGFloat) {
     lhs = lhs * rhs
 }

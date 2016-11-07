@@ -5,13 +5,13 @@
 import UIKit
 
 /// CGRectZeroの短縮形
-public let cr0 = CGRectZero
+public let cr0 = CGRect.zero
 
 /// CGPointZeroの短縮形
-public let cp0 = CGPointZero
+public let cp0 = CGPoint.zero
 
 /// CGSizeZeroの短縮形
-public let cs0 = CGSizeZero
+public let cs0 = CGSize.zero
 
 // MARK: - CGRect拡張 -
 public extension CGRect {
@@ -23,28 +23,28 @@ public extension CGRect {
     /// - parameter y: Y座標
     /// - parameter w: 幅
     /// - parameter h: 高さ
-    public mutating func update<T>(x x: T? = nil, y: T? = nil, w: T? = nil, h: T? = nil) {
-        self.origin = CGPointMake(
-            (x != nil) ? CGFloat.cast(x!) : self.origin.x,
-            (y != nil) ? CGFloat.cast(y!) : self.origin.y
+    public mutating func update<T>(x: T? = nil, y: T? = nil, w: T? = nil, h: T? = nil) {
+        self.origin = CGPoint(
+            x: (x != nil) ? CGFloat.cast(x!) : self.origin.x,
+            y: (y != nil) ? CGFloat.cast(y!) : self.origin.y
         )
-        self.size = CGSizeMake(
-            (w != nil) ? CGFloat.cast(w!) : self.size.width,
-            (h != nil) ? CGFloat.cast(h!) : self.size.height
+        self.size = CGSize(
+            width: (w != nil) ? CGFloat.cast(w!) : self.size.width,
+            height: (h != nil) ? CGFloat.cast(h!) : self.size.height
         )
     }
     
     /// サイズをCGSizeZeroに変更する
     /// - returns: 変更後のCGRect
     public mutating func toSizeZero() -> CGRect {
-        self.size = CGSizeZero
+        self.size = CGSize.zero
         return self
     }
     
     /// 位置をCGPointZeroに変更する
     /// - returns: 変更後のCGRect
     public mutating func toOriginZero() -> CGRect {
-        self.origin = CGPointZero
+        self.origin = CGPoint.zero
         return self
     }
     
@@ -148,7 +148,7 @@ public extension CGRect {
     /// - parameter x: X座標
     /// - parameter y: Y座標
     /// - parameter size: サイズ
-    public init<T>(x: T, y: T, size: CGSize = CGSizeZero) {
+    public init<T>(x: T, y: T, size: CGSize = CGSize.zero) {
         self.origin = CGPoint(x: CGFloat.cast(x), y: CGFloat.cast(y))
         self.size   = size
     }
@@ -157,7 +157,7 @@ public extension CGRect {
     /// - parameter width: 幅
     /// - parameter height: 高さ
     /// - parameter origin: 位置
-    public init<T>(width: T, height: T, origin: CGPoint = CGPointZero) {
+    public init<T>(width: T, height: T, origin: CGPoint = CGPoint.zero) {
         self.origin = origin
         self.size   = CGSize(width: CGFloat.cast(width), height: CGFloat.cast(height))
     }
@@ -172,7 +172,7 @@ public extension CGRect {
     /// イニシャライザ
     /// - parameter size: サイズ
     public init(size: CGSize) {
-        self.origin = CGPointZero
+        self.origin = CGPoint.zero
         self.size   = size
     }
 
@@ -180,7 +180,7 @@ public extension CGRect {
     /// - parameter orgin: 位置
     public init(origin: CGPoint) {
         self.origin = origin
-        self.size   = CGSizeZero
+        self.size   = CGSize.zero
     }
     
     /// イニシャライザ
@@ -188,7 +188,7 @@ public extension CGRect {
     /// - parameter size: サイズ
     public init(center: CGPoint, size: CGSize) {
         self.size = size
-        self.origin = CGPointZero
+        self.origin = CGPoint.zero
         self.centerX = center.x
         self.centerY = center.y
     }
@@ -269,7 +269,7 @@ public extension CGPoint {
 /// - parameter width: 幅
 /// - parameter height: 高さ
 /// - returns: CGRect
-public func cr<T>(x: T, _ y: T, _ width: T, _ height: T) -> CGRect {
+public func cr<T>(_ x: T, _ y: T, _ width: T, _ height: T) -> CGRect {
     return CGRect(x, y, width, height)
 }
 
@@ -278,7 +278,7 @@ public func cr<T>(x: T, _ y: T, _ width: T, _ height: T) -> CGRect {
 /// - parameter y: Y座標
 /// - parameter size: サイズ
 /// - returns: CGRect
-public func cr<T>(x x: T, y: T, size: CGSize = CGSizeZero) -> CGRect {
+public func cr<T>(x: T, y: T, size: CGSize = CGSize.zero) -> CGRect {
     return CGRect(x: x, y: y, size: size)
 }
 
@@ -287,7 +287,7 @@ public func cr<T>(x x: T, y: T, size: CGSize = CGSizeZero) -> CGRect {
 /// - parameter height: 高さ
 /// - parameter origin: 位置
 /// - returns: CGRect
-public func cr<T>(width width: T, height: T, origin: CGPoint = CGPointZero) -> CGRect {
+public func cr<T>(width: T, height: T, origin: CGPoint = CGPoint.zero) -> CGRect {
     return CGRect(width: width, height: height, origin: origin)
 }
 
@@ -295,21 +295,21 @@ public func cr<T>(width width: T, height: T, origin: CGPoint = CGPointZero) -> C
 /// - parameter w: 幅
 /// - parameter h: 高さ
 /// - returns: CGRect
-public func cr<T>(w: T, _ h: T) -> CGRect {
+public func cr<T>(_ w: T, _ h: T) -> CGRect {
     return CGRect(w, h)
 }
 
 /// CGRectを作成する
 /// - parameter size: サイズ
 /// - returns: CGRect
-public func cr(size: CGSize) -> CGRect {
+public func cr(_ size: CGSize) -> CGRect {
     return CGRect(size: size)
 }
 
 /// CGRectを作成する
 /// - parameter orgin: 位置
 /// - returns: CGRect
-public func cr(origin: CGPoint) -> CGRect {
+public func cr(_ origin: CGPoint) -> CGRect {
     return CGRect(origin: origin)
 }
 
@@ -317,7 +317,7 @@ public func cr(origin: CGPoint) -> CGRect {
 /// - parameter origin: 位置
 /// - parameter size: サイズ
 /// - returns: CGRect
-public func cr(origin origin: CGPoint, size: CGSize) -> CGRect {
+public func cr(origin: CGPoint, size: CGSize) -> CGRect {
     return CGRect(origin: origin, size: size)
 }
 
@@ -325,7 +325,7 @@ public func cr(origin origin: CGPoint, size: CGSize) -> CGRect {
 /// - parameter center: 中央位置
 /// - parameter size: サイズ
 /// - returns: CGRect
-public func cr(center center: CGPoint, size: CGSize) -> CGRect {
+public func cr(center: CGPoint, size: CGSize) -> CGRect {
     return CGRect(center: center, size: size)
 }
 
@@ -335,7 +335,7 @@ public func cr(center center: CGPoint, size: CGSize) -> CGRect {
 /// - parameter x: X座標
 /// - parameter y: Y座標
 /// - returns: CGPoint
-public func cp<T>(x: T, _ y: T) -> CGPoint {
+public func cp<T>(_ x: T, _ y: T) -> CGPoint {
     return CGPoint(x, y)
 }
 
@@ -345,6 +345,6 @@ public func cp<T>(x: T, _ y: T) -> CGPoint {
 /// - parameter width: 幅
 /// - parameter height: 高さ
 /// - returns: CGSize
-public func cs<T>(width: T, _ height: T) -> CGSize {
+public func cs<T>(_ width: T, _ height: T) -> CGSize {
     return CGSize(width, height)
 }

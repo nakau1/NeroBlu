@@ -5,22 +5,22 @@
 import UIKit
 
 /// 長押し可能のボタン
-public class NBLongPressableButton: UIButton {
+open class NBLongPressableButton: UIButton {
     
     public typealias PressingClosure = (UInt64) -> Void
     
     /// 長押しが継続されるごとに呼ばれるクロージャ
     /// - parameter times: 長押しの検知開始からクロージャが呼ばれた回数
-    public var pressing: PressingClosure?
+    open var pressing: PressingClosure?
     
     /// 長押しが開始された時に呼ばれるクロージャ
-    public var started: VoidClosure?
+    open var started: VoidClosure?
     
     /// 長押しをやめた時に呼ばれるクロージャ
-    public var finished: VoidClosure?
+    open var finished: VoidClosure?
     
     /// 最初の長押しを感知するまでに要する秒数
-    @IBInspectable public var recognizeDuration : Double = 1.2 { // as CFTimeInterval
+    @IBInspectable open var recognizeDuration : Double = 1.2 { // as CFTimeInterval
         didSet { let v = self.recognizeDuration
             if self.longPressRecognizer != nil {
                 self.longPressRecognizer.minimumPressDuration = v
@@ -29,11 +29,11 @@ public class NBLongPressableButton: UIButton {
     }
     
     /// 次の長押しを感知するまでの間隔
-    @IBInspectable public var continuousInterval: Double = 0.1 // as CFTimeInterval
+    @IBInspectable open var continuousInterval: Double = 0.1 // as CFTimeInterval
     
     /// 次の長押しを感知するまでの間隔を変更して加速度を変化させる
     /// - parameter interval: 次の長押しを感知するまでの間隔
-    public func accelerate(interval: NSTimeInterval) {
+    open func accelerate(_ interval: TimeInterval) {
         if self.acceleratedContinuousInterval != interval {
             self.acceleratedContinuousInterval = interval
         }
@@ -42,7 +42,7 @@ public class NBLongPressableButton: UIButton {
     /// PressingClosureで得た回数の値から適度な加速度間隔を返す
     /// - parameter times: クロージャが呼ばれた回数
     /// - returns: 加速度間隔(acceleratedContinuousIntervalプロパティに渡す)
-    public class func templateIntervalForAccelerate(times: UInt64) -> NSTimeInterval {
+    open class func templateIntervalForAccelerate(_ times: UInt64) -> TimeInterval {
         switch times {
         case   0...10:  return 0.1
         case  11...20:  return 0.09
@@ -62,13 +62,13 @@ public class NBLongPressableButton: UIButton {
     
     // MARK: プライベート
     
-    private var times: UInt64 = 0
-    private var acceleratedContinuousInterval: NSTimeInterval = 0.0
-    private var longPressRecognizer: UILongPressGestureRecognizer!
-    private var longPressTimer: NSTimer?
-    private var touchesStarted: CFTimeInterval?
+    fileprivate var times: UInt64 = 0
+    fileprivate var acceleratedContinuousInterval: TimeInterval = 0.0
+    fileprivate var longPressRecognizer: UILongPressGestureRecognizer!
+    fileprivate var longPressTimer: Timer?
+    fileprivate var touchesStarted: CFTimeInterval?
 
-    private func commonInitialize() {
+    fileprivate func commonInitialize() {
         let lpgr = UILongPressGestureRecognizer(target: self, action: #selector(NBLongPressableButton.didRecognizeLongPress(_:)))
         lpgr.cancelsTouchesInView = false
         lpgr.minimumPressDuration = self.recognizeDuration
@@ -77,15 +77,15 @@ public class NBLongPressableButton: UIButton {
         self.longPressRecognizer = lpgr
     }
     
-    @objc private func didRecognizeLongPress(recognizer: UILongPressGestureRecognizer) {
+    @objc fileprivate func didRecognizeLongPress(_ recognizer: UILongPressGestureRecognizer) {
         switch recognizer.state {
-        case .Began: self.didBeginPressButton()
-        case .Ended: self.didEndPressButton()
+        case .began: self.didBeginPressButton()
+        case .ended: self.didEndPressButton()
         default:break
         }
     }
     
-    private func didBeginPressButton() {
+    fileprivate func didBeginPressButton() {
         if self.touchesStarted != nil { return }
         
         self.touchesStarted = CACurrentMediaTime()
@@ -93,7 +93,7 @@ public class NBLongPressableButton: UIButton {
         self.startLongPressTimer()
     }
     
-    private func didEndPressButton() {
+    fileprivate func didEndPressButton() {
         if self.touchesStarted != nil {
             self.touchesStarted = nil
             self.stopLongPressTimer()
@@ -101,21 +101,21 @@ public class NBLongPressableButton: UIButton {
         }
     }
 
-    private func startLongPressTimer() {
+    fileprivate func startLongPressTimer() {
         self.times = 0
         self.acceleratedContinuousInterval = self.continuousInterval
         self.executeNextLongPressTimer()
     }
     
-    @objc private func didFireLongPressTimer(timer: NSTimer) {
+    @objc fileprivate func didFireLongPressTimer(_ timer: Timer) {
         self.times = (self.times < UINT64_MAX) ? self.times + 1 : UINT64_MAX
         self.pressing?(self.times)
         self.executeNextLongPressTimer()
     }
     
-    private func executeNextLongPressTimer() {
-        self.longPressTimer = NSTimer.scheduledTimerWithTimeInterval(
-            self.acceleratedContinuousInterval,
+    fileprivate func executeNextLongPressTimer() {
+        self.longPressTimer = Timer.scheduledTimer(
+            timeInterval: self.acceleratedContinuousInterval,
             target:   self,
             selector: #selector(NBLongPressableButton.didFireLongPressTimer(_:)),
             userInfo: nil,
@@ -123,8 +123,8 @@ public class NBLongPressableButton: UIButton {
         )
     }
     
-    private func stopLongPressTimer() {
-        if let timer = self.longPressTimer where timer.valid {
+    fileprivate func stopLongPressTimer() {
+        if let timer = self.longPressTimer, timer.isValid {
             timer.invalidate()
         }
         self.longPressTimer = nil

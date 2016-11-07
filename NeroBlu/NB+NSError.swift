@@ -9,7 +9,7 @@ import UIKit
 /// - parameter code: エラーコード
 /// - parameter domain: エラードメイン
 /// - returns: エラーオブジェクト
-public func Error(message: String, _ code: Int = -1, _ domain: String = "") -> NSError {
+public func Error(_ message: String, _ code: Int = -1, _ domain: String = "") -> NSError {
     return NSError(domain: domain, code: code, userInfo: [NSLocalizedDescriptionKey: message])
 }
 
@@ -36,7 +36,7 @@ public protocol NBErrorRaisable {
 
     /// エラーオブジェクトを自身にセットする
     /// - parameter error: エラーエラーオブジェクト
-    func raiseError(error: NSError?)
+    func raiseError(_ error: NSError?)
 }
 public extension NBErrorRaisable {
     
@@ -44,14 +44,14 @@ public extension NBErrorRaisable {
     /// - parameter message: エラーメッセージ
     /// - parameter code: エラーコード
     /// - returns: エラーオブジェクト
-    public func createError(message: String, code: Int = -1) -> NSError {
+    public func createError(_ message: String, code: Int = -1) -> NSError {
         return Error(message, code, "\( self.className )ErrorDomain")
     }
     
     /// エラーオブジェクトを自身にセットする
     /// - parameter message: エラーメッセージ
     /// - parameter code: エラーコード
-    public func raiseError(message: String, code: Int = -1) {
+    public func raiseError(_ message: String, code: Int = -1) {
         self.raiseError(self.createError(message, code: code))
     }
     

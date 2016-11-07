@@ -5,13 +5,13 @@
 import UIKit
 
 // MARK: - NSIndexPath拡張 -
-public extension NSIndexPath {
+public extension IndexPath {
     
     /// イニシャライザ
     /// - parameter row: 行インデックス
     /// - parameter section: セクションインデックス
-    public convenience init(_ row: Int, _ section: Int = 0) {
-        self.init(forRow: row, inSection: section)
+    public init(_ row: Int, _ section: Int = 0) {
+        (self as NSIndexPath).init(row: row, section: section)
     }
 }
 
@@ -34,7 +34,7 @@ public extension NBCellRegisterable {
     public static func nibName() -> String { return self.className }
     
     /// 使用するXib(Nib)があるバンドル(デフォルトはメインバンドルを使用する)
-    public static func cellBundle() -> NSBundle? { return nil }
+    public static func cellBundle() -> Bundle? { return nil }
     
     public static var cellIdentifier: String { return NBCellDefaultIdentifier }
 }
@@ -45,12 +45,12 @@ public extension UITableView {
     
     /// セルを登録する
     /// - parameter registerableType: NBCellRegisterableを実装したクラスの型
-    public func register<T: NBCellRegisterable where T: UITableViewCell>(registerableType: T.Type) {
+    public func register<T: NBCellRegisterable>(_ registerableType: T.Type) where T: UITableViewCell {
         let id = registerableType.cellIdentifier
         if let nib = UINib.create(nibName: registerableType.nibName(), bundle: registerableType.cellBundle()) {
-            self.registerNib(nib, forCellReuseIdentifier: id)
+            self.register(nib, forCellReuseIdentifier: id)
         } else {
-            self.registerClass(registerableType, forCellReuseIdentifier: id)
+            self.register(registerableType, forCellReuseIdentifier: id)
         }
     }
     
@@ -58,13 +58,13 @@ public extension UITableView {
     /// - parameter registerableType: NBCellRegisterableを実装したクラスの型
     /// - parameter indexPath: インデックパス
     /// - returns: 再利用可能なセル
-    public func dequeueReusableCell<T: NBCellRegisterable where T: UITableViewCell>(registerableType: T.Type, forIndexPath indexPath: NSIndexPath? = nil) -> T {
+    public func dequeueReusableCell<T: NBCellRegisterable>(_ registerableType: T.Type, forIndexPath indexPath: IndexPath? = nil) -> T where T: UITableViewCell {
         let id = registerableType.cellIdentifier
         let reusableCell: UITableViewCell?
         if let indexPath = indexPath {
-            reusableCell = self.dequeueReusableCellWithIdentifier(id, forIndexPath: indexPath)
+            reusableCell = self.dequeueReusableCell(withIdentifier: id, for: indexPath)
         } else {
-            reusableCell = self.dequeueReusableCellWithIdentifier(id)
+            reusableCell = self.dequeueReusableCell(withIdentifier: id)
         }
         guard let ret = reusableCell as? T else {
             return registerableType.init()
@@ -76,10 +76,10 @@ public extension UITableView {
 // MARK: - NBTableViewController -
 
 /// テーブルビューを管理するビューコントローラ(UITableViewControllerとは直接継承関係にはない)
-public class NBTableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+open class NBTableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     /// 管理するテーブルビュー
-    public var tableView: UITableView? {
+    open var tableView: UITableView? {
         get {
             return self.view as? UITableView
         }
@@ -94,49 +94,49 @@ public class NBTableViewController: UIViewController, UITableViewDelegate, UITab
     
     /// テーブルビューのセットアップを行う
     /// - parameter tableView: テーブルビュー
-    public func setup(tableView: UITableView) {
+    open func setup(_ tableView: UITableView) {
         self.tableView = tableView
     }
     
     // MARK: UITableViewDelegate / UITableViewDataSource
     
-    public func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    open func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    public func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    open func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 0
     }
     
-    public func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        return tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath)
+    open func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        return tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
     }
     
-    public func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+    open func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
     }
 }
 
 // MARK: - NBTableViewCell -
 
 /// UITableViewCellを継承したカスタム用テーブルビューセルクラス
-public class NBTableViewCell: UITableViewCell {
+open class NBTableViewCell: UITableViewCell {
     
     /// 生成時に一度だけ呼ばれる初期処理
-    public func initialize() {} // expected override implementation.
+    open func initialize() {} // expected override implementation.
     
     // MARK: プライベート
     
-    private var initialized = false
+    fileprivate var initialized = false
     
-    private func initializeIfNeeded() {
+    fileprivate func initializeIfNeeded() {
         if !self.initialized {
             self.initialize()
             self.initialized = true
         }
     }
     
-    public override func awakeFromNib() {
+    open override func awakeFromNib() {
         super.awakeFromNib()
         self.initializeIfNeeded()
     }
@@ -155,12 +155,12 @@ public extension UICollectionView {
     
     /// セルを登録する
     /// - parameter registerableType: NBCellRegisterableを実装したクラスの型
-    public func register<T: NBCellRegisterable where T: UICollectionViewCell>(registerableType: T.Type) {
+    public func register<T: NBCellRegisterable>(_ registerableType: T.Type) where T: UICollectionViewCell {
         let id = registerableType.cellIdentifier
         if let nib = UINib.create(nibName: registerableType.nibName(), bundle: registerableType.cellBundle()) {
-            self.registerNib(nib, forCellWithReuseIdentifier: id)
+            self.register(nib, forCellWithReuseIdentifier: id)
         } else {
-            self.registerClass(registerableType, forCellWithReuseIdentifier: id)
+            self.register(registerableType, forCellWithReuseIdentifier: id)
         }
     }
     
@@ -168,9 +168,9 @@ public extension UICollectionView {
     /// - parameter registerableType: NBCellRegisterableを実装したクラスの型
     /// - parameter indexPath: インデックパス
     /// - returns: 再利用可能なセル
-    public func dequeueReusableCell<T: NBCellRegisterable where T: UICollectionViewCell>(registerableType: T.Type, forIndexPath indexPath: NSIndexPath? = nil) -> T {
+    public func dequeueReusableCell<T: NBCellRegisterable>(_ registerableType: T.Type, forIndexPath indexPath: IndexPath? = nil) -> T where T: UICollectionViewCell {
         let id = registerableType.cellIdentifier
-        let reusableCell = self.dequeueReusableCellWithReuseIdentifier(id, forIndexPath: indexPath ?? NSIndexPath(0, 0))
+        let reusableCell = self.dequeueReusableCell(withReuseIdentifier: id, for: indexPath ?? IndexPath(0, 0))
 
         guard let ret = reusableCell as? T else {
             return registerableType.init()
@@ -182,10 +182,10 @@ public extension UICollectionView {
 // MARK: - NBCollectionViewController -
 
 /// コレクションビューを管理するビューコントローラ(UICollectionViewControllerとは直接継承関係にはない)
-public class NBCollectionViewController: UIViewController, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
+open class NBCollectionViewController: UIViewController, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
     
     /// 管理するコレクションビュー
-    public var collectionView: UICollectionView? {
+    open var collectionView: UICollectionView? {
         get {
             return self.view as? UICollectionView
         }
@@ -199,7 +199,7 @@ public class NBCollectionViewController: UIViewController, UICollectionViewDeleg
     }
     
     /// コレクションビューレイアウト
-    public var collectionViewLayout: UICollectionViewLayout? {
+    open var collectionViewLayout: UICollectionViewLayout? {
         get {
             return self.collectionView?.collectionViewLayout
         }
@@ -212,49 +212,49 @@ public class NBCollectionViewController: UIViewController, UICollectionViewDeleg
     
     /// コレクションビューのセットアップを行う
     /// - parameter collectionView: コレクションビュー
-    public func setup(collectionView: UICollectionView) {
+    open func setup(_ collectionView: UICollectionView) {
         self.collectionView = collectionView
     }
     
     // MARK: UICollectionViewDelegateFlowLayout / UICollectionViewDataSource
     
-    public func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
+    open func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
     
-    public func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    open func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return 0
     }
     
-    public func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        return collectionView.dequeueReusableCellWithReuseIdentifier("cell", forIndexPath: indexPath)
+    open func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        return collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
     }
     
-    public func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        collectionView.deselectItemAtIndexPath(indexPath, animated: true)
+    open func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        collectionView.deselectItem(at: indexPath, animated: true)
     }
 }
 
 // MARK: - NBCollectionViewCell -
 
 /// UICollectionViewCellを継承したカスタム用コレクションビューセルクラス
-public class NBCollectionViewCell: UICollectionViewCell {
+open class NBCollectionViewCell: UICollectionViewCell {
     
     /// 生成時に一度だけ呼ばれる初期処理
-    public func initialize() {} // expected override implementation.
+    open func initialize() {} // expected override implementation.
     
     // MARK: プライベート
     
-    private var initialized = false
+    fileprivate var initialized = false
     
-    private func initializeIfNeeded() {
+    fileprivate func initializeIfNeeded() {
         if !self.initialized {
             self.initialize()
             self.initialized = true
         }
     }
     
-    public override func awakeFromNib() {
+    open override func awakeFromNib() {
         super.awakeFromNib()
         self.initializeIfNeeded()
     }
@@ -277,7 +277,7 @@ public extension UICollectionViewLayout {
     /// - parameter totalWidth: セルサイズの計算に使用する全体幅(省略時は画面の幅を使用する)
     /// - parameter direction: スクロール方向
     /// - returns: UICollectionViewFlowLayout
-    public class func tiledLayout(numberOfColumns column: Int = 4, interval: CGFloat = 1.0, margin: CGFloat = 1.0, totalWidth: CGFloat? = nil, direction: UICollectionViewScrollDirection = .Vertical) -> UICollectionViewLayout {
+    public class func tiledLayout(numberOfColumns column: Int = 4, interval: CGFloat = 1.0, margin: CGFloat = 1.0, totalWidth: CGFloat? = nil, direction: UICollectionViewScrollDirection = .vertical) -> UICollectionViewLayout {
         
         if column <= 0 { fatalError("UICollectionViewLayout#tiledLayout argument of 'column' should not be zero") }
         

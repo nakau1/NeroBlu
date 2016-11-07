@@ -30,7 +30,7 @@ extension Array {
     /// - note: 元の配列自身の要素は変わりません。その用途の場合は appendメソッドを使います
     /// - parameter e: 要素
     /// - returns: 要素を足した配列(元の配列自身は変わりません)
-    public func add(e: Element) -> Array<Element> {
+    public func add(_ e: Element) -> Array<Element> {
         return self + [e]
     }
     
@@ -38,7 +38,7 @@ extension Array {
     /// - note: 元の配列自身の要素は変わりません。その用途の場合は appendメソッドを使います
     /// - parameter e: 要素
     /// - returns: 要素を足した配列(元の配列自身は変わりません)
-    public func add(e: [Element]) -> Array<Element> {
+    public func add(_ e: [Element]) -> Array<Element> {
         return self + e
     }
 }
@@ -75,10 +75,10 @@ extension Optional: NBSequenceOptionalType {
     public var optionalValue: Wrapped? { return self }
 }
 
-public extension SequenceType where Generator.Element: NBSequenceOptionalType {
+public extension Sequence where Iterator.Element: NBSequenceOptionalType {
     
     /// nilを取り除いた非オプショナルなコレクション
-    public var flatten: [Generator.Element.T] {
+    public var flatten: [Iterator.Element.T] {
         return self.flatMap { $0.optionalValue }
     }
 }
