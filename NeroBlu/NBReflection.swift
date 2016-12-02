@@ -60,11 +60,14 @@ extension NBReflection {
     fileprivate static func fetchClass(target: Any) -> AnyClass? {
         if let cls = target as? AnyClass {
             return cls
-        } else if let obj = target as? AnyObject {
-            return type(of: obj)
-        } else {
-            return nil
         }
+        
+        //let targetType = type(of: target)
+        
+        //if let targetType = type(of: target) {
+        //
+       // }
+        return nil
     }
 }
 
