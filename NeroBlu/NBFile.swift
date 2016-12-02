@@ -65,7 +65,7 @@ public extension NBFile {
     public var isFile: Bool {
         var isDirectory: ObjCBool = false
         if self.manager.fileExists(atPath: self.path, isDirectory: &isDirectory) {
-            if !isDirectory { return true }
+            if !isDirectory.boolValue { return true }
         }
         return false
     }

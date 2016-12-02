@@ -212,8 +212,7 @@ extension String {
         } else if max < e {
             e = max
         }
-        let range = Range(self.characters.index(self.startIndex, offsetBy: s)...self.characters.index(self.startIndex, offsetBy: e))
-        return self.substring(with: range)
+        return self[self.index(self.startIndex, offsetBy: s)...self.index(self.startIndex, offsetBy: e)]
     }
     
     /// 文字列の部分取得を行う
@@ -418,7 +417,7 @@ extension String {
     
     /// URLデコードした文字列
     public var urlDecode: String {
-        return self.stringByRemovingPercentEncoding ?? ""
+        return self.removingPercentEncoding ?? ""
     }
 }
 

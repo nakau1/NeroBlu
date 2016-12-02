@@ -13,7 +13,7 @@ public func onMainThread(_ block: @escaping VoidClosure) {
 /// 新しいスレッド(キュー)との同期をとって処理を実行する
 /// - parameter block: 新しいスレッドで行う処理
 public func onNewThread(_ block: @escaping VoidClosure) {
-    DispatchQueue.global(priority: DispatchQueue.GlobalQueuePriority.default).async(execute: block)
+   DispatchQueue.global(qos: .default).async(execute: block)
 }
 
 /// 非同期処理を行う

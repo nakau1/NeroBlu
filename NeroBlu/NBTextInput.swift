@@ -163,9 +163,9 @@ open class NBKeyboardEventManager: NSObject {
         }
         
         App.Notify.observe(self, start: start, notificationsAndSelectors:[
-            NSNotification.Name.UIKeyboardWillShow        : selector,
-            NSNotification.Name.UIKeyboardWillChangeFrame : selector,
-            NSNotification.Name.UIKeyboardWillHide        : selector,
+            NSNotification.Name.UIKeyboardWillShow.rawValue        : selector,
+            NSNotification.Name.UIKeyboardWillChangeFrame.rawValue : selector,
+            NSNotification.Name.UIKeyboardWillHide.rawValue        : selector,
             ]
         )
     }

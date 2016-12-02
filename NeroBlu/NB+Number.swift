@@ -82,7 +82,7 @@ public extension Int {
         fmt.numberStyle       = .decimal
         fmt.groupingSeparator = ","
         fmt.groupingSize      = 3
-        return fmt.string(from: NSNumber(self)) ?? ""
+        return fmt.string(from: NSNumber(integerLiteral: self)) ?? ""
     }
 }
 
