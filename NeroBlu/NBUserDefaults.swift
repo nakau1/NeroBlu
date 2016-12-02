@@ -25,6 +25,13 @@ open class NBUserDefaults: NSObject {
     deinit {
         self.observe(false)
     }
+    
+    // KVO
+    open override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        guard let keyPath = keyPath else { return }
+        self.ud.set(change?[NSKeyValueChangeKey.newKey], forKey: self.keyName(keyPath))
+        self.ud.synchronize()
+    }
 }
 
 // MARK: - 設定 -
@@ -89,16 +96,6 @@ private extension NBUserDefaults {
         return Mirror(reflecting: self).children.flatMap { $0.label }.filter {
             !type(of: self).ignoredProperties().contains($0)
         }
-    }
-}
-
-// MARK: - KVO -
-public extension NBUserDefaults {
-    
-    open override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-        guard let keyPath = keyPath else { return }
-        self.ud.set(change?["new"], forKey: self.keyName(keyPath))
-        self.ud.synchronize()
     }
 }
 
