@@ -19,15 +19,14 @@ class ViewController: NBLandingViewController {
                     var r = cr0
                     r.update(w: 100, h: 50)
                     r.p = cp(30, 60)
-                    r.p.reverse()
-                    print(r) // (60.0, 30.0, 100.0, 50.0)
+                    print(r.p.reverse()) // (60.0, 30.0, 100.0, 50.0)
                 },
                 NBLandingItem("CGRect(2) - 四辺取得") {
                     let r = cr(origin: cp(10, 20), size: cs(30, 40))
                     print(r.x, r.y, r.r, r.b) // (10.0, 20.0, 40.0, 60.0)
                 },
                 NBLandingItem("CGRect(3) - 文字列での指定可能") {
-                    let r = CGRect("12", 34, 56.0, "78.9")
+                    let r = CGRect(12, 34, 56.0, 78.9)
                     print(r) // (12.0, 34.0, 56.0, 78.9)
                 },
                 NBLandingItem("CGRect(4) - 中央位置指定") {
