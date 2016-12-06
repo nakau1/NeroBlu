@@ -20,6 +20,6 @@ public extension RealmSwift.List {
     /// - parameter array: 配列
     public func reset(_ array: [Entity] = []) {
         self.removeAll()
-        self.append(contentsOf: array)
+		self.append(objectsIn: array)
     }
 }

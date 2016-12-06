@@ -237,6 +237,7 @@
 					};
 					DB80EE8E1D2422F3006A44C2 = {
 						CreatedOnToolsVersion = 7.3.1;
+						DevelopmentTeam = F5GAB67SL8;
 						LastSwiftMigration = 0810;
 					};
 				};
@@ -511,6 +512,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = F5GAB67SL8;
 				INFOPLIST_FILE = NeroBluDemo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.neroblu.ios.libs.NeroBluDemo;
@@ -524,6 +526,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = F5GAB67SL8;
 				INFOPLIST_FILE = NeroBluDemo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.neroblu.ios.libs.NeroBluDemo;

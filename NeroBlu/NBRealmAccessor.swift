@@ -59,7 +59,7 @@ public extension NBRealmAccessor {
     ///           \
     ///           - returns: セットアップされたエンティティ
     /// - returns: 新しいエンティティ
-    public func create<T: Collection>(_ collection: T, withID firstID: Int64, setup: (Entity, T.Iterator.Element) -> Entity) -> [Entity] {
+    public func create<T: Collection>(_ collection: T, withID firstID: Int64?, setup: (Entity, T.Iterator.Element) -> Entity) -> [Entity] {
         var ret = [Entity]()
         var id = firstID ?? self.autoIncrementedID
         for element in collection {
@@ -78,10 +78,10 @@ public extension NBRealmAccessor {
     
     /// オートインクリメントされたID値
     public var autoIncrementedID: Int64 {
-        guard let max = self.realm.objects(Entity).sorted(NBRealmEntity.IDKey, ascending: false).first else {
-            return 1
-        }
-        return max.id + 1
+		guard let max = self.realm.objects(Entity.self).sorted(byProperty: NBRealmEntity.IDKey, ascending: false).first else {
+			return 1
+		}
+		return max.id + 1
     }
 }
 
@@ -142,13 +142,13 @@ public extension NBRealmAccessor {
     /// - parameter sort: ソート
     /// - returns: RealmResultsオブジェクト
     fileprivate func getResult(condition: NSPredicate? = nil, sort: NBRealmSort? = nil) -> RealmSwift.Results<Entity> {
-        var result = self.realm.objects(Entity)
+        var result = self.realm.objects(Entity.self)
         if let condition = condition {
             result = result.filter(condition)
         }
         if let sort = sort {
             sort.forEach {
-                result = result.sorted($0.0, ascending: $0.1)
+				result = result.sorted(byProperty: $0.key, ascending: $0.value)
             }
         }
         return result
@@ -190,7 +190,7 @@ public extension NBRealmAccessor {
     public func delete(_ condition: NSPredicate) {
         let r = self.realm
         try! r.write {
-            r.delete(r.objects(Entity).filter(condition))
+            r.delete(r.objects(Entity.self).filter(condition))
         }
     }
     
@@ -227,10 +227,10 @@ public extension NBRealmAccessor {
     /// 指定した条件で抽出されるレコードを更新する
     /// - parameter condition: 条件オブジェクト
     /// - parameter updating: データ更新クロージャ
-    public func update(_ condition: NSPredicate? = nil, updating: @escaping NBRealmUpdateClosure) {
+    public func update(condition: NSPredicate? = nil, updating: @escaping NBRealmUpdateClosure) {
         let r = self.realm
         try! r.write {
-            var result = r.objects(Entity)
+            var result = r.objects(Entity.self)
             if let condition = condition {
                 result = result.filter(condition)
             }
@@ -246,15 +246,15 @@ public extension NBRealmAccessor {
     /// 指定した複数のIDで抽出されるレコードを更新する
     /// - parameter ids: IDの配列
     /// - parameter updating: データ更新クロージャ
-    public func update(_ ids: [Int64], updating: NBRealmUpdateClosure) {
-        self.update(NSPredicate(ids: ids), updating: updating)
+    public func update(_ ids: [Int64], updating: @escaping NBRealmUpdateClosure) {
+        self.update(condition: NSPredicate(ids: ids), updating: updating)
     }
     
     /// 指定したIDのレコードを更新する
     /// - parameter id: ID
     /// - parameter updating: データ更新クロージャ
-    public func update(_ id: Int64, updating: NBRealmUpdateClosure) {
-        self.update(NSPredicate(id: id), updating: updating)
+    public func update(_ id: Int64, updating: @escaping NBRealmUpdateClosure) {
+        self.update(condition: NSPredicate(id: id), updating: updating)
     }
     
     /// 指定したエンティティのレコードを更新する

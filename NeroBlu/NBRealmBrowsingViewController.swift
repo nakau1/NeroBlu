@@ -191,7 +191,7 @@ open class NBRealmBrowsingViewController: UIViewController, UITableViewDelegate,
             cell = reusableCell
         } else {
             cell = UITableViewCell(style: self.type.cellStyle, reuseIdentifier: "cell")
-            self.setupCell(cell)
+            cell = self.setupCell(cell)
         }
         
         let item = self.items[indexPath.row]
@@ -285,7 +285,7 @@ private class NBRealmBrowsingItem {
 
 private extension NBRealmBrowsingItem {
     
-    func detailValue(_ targetObject: RmObject?) -> AnyObject? {
+    func detailValue(_ targetObject: RmObject?) -> Any? {
         if let object = targetObject, let ret = object.value(forKey: self.mainText) {
             return ret
         }
@@ -384,7 +384,7 @@ private class NBRealmBrowsingItems {
         }
     }
     
-    fileprivate func selectableForDetail(_ type: RmType, _ value: AnyObject?) -> Bool {
+    fileprivate func selectableForDetail(_ type: RmType, _ value: Any?) -> Bool {
         guard let v = value else { return false }
         switch type {
         case .array, .object: return true
@@ -412,23 +412,23 @@ private extension NBRealmBrowsingTextUtil {
         case .date:           typeName = "DateTime"
         case .object:         typeName = "<\(property.objectClassName ?? "?" )>"
         case .array:          typeName = "Array of <\(property.objectClassName ?? "?" )>"
-        case .LinkingObjects: typeName = "LinkingObjects of <\(property.objectClassName ?? "?" )>"
+        case .linkingObjects: typeName = "LinkingObjects of <\(property.objectClassName ?? "?" )>"
         }
         
         let ret = self.string(typeName)
-        if property.optional {
+        if property.isOptional {
             self.addOptionalText(ret)
         }
-        if property.indexed {
+        if property.isIndexed {
             self.addInexedText(ret)
         }
         
         return ret
     }
     
-    class func text(detailValue any: AnyObject?, propertyType type: RmType) -> NSAttributedString {
+    class func text(detailValue any: Any?, propertyType type: RmType) -> NSAttributedString {
         guard let value = any else { return self.nilText }
-        
+		
         switch type {
         case .string:
             let ret = self.string("\"\(value)\"")
