@@ -18,8 +18,8 @@ public extension RealmSwift.List {
     
     /// 自身のデータを渡された配列でリセットする
     /// - parameter array: 配列
-    public func reset(array: [Entity] = []) {
+    public func reset(_ array: [Entity] = []) {
         self.removeAll()
-        self.appendContentsOf(array)
+        self.append(contentsOf: array)
     }
 }

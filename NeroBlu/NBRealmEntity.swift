@@ -8,23 +8,23 @@ import RealmSwift
 // MARK: - NBRealmEntity -
 
 /// RealmObjectを継承したデータエンティティクラス
-public class NBRealmEntity: RealmSwift.Object {
+open class NBRealmEntity: RealmSwift.Object {
     
-    public static let IDKey       = "id"
-    public static let CreatedKey  = "created"
-    public static let ModifiedKey = "modified"
+    open static let IDKey       = "id"
+    open static let CreatedKey  = "created"
+    open static let ModifiedKey = "modified"
     
     /// オブジェクトID
-    public dynamic var id : Int64 = 0 // = NBRealmEntityIDKey
+    open dynamic var id : Int64 = 0 // = NBRealmEntityIDKey
     
     /// 作成日時
-    public dynamic var created = NSDate() // = NBRealmEntityCreatedKey
+    open dynamic var created = Date() // = NBRealmEntityCreatedKey
     
     /// 更新日時
-    public dynamic var modified = NSDate() // = NBRealmEntityModifiedKey
+    open dynamic var modified = Date() // = NBRealmEntityModifiedKey
     
     /// 主キー設定
-    public override static func primaryKey() -> String? {
+    open override static func primaryKey() -> String? {
         return NBRealmEntity.IDKey
     }
 }

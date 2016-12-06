@@ -11,21 +11,21 @@ public extension NSPredicate {
     /// - parameter ids: IDの配列
     /// - parameter q: 検索文字列
     public convenience init(ids: [Int64]) {
-        let arr = ids.map { NSNumber(longLong: $0) }
+        let arr = ids.map { NSNumber(value: $0 as Int64) }
         self.init(format: "\(NBRealmEntity.IDKey) IN %@", argumentArray: [arr])
     }
     
     /// イニシャライザ
     /// - parameter id: ID
     public convenience init(id: Int64) {
-        self.init(format: "\(NBRealmEntity.IDKey) = %@", argumentArray: [NSNumber(longLong: id)])
+        self.init(format: "\(NBRealmEntity.IDKey) = %@", argumentArray: [NSNumber(value: id as Int64)])
     }
 }
 
 // MARK: - NSPredicate拡張: イニシャライザ(式) -
 public extension NSPredicate {
     
-    private convenience init(expression property: String, _ operation: String, _ value: AnyObject) {
+    fileprivate convenience init(expression property: String, _ operation: String, _ value: AnyObject) {
         self.init(format: "\(property) \(operation) %@", argumentArray: [value])
     }
     
@@ -155,18 +155,18 @@ public extension NSPredicate {
     /// - parameter fromDate: From日時
     /// - parameter toDate: To日時
     /// - seealso: [NSPredicate Cheatsheet](https://realm.io/news/nspredicate-cheatsheet/)
-    public convenience init(_ property: String, fromDate: NSDate?, toDate: NSDate?) {
+    public convenience init(_ property: String, fromDate: Date?, toDate: Date?) {
         var format = "", args = [AnyObject]()
         if let from = fromDate {
             format += "\(property) >= %@"
-            args.append(from)
+            args.append(from as AnyObject)
         }
         if let to = toDate {
             if !format.isEmpty {
                 format += " AND "
             }
             format += "\(property) <= %@"
-            args.append(to)
+            args.append(to as AnyObject)
         }
         if !args.isEmpty {
             self.init(format: format, argumentArray: args)
@@ -221,34 +221,34 @@ public extension NSPredicate {
     /// AND条件結合したNSPredicateを返す
     /// - parameter predicates: NSPredicateの配列
     /// - returns: 条件結合したNSPredicate
-    public func and(predicate: NSPredicate) -> NSPredicate {
-        return self.compound([predicate], type: .AndPredicateType)
+    public func and(_ predicate: NSPredicate) -> NSPredicate {
+        return self.compound([predicate], type: .and)
     }
     
     /// OR条件結合したNSPredicateを返す
     /// - parameter predicates: NSPredicateの配列
     /// - returns: 条件結合したNSPredicate
-    public func or(predicate: NSPredicate) -> NSPredicate {
-        return self.compound([predicate], type: .OrPredicateType)
+    public func or(_ predicate: NSPredicate) -> NSPredicate {
+        return self.compound([predicate], type: .or)
     }
     
     /// 条件結合したNSPredicateを返す
     /// - parameter predicates: NSPredicateの配列
     /// - returns: 条件結合したNSPredicate
-    public func not(predicate: NSPredicate) -> NSPredicate {
-        return self.compound([predicate], type: .NotPredicateType)
+    public func not(_ predicate: NSPredicate) -> NSPredicate {
+        return self.compound([predicate], type: .not)
     }
     
     /// 条件結合したNSPredicateを返す
     /// - parameter predicates: NSPredicateの配列
     /// - parameter type: 結合の種別
     /// - returns: 条件結合したNSPredicate
-    public func compound(predicates: [NSPredicate], type: NSCompoundPredicateType = .AndPredicateType) -> NSPredicate {
-        var p = predicates; p.insert(self, atIndex: 0)
+    public func compound(_ predicates: [NSPredicate], type: NSCompoundPredicate.LogicalType = .and) -> NSPredicate {
+        var p = predicates; p.insert(self, at: 0)
         switch type {
-        case .AndPredicateType: return NSCompoundPredicate(andPredicateWithSubpredicates: p)
-        case .OrPredicateType:  return NSCompoundPredicate(orPredicateWithSubpredicates:  p)
-        case .NotPredicateType: return NSCompoundPredicate(notPredicateWithSubpredicate:  self.compound(p))
+        case .and: return NSCompoundPredicate(andPredicateWithSubpredicates: p)
+        case .or:  return NSCompoundPredicate(orPredicateWithSubpredicates:  p)
+        case .not: return NSCompoundPredicate(notPredicateWithSubpredicate:  self.compound(p))
         }
     }
 }

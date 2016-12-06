@@ -18,13 +18,13 @@ public typealias NBRealmLimit = (offset: Int, count: Int)
 // MARK: - NBRealm -
 
 /// Realm自体の参照等を扱うクラス
-public class NBRealm {
+open class NBRealm {
     
     /// Realmファイルのパス
-    public static var realmPath: String {
+    open static var realmPath: String {
         return Realm.Configuration.defaultConfiguration.fileURL?.absoluteString ?? ""
     }
     
     /// Realmオブジェクト
-    public static var realm: Realm { return try! Realm() }
+    open static var realm: Realm { return try! Realm() }
 }

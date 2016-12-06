@@ -8,17 +8,17 @@ import RealmSwift
 // MARK: - NBRealmAccessor -
 
 /// Realmオブジェクトのデータアクセサの基底クラス
-public class NBRealmAccessor<T: NBRealmEntity>: CustomStringConvertible {
+open class NBRealmAccessor<T: NBRealmEntity>: CustomStringConvertible {
     
     /// エンティティ
     public typealias Entity = T
     
     /// Realmオブジェクトの参照
-    public var realm: Realm { return NBRealm.realm }
+    open var realm: Realm { return NBRealm.realm }
     
     public init() {}
     
-    public var description: String {
+    open var description: String {
         return ""
     }
     
@@ -27,7 +27,7 @@ public class NBRealmAccessor<T: NBRealmEntity>: CustomStringConvertible {
     /// 渡したエンティティを複製した新しいエンティティを生成する
     /// - parameter entity: コピーするエンティティ
     /// - returns: 引数のエンティティを複製した新しいエンティティ
-    public func clone(entity: Entity) -> Entity {
+    open func clone(_ entity: Entity) -> Entity {
         let ret = Entity()
         ret.id       = entity.id
         ret.created  = entity.created
@@ -59,7 +59,7 @@ public extension NBRealmAccessor {
     ///           \
     ///           - returns: セットアップされたエンティティ
     /// - returns: 新しいエンティティ
-    public func create<T: CollectionType>(collection: T, withID firstID: Int64, setup: (Entity, T.Generator.Element) -> Entity) -> [Entity] {
+    public func create<T: Collection>(_ collection: T, withID firstID: Int64, setup: (Entity, T.Iterator.Element) -> Entity) -> [Entity] {
         var ret = [Entity]()
         var id = firstID ?? self.autoIncrementedID
         for element in collection {
@@ -91,18 +91,18 @@ public extension NBRealmAccessor {
     /// 指定したエンティティのレコードを更新する
     /// - parameter condition: 条件オブジェクト
     /// - parameter updating: データ更新クロージャ
-    public func save(entity: Entity) {
+    public func save(_ entity: Entity) {
         self.save([entity])
     }
     
     /// 指定したエンティティのレコードを更新する
     /// - parameter condition: 条件オブジェクト
     /// - parameter updating: データ更新クロージャ
-    public func save(entities: [Entity]) {
+    public func save(_ entities: [Entity]) {
         let r = self.realm
         try! r.write {
             for entity in entities {
-                entity.modified = NSDate()
+                entity.modified = Date()
             }
             r.add(entities, update: true)
         }
@@ -117,7 +117,7 @@ public extension NBRealmAccessor {
     /// - parameter sort: ソート
     /// - parameter limit: 取得制限
     /// - returns: エンティティの配列
-    public func select(condition condition: NSPredicate? = nil, sort: NBRealmSort? = nil, limit: NBRealmLimit? = nil) -> [Entity] {
+    public func select(condition: NSPredicate? = nil, sort: NBRealmSort? = nil, limit: NBRealmLimit? = nil) -> [Entity] {
         let result = self.getResult(condition: condition, sort: sort)
         if let limit = limit {
             var ret = [Entity]()
@@ -133,7 +133,7 @@ public extension NBRealmAccessor {
     /// 指定した条件で抽出されるレコード数を取得する
     /// - parameter condition: 条件オブジェクト
     /// - returns: レコード数
-    public func count(condition condition: NSPredicate? = nil) -> Int {
+    public func count(condition: NSPredicate? = nil) -> Int {
         return self.getResult(condition: condition, sort: nil).count
     }
     
@@ -141,7 +141,7 @@ public extension NBRealmAccessor {
     /// - parameter condition: 条件オブジェクト
     /// - parameter sort: ソート
     /// - returns: RealmResultsオブジェクト
-    private func getResult(condition condition: NSPredicate? = nil, sort: NBRealmSort? = nil) -> RealmSwift.Results<Entity> {
+    fileprivate func getResult(condition: NSPredicate? = nil, sort: NBRealmSort? = nil) -> RealmSwift.Results<Entity> {
         var result = self.realm.objects(Entity)
         if let condition = condition {
             result = result.filter(condition)
@@ -160,15 +160,15 @@ public extension NBRealmAccessor {
     
     /// エンティティの配列からレコードを一括で新規追加する
     /// - parameter entities: 追加するエンティティの配列
-    public func insert(entities: [Entity]) {
+    public func insert(_ entities: [Entity]) {
         let r = self.realm
         var i = 0, id: Int64 = 1
         try! r.write {
             for entity in entities {
                 if i == 0 { id = entity.id }
                 entity.id       = id + i
-                entity.created  = NSDate()
-                entity.modified = NSDate()
+                entity.created  = Date()
+                entity.modified = Date()
                 r.add(entity, update: true)
                 i += 1
             }
@@ -177,7 +177,7 @@ public extension NBRealmAccessor {
     
     /// エンティティからレコードを新規追加する
     /// - parameter entity: 追加するエンティティ
-    public func insert(entity: Entity) {
+    public func insert(_ entity: Entity) {
         self.insert([entity])
     }
 }
@@ -187,7 +187,7 @@ public extension NBRealmAccessor {
     
     /// 指定した条件に該当するレコードを削除する
     /// - parameter condition: 条件オブジェクト
-    public func delete(condition: NSPredicate) {
+    public func delete(_ condition: NSPredicate) {
         let r = self.realm
         try! r.write {
             r.delete(r.objects(Entity).filter(condition))
@@ -196,19 +196,19 @@ public extension NBRealmAccessor {
     
     /// 指定した複数のIDで抽出されるレコードを削除する
     /// - parameter ids: IDの配列
-    public func delete(ids ids: [Int64]) {
+    public func delete(ids: [Int64]) {
         self.delete(NSPredicate(ids: ids))
     }
     
     /// 指定したIDのレコードを削除する
     /// - parameter id: ID
-    public func delete(id id: Int64) {
+    public func delete(id: Int64) {
         self.delete(NSPredicate(id: id))
     }
     
     /// 指定したエンティティのレコードを削除する
     /// - parameter entity: エンティティ
-    public func delete(entity entity: Entity) {
+    public func delete(entity: Entity) {
         let r = self.realm
         try! r.write {
             r.delete(entity)
@@ -227,7 +227,7 @@ public extension NBRealmAccessor {
     /// 指定した条件で抽出されるレコードを更新する
     /// - parameter condition: 条件オブジェクト
     /// - parameter updating: データ更新クロージャ
-    public func update(condition: NSPredicate? = nil, updating: NBRealmUpdateClosure) {
+    public func update(_ condition: NSPredicate? = nil, updating: @escaping NBRealmUpdateClosure) {
         let r = self.realm
         try! r.write {
             var result = r.objects(Entity)
@@ -236,7 +236,7 @@ public extension NBRealmAccessor {
             }
             var i = 0
             for entity in result {
-                entity.modified = NSDate()
+                entity.modified = Date()
                 updating(entity, i)
                 i += 1
             }
@@ -246,24 +246,24 @@ public extension NBRealmAccessor {
     /// 指定した複数のIDで抽出されるレコードを更新する
     /// - parameter ids: IDの配列
     /// - parameter updating: データ更新クロージャ
-    public func update(ids: [Int64], updating: NBRealmUpdateClosure) {
+    public func update(_ ids: [Int64], updating: NBRealmUpdateClosure) {
         self.update(NSPredicate(ids: ids), updating: updating)
     }
     
     /// 指定したIDのレコードを更新する
     /// - parameter id: ID
     /// - parameter updating: データ更新クロージャ
-    public func update(id: Int64, updating: NBRealmUpdateClosure) {
+    public func update(_ id: Int64, updating: NBRealmUpdateClosure) {
         self.update(NSPredicate(id: id), updating: updating)
     }
     
     /// 指定したエンティティのレコードを更新する
     /// - parameter condition: 条件オブジェクト
     /// - parameter updating: データ更新クロージャ
-    public func update(entity: Entity, updating: NBRealmUpdateClosure) {
+    public func update(_ entity: Entity, updating: @escaping NBRealmUpdateClosure) {
         let r = self.realm
         try! r.write {
-            entity.modified = NSDate()
+            entity.modified = Date()
             updating(entity, 0)
             r.add(entity, update: true)
         }
