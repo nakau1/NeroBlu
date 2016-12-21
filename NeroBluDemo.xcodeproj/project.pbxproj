@@ -45,6 +45,7 @@
 		DB80EE9A1D2422F3006A44C2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DB80EE991D2422F3006A44C2 /* Assets.xcassets */; };
 		DB80EE9D1D2422F3006A44C2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DB80EE9B1D2422F3006A44C2 /* LaunchScreen.storyboard */; };
 		DBC0EE081D4ADCE1007E3D02 /* NB+Operation.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBC0EE071D4ADCE1007E3D02 /* NB+Operation.swift */; };
+		FE96927B1ECB8BF9011DF3DB /* libPods-NeroBluDemo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 38F7658C20A74D928DE8B472 /* libPods-NeroBluDemo.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -72,6 +73,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0D3EE0A7C22F6DBBEBA4E948 /* Pods-NeroBluDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NeroBluDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-NeroBluDemo/Pods-NeroBluDemo.debug.xcconfig"; sourceTree = "<group>"; };
+		38F7658C20A74D928DE8B472 /* libPods-NeroBluDemo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-NeroBluDemo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		979A682AEFCE0516080C743B /* Pods-NeroBluDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NeroBluDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-NeroBluDemo/Pods-NeroBluDemo.release.xcconfig"; sourceTree = "<group>"; };
 		DB105BF31D26C50600CF994D /* App.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
 		DB105BF41D26C50600CF994D /* NB.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NB.swift; sourceTree = "<group>"; };
 		DB105BF51D26C50600CF994D /* NB+CGGeometry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NB+CGGeometry.swift"; sourceTree = "<group>"; };
@@ -127,12 +131,30 @@
 			buildActionMask = 2147483647;
 			files = (
 				DB6302561D24244900FE2505 /* NeroBlu.framework in Frameworks */,
+				FE96927B1ECB8BF9011DF3DB /* libPods-NeroBluDemo.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2617FE476E499178785157BC /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				0D3EE0A7C22F6DBBEBA4E948 /* Pods-NeroBluDemo.debug.xcconfig */,
+				979A682AEFCE0516080C743B /* Pods-NeroBluDemo.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		BDD0306164EE8F60CA82B1B9 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				38F7658C20A74D928DE8B472 /* libPods-NeroBluDemo.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		DB6302501D24244900FE2505 /* NeroBlu */ = {
 			isa = PBXGroup;
 			children = (
@@ -178,6 +200,8 @@
 				DB80EE911D2422F3006A44C2 /* NeroBluDemo */,
 				DB6302501D24244900FE2505 /* NeroBlu */,
 				DB80EE901D2422F3006A44C2 /* Products */,
+				2617FE476E499178785157BC /* Pods */,
+				BDD0306164EE8F60CA82B1B9 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -239,10 +263,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = DB80EEA11D2422F3006A44C2 /* Build configuration list for PBXNativeTarget "NeroBluDemo" */;
 			buildPhases = (
+				B95DE90B68A7000DA392B470 /* [CP] Check Pods Manifest.lock */,
 				DB80EE8B1D2422F3006A44C2 /* Sources */,
 				DB80EE8C1D2422F3006A44C2 /* Frameworks */,
 				DB80EE8D1D2422F3006A44C2 /* Resources */,
 				DB63025B1D24244900FE2505 /* Embed Frameworks */,
+				E47F31F4C8E3A184064079F0 /* [CP] Embed Pods Frameworks */,
+				E1AEECC8BF7EDB0C3B0D70E3 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -312,6 +339,54 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		B95DE90B68A7000DA392B470 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		E1AEECC8BF7EDB0C3B0D70E3 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-NeroBluDemo/Pods-NeroBluDemo-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E47F31F4C8E3A184064079F0 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-NeroBluDemo/Pods-NeroBluDemo-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		DB63024A1D24244900FE2505 /* Sources */ = {
@@ -527,6 +602,7 @@
 		};
 		DB80EEA21D2422F3006A44C2 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0D3EE0A7C22F6DBBEBA4E948 /* Pods-NeroBluDemo.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -540,6 +616,7 @@
 		};
 		DB80EEA31D2422F3006A44C2 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 979A682AEFCE0516080C743B /* Pods-NeroBluDemo.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
