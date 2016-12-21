@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "NeroBlu"
-  s.version      = "2.0.0"
+  s.version      = "2.0.1"
   s.summary      = "NeroBlu iOS Core Library."
   s.license      = { :type => 'MIT' }
   s.description  = "NeroBlu core utilities library for swift3"
