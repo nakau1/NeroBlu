@@ -61,7 +61,7 @@ extension UIViewController: Presentable {
     
     /// モーダルで表示されたビューコントローラを閉じる
     /// - parameter completion: 閉じ終えた時の処理
-    public func dismiss(_ completion: CompletionHandler? = nil) {
+    open func dismiss(_ completion: CompletionHandler? = nil) {
         self.dismiss(animated: true, completion: completion)
     }
 }
