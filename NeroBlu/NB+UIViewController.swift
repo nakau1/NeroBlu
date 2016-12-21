@@ -14,21 +14,21 @@ extension UIViewController: Navigatable {
     /// ナビゲーションスタックにビューコントローラをプッシュして表示を更新する
     /// - parameter viewController: ビューコントローラ
     /// - parameter animated: アニメーションの有無
-    public func push(_ viewController: UIViewController, animated: Bool = true) {
+    open func push(_ viewController: UIViewController, animated: Bool = true) {
         self.navigationController?.pushViewController(viewController, animated: animated)
     }
     
     /// ナビゲーションスタックからトップビューコントローラをポップして表示を更新する
     /// - parameter animated: アニメーションの有無
     /// - returns: ポップしたトップビューコントローラ
-    public func pop(animated: Bool = true) -> UIViewController? {
+    open func pop(animated: Bool = true) -> UIViewController? {
         return self.navigationController?.popViewController(animated: animated)
     }
     
     /// ルートビューコントローラを除いて、スタック上のすべてのビューコントローラをポップして表示を更新する
     /// - parameter animated: アニメーションの有無
     /// - returns: ポップされたビューコントローラの配列
-    public func popToRoot(animated: Bool = true) -> [UIViewController]? {
+    open func popToRoot(animated: Bool = true) -> [UIViewController]? {
         return self.navigationController?.popToRootViewController(animated: animated)
     }
     
@@ -36,7 +36,7 @@ extension UIViewController: Navigatable {
     /// - parameter viewController: ビューコントローラ
     /// - parameter animated: アニメーションの有無
     /// - returns: ポップされたビューコントローラの配列
-    public func popTo(_ viewController: UIViewController, animated: Bool = true) -> [UIViewController]? {
+    open func popTo(_ viewController: UIViewController, animated: Bool = true) -> [UIViewController]? {
         return self.navigationController?.popToViewController(viewController, animated: animated)
     }
 }
@@ -52,7 +52,7 @@ extension UIViewController: Presentable {
     /// - parameter viewController: ビューコントローラ
     /// - parameter transitionStyle: 表示エフェクトスタイル
     /// - parameter completion: 表示完了時の処理
-    public func present(_ viewController: UIViewController, transitionStyle: UIModalTransitionStyle? = nil, completion: CompletionHandler? = nil) {
+    open func present(_ viewController: UIViewController, transitionStyle: UIModalTransitionStyle? = nil, completion: CompletionHandler? = nil) {
         if let transition = transitionStyle {
             viewController.modalTransitionStyle = transition
         }
