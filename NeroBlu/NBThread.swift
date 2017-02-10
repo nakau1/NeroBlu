@@ -38,7 +38,7 @@ public func asyncSleep(seconds: UInt32, completed: @escaping VoidClosure) {
 /// ミリ秒を指定して非同期処理でスリープを行う
 /// - parameter milliseconds: スリープのミリ秒数
 /// - parameter completed: スリープ完了時に行う処理
-public func asyncSleep(_ milliseconds: useconds_t, completed: @escaping VoidClosure) {
+public func asyncSleep(milliseconds: useconds_t, completed: @escaping VoidClosure) {
     async(async: { usleep(milliseconds) }, completed: completed)
 }
 
