@@ -11,7 +11,25 @@ class ViewController: NBLandingViewController {
         return [
             (title:"動作確認", rows:[
                 NBLandingItem("動作確認(1)") {
-                    print(App.Dimen.Screen.RetinaSize)
+                    var arr = [3, 8, 11, 23, 45, 62, 95]
+                    print(arr.indexInRange(for: -1)) // 0
+                    print(arr.indexInRange(for: 4))  // 4
+                    print(arr.indexInRange(for: 7))  // 6
+                    print(arr.indexInRange(for: 12)) // 6
+                    
+                    print(arr.elementInRange(for: 10))  // 95
+                    print(arr.elementInRange(for: -2))  // 3
+                    
+                    print(arr.nextLoopIndex(of: 4)) // 5
+                    print(arr.nextLoopIndex(of: 5)) // 6
+                    print(arr.nextLoopIndex(of: 6)) // 0
+                    
+                    print(arr.previousLoopIndex(of: 2)) // 1
+                    print(arr.previousLoopIndex(of: 1)) // 0
+                    print(arr.previousLoopIndex(of: 0)) // 6
+                    
+                    let _ = arr.exchange(from: 3, to: 0)
+                    print(arr) // [23, 8, 11, 3, 45, 62, 95]
                 },
                 ]),
             (title:"NB+CGGeometry", rows:[

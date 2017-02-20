@@ -41,6 +41,99 @@ extension Array {
     public func add(_ e: [Element]) -> Array<Element> {
         return self + e
     }
+    
+    /// 配列の範囲内かどうかを返す
+    /// - parameter index: インデックス
+    /// - returns: 配列の範囲内かどうか
+    public func inRange(at index: Int) -> Bool {
+        guard
+            let first = self.firstIndex,
+            let last  = self.lastIndex
+            else {
+                return false
+        }
+        return first <= index && index <= last
+    }
+    
+    /// 配列範囲内に収まるインデックスを返す
+    /// - note: 配列に要素がない場合は-1を返す
+    /// - parameter index: インデックス
+    /// - returns: 引数が0未満であれば最初のインデックス、最大インデックス以上であれば最後のインデックスを返す
+    public func indexInRange(for index: Int) -> Int {
+        guard
+            let first = self.firstIndex,
+            let last  = self.lastIndex
+            else {
+                return -1
+        }
+        if index < first {
+            return first
+        } else if last < index {
+            return last
+        } else {
+            return index
+        }
+    }
+    
+    /// 配列範囲内に収まる要素を返す
+    /// - note: 配列に要素がない場合はnilを返す
+    /// - parameter index: インデックス
+    /// - returns: 引数が0未満であれば最初の要素、最大インデックス以上であれば最後の要素を返す
+    public func elementInRange(for index: Int) -> Element? {
+        let i = self.indexInRange(for: index)
+        if i < 0 {
+            return nil
+        }
+        return self[i]
+    }
+    
+    /// ループさせる場合の次の配列のインデックスを取得する
+    /// - note: 配列に要素がない場合は-1を返す
+    /// - parameter index: インデックス
+    /// - returns: 次のインデックス
+    public func nextLoopIndex(of index: Int) -> Int {
+        guard let last = self.lastIndex else { return -1 }
+        if index + 1 > last {
+            return 0
+        } else {
+            return index + 1
+        }
+    }
+    
+    /// ループさせる場合の前の配列のインデックスを取得する
+    /// - note: 配列に要素がない場合は-1を返す
+    /// - parameter index: インデックス
+    /// - returns: 前のインデックス
+    public func previousLoopIndex(of index: Int) -> Int {
+        guard let last = self.lastIndex else { return -1 }
+        if index - 1 < 0 {
+            return last
+        } else {
+            return index - 1
+        }
+    }
+    
+    /// 指定したインデックスの要素同士の入れ替え(移動)が可能かどうかを返す
+    /// - parameter from: 移動する元のインデックス
+    /// - parameter to: 移動する先のインデックス
+    /// - returns: 要素が入れ替え(移動)可能かどうか
+    public func isExchangable(from: Int, to: Int) -> Bool {
+        return self.indices.contains(from) && self.indices.contains(to)
+    }
+    
+    /// 指定したインデックスの要素同士を入れ替える
+    /// - parameter from: 移動する元のインデックス
+    /// - parameter to: 移動する先のインデックス
+    /// - returns: 要素が入れ替え(移動)ができたかどうか
+    public mutating func exchange(from: Int, to: Int) -> Bool {
+        if from == to {
+            return false
+        } else if !self.isExchangable(from: from, to: to) {
+            return false
+        }
+        swap(&self[from], &self[to])
+        return true
+    }
 }
 
 // MARK: - Dictionary拡張 -
